@@ -19,9 +19,9 @@
 	<key>CFBundleSignature</key>
 	<string>esEA</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1b3</string>
+	<string>${Version_Number}</string>
 	<key>CFBundleVersion</key>
-	<string>1b3</string>
+	<string>${Build_Number}</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

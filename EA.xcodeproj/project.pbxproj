@@ -45,6 +45,11 @@
 		6CEABD620BB3223D0059641A /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = English; path = English.lproj/readme.html; sourceTree = "<group>"; };
 		6CEABD770BB322BC0059641A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
 		6CEAC2730BB4B3290059641A /* English */ = {isa = PBXFileReference; explicitFileType = text.plist.strings; fileEncoding = 10; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6CFB92B80BBC4F4000191CDD /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = French; path = French.lproj/Credits.html; sourceTree = "<group>"; };
+		6CFB93030BBC5B2800191CDD /* German */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = German; path = German.lproj/Credits.html; sourceTree = "<group>"; };
+		6CFB931E0BBC5D5200191CDD /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6CFB931F0BBC5D5700191CDD /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6CFB93280BBC5F4700191CDD /* German */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = German; path = German.lproj/readme.html; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Earth Addresser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Earth Addresser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -207,6 +212,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C165DFE840E0CC02AAC07 /* English */,
+				6CFB931E0BBC5D5200191CDD /* French */,
+				6CFB931F0BBC5D5700191CDD /* German */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -245,6 +252,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				6CEABD620BB3223D0059641A /* English */,
+				6CFB93280BBC5F4700191CDD /* German */,
 			);
 			name = readme.html;
 			sourceTree = "<group>";
@@ -253,6 +261,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				6C54D8CC0BBB1B8D00D4B7F2 /* English */,
+				6CFB92B80BBC4F4000191CDD /* French */,
+				6CFB93030BBC5B2800191CDD /* German */,
 			);
 			name = Credits.html;
 			sourceTree = "<group>";
@@ -263,6 +273,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				Build_Number = 5;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -271,6 +282,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
+				Version_Number = 1;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -283,11 +295,13 @@
 					ppc,
 					i386,
 				);
+				Build_Number = 5;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
+				Version_Number = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

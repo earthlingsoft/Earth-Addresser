@@ -1,0 +1,125 @@
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<head>
+<title>Earth Addresser</title>
+<style type="text/css">
+body { background:#eee; color:555; text-align:center; font-family:Georgia, Garamond,Palatino,Times,serif; }
+#main { max-width:35em; padding:3em 1em 1em 0;margin:auto; line-height:1.4em;}
+h1 { font-family:Zapfino; font-weight:normal;}
+dl dt { font-style:italic; margin:2em 0em 0.5em 0em;}
+ul {list-style-type:none; padding:0px; }
+ul li, dl dd ul, dl dd {margin:0px; padding:0px;}
+ul.links li { display : inline;}
+ul.links li:before { content: '\002022'; margin:0em 0.3em; }
+ul.links li.i1:before { content:'';}
+a {text-decoration:none;}
+#oldversions  { display:none;}
+#oldversions:target + p { display:none;}
+#oldversions:target { display:block;} 
+h3 { margin:3em 0em 1em 0em;}
+</style>
+</head>
+<body>
+<div id="main">
+<h1>Earth Addresser</h1>
+
+<p>
+Deine Adressen in Google Earth.
+</p>
+<p>
+Das Adressbuch im Computer randvoll mit Adressen und begeistert von Google Earth? Dann wird Earth Addresser die perfekte Erg&auml;nzung sein. Das Programm schreibt die Adressen aus dem Adressbuch in eine &sbquo;KML&lsquo; Datei, die Google Earth lesen kann um dann die Adressen auf der Weltkarte anzuzeigen. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird anstelle der &uuml;blichen Stecknadel das Photo auf der Weltkarte angezeigt.
+</p>
+<p>
+Um die Ortsmarken an der korrekten Stelle anzuzeigen mu&szlig; Google Earth zun&auml;chst die Adresse in Koordinaten umwandeln. Hierzu schickt Google Earth die Adresse an einen Server von Google. <em>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser nicht benutzen und die erzeugte Datei nicht mit Google Earth &ouml;ffnen.</em>
+</p>
+<p>
+Falls f&uuml;r manche Adressen keine Ortsmarke an der korrekten Stelle angezeigt wird kann das an verschiedenen Dingen liegen. Zum einen hat Google Earth noch nicht f&uuml;r jedes Land auf der Welt Stra&szlig;enpl&auml;ne, so da&szlig; Adressen in einigen L&auml;ndern nicht gefunden werden k&ouml;nnen. Zum anderen versteht Google Earth manche Adre&szlig;formate nicht, zum Beispiel wenn Wohnungsnummern oder &auml;hnliches in der Adresse vorkommen. Earth Addresser versucht, die g&auml;ngigsten  Bezeichnungen aus Adressen zu entfernen, es kann aber durchaus vorkommen, da&szlig; Dein Adressbuch Varianten enth&auml;lt, die nicht ber&uuml;cksichtigt werden. Alle Adressen, die Google Earth nicht finden konnte, werden auf dem Globus an der Stelle 0&deg;N, 0&deg;O angezeigt.
+</p>
+<p>
+Um das zu einer Adresse geh&ouml;rende Land zu ermitteln schaut Earth Addresser <em>nicht</em> in das &sbquo;Land&lsquo; Feld der Adresse, das h&auml;ufig leer ist. Stattdessen wird das f&uuml;r das Adressformat angegebene Land verwendet. Das Adressformat kann eingestellt werden, indem im Bearbeiten Modus auf das Etikett einer Adresse geklickt  und  das gew&uuml;nschte Land im Untermen&uuml; &sbquo;Adressformat &auml;ndern&lsquo; ausgew&auml;hlt wird.
+</p>
+<p>
+Vielen Dank an Nat Bletter, der die Idee f&uuml;r Earth Addresser angesto&szlig;en hat, an Dan Wood f&uuml;r seine Cocoa-Ratschl&auml;ge und an Ronald Leroux f&uuml;r die Franz&ouml;sische Lokalisierung.
+</p>
+<p>
+Viel Spa&szlig;.
+</p>
+<ul class="links">
+<li class="i1"><a href="http://earthlingsoft.net/Earth%20Addresser">Earth Addresser Webseite</a></li>
+<li><a href="http://earthlingsoft.net/">earthlingsoft Website</a></li>
+<li><a href="https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&amp;item_name=Earth%20Addresser&amp;no_shipping=1&amp;cn=Comments&amp;tax=0&amp;currency_code=EUR">Spenden</a></li>
+<li><a href="mailto:earthlingsoft@earthlingsoft.net?subject=Earth%20Addresser">E-Mail senden</a></li>
+<li><a href="http://earthlingsoft.net/ssp/blog/2007/03/earth_addresser#comments">Kommentar hinterlassen</a></li>
+</ul>
+
+
+<h3>Versionsgeschichte</h3>
+<dl class="versions" id="latestversion">
+
+<dt>v1 (2007-03-30)</dt>
+<dd>
+Erste ver&ouml;ffentlichte Version
+</dd>
+
+
+
+</dl>
+
+
+<dl class="versions" id="oldversions">
+<dt>version 1b3 (2007-03-28)</dt>
+<dd>
+<ul>
+<li>added checking for updates</li>
+<li>added French localisation contributed by Ronald Leroux</li>
+<li>added German localisation</li>
+<li>minor UI improvements</li>
+</ul>
+</dd>
+
+
+<dt>version 1b2 (2007-03-27)</dt>
+<dd>
+hopefully fixed a problem that made the application stall
+</dd>
+
+
+<dt>version 1b (2007-03-26)</dt>
+<dd>
+<ul>
+<li>first testing release</li>	
+<li>more fixes and polish</li>
+</ul>
+</dd>
+<dt>version 0.4 (unreleased)</dt>
+<dd>
+<ul>
+<li>removed the 'smarts' again as they didn't work</li>
+<li>new strategy: write image files to Application Support folder and output a KML file only</li>
+<li>set size of images in Preferences</li>
+</ul>
+</dd>
+<dt>version 0.3 (unreleased)</dt>
+<dd>
+<ul>
+<li>introduced the 'smarts' to pack everything up in a nice KMZ file</li>
+<li>unfortunately GoogleEarth doesn't load Icon href elements from within the KMZ file</li>
+<li>also removed colons from id attributes and file names</li>
+</ul>
+</dd>
+<dt>version 0.2 (unreleased)</dt>
+<dd>
+	rewrote XML generation to use NSXML so we can have actual, properly-escaped XML
+</dd>
+<dt>version 0.1 (unreleased)</dt>
+<dd>
+	initial build
+</dd>
+</dl>
+
+<p id="morehistorylinks"><a href="#oldversions" id="showolder">Complete list</a></p>
+
+</div>
+</body>
+</html>

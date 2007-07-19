@@ -495,7 +495,7 @@
     if([[NSApp currentEvent] modifierFlags] == (NSAlphaShiftKeyMask|NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask)) {
 		//        [VersionChecker writeVersionFileWithDownloadURLString:@"http://www.earthlingsoft.net/GeburtstagsChecker/GeburtstagsChecker.sit"];
     } else {
-		[VersionChecker checkVersionForURLString:@"http://www.earthlingsoft.net/Mailboxer/Mailboxer.xml" silent:NO];
+		[VersionChecker checkVersionForURLString:@"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml" silent:NO];
     }
 }
 

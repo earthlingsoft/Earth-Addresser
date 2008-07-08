@@ -1,6 +1,6 @@
 //
 //  Magic.m
-//  Mailboxer
+//  Mailboxer / Earth Addresser
 //
 //  Created by  Sven on 21.03.07.
 //  Copyright 2007 earthlingsoft. All rights reserved.
@@ -8,7 +8,7 @@
 //
 
 #import "Magic.h"
-
+#define UDC [NSUserDefaultsController sharedUserDefaultsController]
 
 @implementation Magic
 
@@ -21,7 +21,6 @@
 		ALLDICTIONARY, @"selectedGroup", 
 		[NSNumber numberWithFloat:1.5], @"imageSize", 
 		nil];
-	UDC = [NSUserDefaultsController sharedUserDefaultsController];
 	[UDC setInitialValues:standardDefaults];	
 	[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addressBookChanged:)
@@ -35,6 +34,16 @@
 	
 	return self;
 }
+
+
+- (void) dealloc {
+	[lastProgressBarUpdate release];
+	[sheetMessage release];
+	[groups release];
+	
+	[super dealloc];
+}
+
 
 
 /*
@@ -77,6 +86,7 @@
 	
 - (void) do2:(id) sender {
 	NSAutoreleasePool * myPool = [[NSAutoreleasePool alloc] init];
+	BOOL error = NO;
 	
 	[self setValue:[NSNumber numberWithInt:0] forKey:@"currentPosition"];
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"running"];
@@ -107,289 +117,304 @@
 	if (! [myFM fileExistsAtPath: EAAppSupportPath]) {
 		if (![myFM createDirectoryAtPath:EAAppSupportPath attributes:nil]) {
 			[self error: NSLocalizedString(@"Couldn't create Application Support/EarthAddresser folder", @"Couldn't create Application Support/EarthAddresser folder")];
-			return;
+			error = YES;
 		}
 	}
 	NSString * imagesPath = [EAAppSupportPath stringByAppendingPathComponent:@"Images"];
-	if (! [myFM fileExistsAtPath: imagesPath]) {
+	if (!error &&  ![myFM fileExistsAtPath: imagesPath]) {
 		if (![myFM createDirectoryAtPath:imagesPath attributes:nil]) {
 			[self error: NSLocalizedString(@"Couldn't create Application Support/EarthAddresser/Images folder", @"Couldn't create Application Support/EarthAddresser/Images folder")];
-			return;
+			error = YES;
 		}
 	}
 	
 
-#pragma mark -do2: Get Contacts & Setup	
-	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
+	if (!error) {
+	#pragma mark -do2: Get Contacts & Setup	
+		ABAddressBook * ab = [ABAddressBook sharedAddressBook];
 
-	NSArray * people = nil ;
-	NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
-	if ([selectedGroup isEqualToString:MENUITEMALL]) {
-		people = [ab people];
-	}
-	else if ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) {
-		ABGroup * myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup];
-		if (myGroup) {
-			people = [myGroup members];
+		NSArray * people = nil ;
+		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
+		if ([selectedGroup isEqualToString:MENUITEMALL]) {
+			people = [ab people];
 		}
-		else {
-			// the group doesn't exist anymore => switch to all
-			[self error: @"group doesn't exist anymore - this shouldn't happen"];
-			return;
-		}
-	}
-	else {
-		// eeek!
-		[self error:NSLocalizedString(@"Selected group wasn't recognisable.",@"Selected group couldn't be recognised.")];
-		return;
-	}
-
-	[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"recordCount"];
-
-	NSTimeInterval progressBarStepTimeInterval = 0.04;
-	if ([people count] < 100) {
-		progressBarStepTimeInterval = 0.02;
-	}
-	else if ([people count] < 50) {
-		progressBarStepTimeInterval = 0.01;
-	}
-	else if ([people count] < 20) { 
-		progressBarStepTimeInterval = 0.03;
-	}
-	
-	NSEnumerator * myEnum = [people objectEnumerator];
-	ABPerson * person;
-	
-	NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
-	ABPerson * me = [[ABAddressBook sharedAddressBook] me];
-	if (me) {
-		NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:[me uniqueId]];
-		[myXML addAttribute:documentID];
-	}
-	[myXML addChild:[NSXMLNode elementWithName:@"name" stringValue:NSLocalizedString(@"Addresses", @"Addresses")]];
-	
-
-#pragma mark -do2: People loop
-	//
-	// Run through all people in the list
-	//
-	while (person = [myEnum nextObject]) {
-		NSString * uniqueID = [person uniqueId];
-		NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] -9]];
-		int flags = [[person valueForProperty:kABPersonFlags] intValue];
-
-		//
-		// get the name	
-		NSString * name;
-		NSString * vorname;
-		NSString * nachname;
-		if (!(flags & kABShowAsCompany)) {
-			vorname = [person valueForProperty:kABFirstNameProperty];
-			if (!vorname) { vorname = @"";}
-			nachname = [person valueForProperty:kABLastNameProperty];
-			if (!nachname) {nachname = @"";}
-			name = [vorname stringByAppendingFormat:@" %@", nachname];
+		else if ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) {
+			ABGroup * myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup];
+			if (myGroup) {
+				people = [myGroup members];
+			}
+			else {
+				// the group doesn't exist anymore => switch to all
+				[self error: @"group doesn't exist anymore - this shouldn't happen"];
+				error = YES;
+			}
 		}
 		else {
-			name = [person valueForProperty:kABOrganizationProperty];
-			if (!name) {name = @"???";}
+			// eeek!
+			[self error:NSLocalizedString(@"Selected group wasn't recognisable.",@"Selected group couldn't be recognised.")];
+			error = YES;
 		}
 
-	
-#pragma mark -do 2: Image Handling
-		//
-		// get image data & add styling if we have an image
-		NSData * imageData = [person imageData];
-		NSString * fullImagePath = nil;
-		if (imageData) {
-		NSBitmapImageRep * theImage = [NSBitmapImageRep imageRepWithData:imageData];
-		NSString * imageFileName = [ID stringByAppendingPathExtension:@"png"];
-		//	NSString * imageFileName = ID;
-		if (theImage) {
-			// got an image, so write it to a file and add the style information
-			NSData * myPNG = [theImage representationUsingType:NSPNGFileType properties:nil];
-			if (myPNG) {
-				fullImagePath = [imagesPath stringByAppendingPathComponent:imageFileName];
-				if ([myPNG writeToFile:fullImagePath atomically:YES]) {
-					// now that we have the image, create the style for it
-					NSXMLElement * styleElement = [NSXMLElement elementWithName:@"Style"];
-					[styleElement addAttribute:[NSXMLNode attributeWithName:@"id" stringValue:ID]];
-					NSXMLElement * iconStyleElement = [NSXMLElement elementWithName:@"IconStyle"];	
-					NSXMLElement * iconElement = [NSXMLElement elementWithName:@"Icon"];
-					//NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:[[@"." stringByAppendingPathComponent:imagesName] stringByAppendingPathComponent:imageFileName]];
-					NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:fullImagePath];
-					[iconElement addChild: hrefElement];
-					[iconStyleElement addChild:iconElement];
-					NSXMLElement * sizeElement = [NSXMLNode elementWithName:@"scale" stringValue:[UDC valueForKeyPath:@"values.imageSize"]];
-					[iconStyleElement addChild:sizeElement];
-					NSXMLElement * hotSpotElement = [NSXMLNode elementWithName:@"hotSpot"];
-					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"x" stringValue:@"0.5"]];
-					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"y" stringValue:@"0"]];
-					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"xunits" stringValue:@"fraction"]];
-					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"yunits" stringValue:@"fraction"]];
-					[iconStyleElement addChild:hotSpotElement];
-					[styleElement addChild:iconStyleElement];				
-					[myXML addChild:styleElement];
+		
+		if (!error) {
+			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"recordCount"];
+
+/*
+			NSTimeInterval progressBarStepTimeInterval = 0.04;
+			if ([people count] < 100) {
+				progressBarStepTimeInterval = 0.02;
+			}
+			else if ([people count] < 50) {
+				progressBarStepTimeInterval = 0.01;
+			}
+			else if ([people count] < 20) { 
+				progressBarStepTimeInterval = 0.03;
+			}
+*/
+			
+			NSEnumerator * myEnum = [people objectEnumerator];
+			ABPerson * person;
+			
+			NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
+			ABPerson * me = [[ABAddressBook sharedAddressBook] me];
+			if (me) {
+				NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:[me uniqueId]];
+				[myXML addAttribute:documentID];
+			}
+			[myXML addChild:[NSXMLNode elementWithName:@"name" stringValue:NSLocalizedString(@"Addresses", @"Addresses")]];
+			
+
+		#pragma mark -do2: People loop
+			//
+			// Run through all people in the list
+			//
+			while (person = [myEnum nextObject]) {
+				NSString * uniqueID = [person uniqueId];
+				NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] -9]];
+				int flags = [[person valueForProperty:kABPersonFlags] intValue];
+
+				//
+				// get the name	
+
+				NSString * name;
+				NSNumber * omitNames = [[NSUserDefaults standardUserDefaults] objectForKey:OMITNAMESDEFAULT];
+				if (omitNames && [omitNames boolValue]) {
+					// don't use names in the KML file
+					name = [[[NSString alloc] initWithUTF8String:"\342\230\205\000"] autorelease];
+				}
+				else {
+					// put names into KML file
+					NSString * vorname;
+					NSString * nachname;
+					if (!(flags & kABShowAsCompany)) {
+						vorname = [person valueForProperty:kABFirstNameProperty];
+						if (!vorname) { vorname = @"";}
+						nachname = [person valueForProperty:kABLastNameProperty];
+						if (!nachname) {nachname = @"";}
+						name = [vorname stringByAppendingFormat:@" %@", nachname];
+					}
+					else {
+						name = [person valueForProperty:kABOrganizationProperty];
+						if (!name) {name = @"???";}
+					}
+				}
+			
+		#pragma mark -do 2: Image Handling
+				//
+				// get image data & add styling if we have an image
+				NSData * imageData = [person imageData];
+				NSString * fullImagePath = nil;
+				if (imageData) {
+				NSBitmapImageRep * theImage = [NSBitmapImageRep imageRepWithData:imageData];
+				NSString * imageFileName = [ID stringByAppendingPathExtension:@"png"];
+				//	NSString * imageFileName = ID;
+				if (theImage) {
+					// got an image, so write it to a file and add the style information
+					NSData * myPNG = [theImage representationUsingType:NSPNGFileType properties:nil];
+					if (myPNG) {
+						fullImagePath = [imagesPath stringByAppendingPathComponent:imageFileName];
+						if ([myPNG writeToFile:fullImagePath atomically:YES]) {
+							// now that we have the image, create the style for it
+							NSXMLElement * styleElement = [NSXMLElement elementWithName:@"Style"];
+							[styleElement addAttribute:[NSXMLNode attributeWithName:@"id" stringValue:ID]];
+							NSXMLElement * iconStyleElement = [NSXMLElement elementWithName:@"IconStyle"];	
+							NSXMLElement * iconElement = [NSXMLElement elementWithName:@"Icon"];
+							//NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:[[@"." stringByAppendingPathComponent:imagesName] stringByAppendingPathComponent:imageFileName]];
+							NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:fullImagePath];
+							[iconElement addChild: hrefElement];
+							[iconStyleElement addChild:iconElement];
+							NSXMLElement * sizeElement = [NSXMLNode elementWithName:@"scale" stringValue:[UDC valueForKeyPath:@"values.imageSize"]];
+							[iconStyleElement addChild:sizeElement];
+							NSXMLElement * hotSpotElement = [NSXMLNode elementWithName:@"hotSpot"];
+							[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"x" stringValue:@"0.5"]];
+							[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"y" stringValue:@"0"]];
+							[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"xunits" stringValue:@"fraction"]];
+							[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"yunits" stringValue:@"fraction"]];
+							[iconStyleElement addChild:hotSpotElement];
+							[styleElement addChild:iconStyleElement];				
+							[myXML addChild:styleElement];
+							
+						}
+					}		
+				}	
+				}
+				
+
+				// 
+				// now cycle through the various addresses and create placemarks
+				ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
+				int addressCount = [addresses count];
+				int index = 0;
+
+		#pragma mark -do2: Address Loop
+				while (addressCount > index) {
+
+		#pragma mark -do2: Address Label			
+					NSDictionary * theAddress = [addresses valueAtIndex:index];
+					NSString * addressName = [addresses labelAtIndex:index];
+					NSString * addressLabel;
+					if ([addressName isEqualToString:kABHomeLabel]) {
+						addressLabel =  NSLocalizedString(@"Home", @"Home (Address Label)");
+					}
+					else if ([addressName isEqualToString: kABWorkLabel]) {
+						addressLabel = NSLocalizedString(@"Work", @"(Work (Address Label)");
+					}
+					else if ([addressName isEqualToString: kABOtherLabel]) {
+						addressLabel = nil; // NSLocalizedString(@"Other", @"Other (Address Label)");
+					}
+					else {
+						addressLabel = addressName;
+					}
+					NSString * nameAndLabel;
+					if (addressLabel) {
+						nameAndLabel = [name stringByAppendingFormat:@" (%@)", addressLabel];
+					}
+					else {
+						nameAndLabel = name;
+					}
 					
+		#pragma mark -do2: Address String
+					NSXMLElement * placemarkElement = [NSXMLElement elementWithName:@"Placemark"];
+					// [placemarkElement addAttribute: [NSXMLNode attributeWithName:@"id" stringValue:ID]];
+					NSXMLElement * nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];
+					[placemarkElement addChild: nameElement];
+					NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: @"1"];
+					[placemarkElement addChild: visibilityElement];
+						
+					NSMutableString * addressString = [NSMutableString string];
+					NSString * addressPiece;
+					if (addressPiece = [theAddress valueForKey:kABAddressStreetKey]) {
+						NSArray * evilWords = [NSArray arrayWithObjects: @"Zimmer ", @"Room ", @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach", nil];
+						NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
+						NSString * evilWord;
+						while (evilWord = [evilWordEnumerator nextObject]) {
+							addressPiece = [self cleanString:addressPiece from: evilWord];
+						}
+						[addressString appendFormat:@"%@\n", addressPiece];
+					}
+					if (addressPiece = [theAddress valueForKey:kABAddressCityKey]) {
+						[addressString appendFormat:@"%@\n", addressPiece];
+					}
+					if (addressPiece = [theAddress valueForKey:kABAddressZIPKey]) {
+						[addressString appendFormat:@"%@\n", addressPiece];
+					}
+					if (addressPiece = [theAddress valueForKey:kABAddressStateKey]) {
+						[addressString appendFormat:@"%@\n", addressPiece];
+					}
+					if (addressPiece = [theAddress valueForKey:kABAddressCountryCodeKey]) {
+						[addressString appendFormat:@"%@\n", addressPiece];
+					}
+					
+
+					NSXMLElement * addressElement = [NSXMLNode elementWithName:@"address" stringValue: addressString];
+					[placemarkElement addChild: addressElement];
+					
+
+					NSMutableString * descriptionHTMLString = [NSMutableString string];
+					/*
+					 if (fullImagePath) {
+						[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;\">\n", 
+							[fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], 
+							NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];					
+					}
+					 */
+					[descriptionHTMLString appendFormat: @"<a href=\"addressbook:%@\">%@</a>", 
+						uniqueID, 
+						NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];			
+					
+					NSXMLElement * descriptionElement = [NSXMLElement elementWithName:@"description" stringValue:descriptionHTMLString];
+					[placemarkElement addChild: descriptionElement];
+					NSXMLElement * snippetElement = [NSXMLElement elementWithName:@"Snippet"];
+					[placemarkElement addChild:snippetElement];
+					NSXMLElement * styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[@"#" stringByAppendingString:ID]];
+					[placemarkElement addChild:styleURLElement];
+						
+					[myXML addChild: placemarkElement];
+
+					index++;
 				}
-			}		
-		}	
-		}
-		
-
-		// 
-		// now cycle through the various addresses and create placemarks
-		ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
-		int addressCount = [addresses count];
-		int index = 0;
-
-#pragma mark -do2: Address Loop
-		while (addressCount > index) {
-
-#pragma mark -do2: Address Label			
-			NSDictionary * theAddress = [addresses valueAtIndex:index];
-			NSString * addressName = [addresses labelAtIndex:index];
-			NSString * addressLabel;
-			if ([addressName isEqualToString:kABHomeLabel]) {
-				addressLabel =  NSLocalizedString(@"Home", @"Home (Address Label)");
-			}
-			else if ([addressName isEqualToString: kABWorkLabel]) {
-				addressLabel = NSLocalizedString(@"Work", @"(Work (Address Label)");
-			}
-			else if ([addressName isEqualToString: kABOtherLabel]) {
-				addressLabel = nil; // NSLocalizedString(@"Other", @"Other (Address Label)");
-			}
-			else {
-				addressLabel = addressName;
-			}
-			NSString * nameAndLabel;
-			if (addressLabel) {
-				nameAndLabel = [name stringByAppendingFormat:@" (%@)", addressLabel];
-			}
-			else {
-				nameAndLabel = name;
-			}
-			
-#pragma mark -do2: Address String
-			NSXMLElement * placemarkElement = [NSXMLElement elementWithName:@"Placemark"];
-			// [placemarkElement addAttribute: [NSXMLNode attributeWithName:@"id" stringValue:ID]];
-			NSXMLElement * nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];
-			[placemarkElement addChild: nameElement];
-			NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: @"1"];
-			[placemarkElement addChild: visibilityElement];
 				
-			NSMutableString * addressString = [NSMutableString string];
-			NSString * addressPiece;
-			if (addressPiece = [theAddress valueForKey:kABAddressStreetKey]) {
-				NSArray * evilWords = [NSArray arrayWithObjects: @"Zimmer ", @"Room ", @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach", nil];
-				NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
-				NSString * evilWord;
-				while (evilWord = [evilWordEnumerator nextObject]) {
-					addressPiece = [self cleanString:addressPiece from: evilWord];
+				[self setValue:[NSNumber numberWithInt:currentPosition + 1] forKey:@"currentPosition"];
+				if (-[lastProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
+					[progressBar display];
+					[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
 				}
-				[addressString appendFormat:@"%@\n", addressPiece];
 			}
-			if (addressPiece = [theAddress valueForKey:kABAddressCityKey]) {
-				[addressString appendFormat:@"%@\n", addressPiece];
-			}
-			if (addressPiece = [theAddress valueForKey:kABAddressZIPKey]) {
-				[addressString appendFormat:@"%@\n", addressPiece];
-			}
-			if (addressPiece = [theAddress valueForKey:kABAddressStateKey]) {
-				[addressString appendFormat:@"%@\n", addressPiece];
-			}
-			if (addressPiece = [theAddress valueForKey:kABAddressCountryCodeKey]) {
-				[addressString appendFormat:@"%@\n", addressPiece];
-			}
-			
 
-			NSXMLElement * addressElement = [NSXMLNode elementWithName:@"address" stringValue: addressString];
-			[placemarkElement addChild: addressElement];
-			
-
-			NSMutableString * descriptionHTMLString = [NSMutableString string];
-			/*
-			 if (fullImagePath) {
-				[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;\">\n", 
-					[fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], 
-					NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];					
-			}
-			 */
-			[descriptionHTMLString appendFormat: @"<a href=\"addressbook:%@\">%@</a>", 
-				uniqueID, 
-				NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];			
-			
-			NSXMLElement * descriptionElement = [NSXMLElement elementWithName:@"description" stringValue:descriptionHTMLString];
-			[placemarkElement addChild: descriptionElement];
-			NSXMLElement * snippetElement = [NSXMLElement elementWithName:@"Snippet"];
-			[placemarkElement addChild:snippetElement];
-			NSXMLElement * styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[@"#" stringByAppendingString:ID]];
-			[placemarkElement addChild:styleURLElement];
-				
-			[myXML addChild: placemarkElement];
-
-			index++;
-		}
-		
-		[self setValue:[NSNumber numberWithInt:currentPosition + 1] forKey:@"currentPosition"];
-		if (-[lastProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
+			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"currentPosition"];
 			[progressBar display];
-			[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
+			
+		#pragma mark -do2: Write KML
+			NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
+			[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
+			[kmlElement addChild: myXML];
+			NSXMLDocument * myXMLDocument = [[[NSXMLDocument alloc] initWithRootElement:kmlElement] autorelease];
+			[myXMLDocument setCharacterEncoding:@"utf-8"];
+			
+			NSData * xmlData = [myXMLDocument XMLData];
+			
+			//
+			// now compress the result
+			NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
+			NSString * XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
+			int i = 2;
+			
+			while ([[NSFileManager defaultManager] fileExistsAtPath:XMLpath]) {
+				KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
+				XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
+				i++;
+			}
+
+			[xmlData writeToFile:XMLpath atomically:YES];	
+			
+			/*
+			NSString * zipCommand = @"/usr/bin/zip";
+			NSArray * zipArguments = [NSArray arrayWithObjects:@"-r", path, folderNamePath, nil];
+			NSTask * zipTask = [NSTask launchedTaskWithLaunchPath:zipCommand arguments:zipArguments];
+			[zipTask waitUntilExit];
+			if ([zipTask terminationStatus] != 0) {
+				[self error: NSLocalizedString(@"Compression of the KMZ file failed", @"Compression of the KMZ file failed")];
+				return;
+			}
+				 
+			[[NSFileManager defaultManager] removeFileAtPath:pathName handler:nil];
+			*/	
+				
+		#pragma mark -do2: Clean Up 	
+			if (![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowWarning"]) {
+				NSString * myMessage =  [NSString stringWithFormat:NSLocalizedString(@"The file %@", @"Text telling that the conversion has finished along with the file name and warning about possibly privacy implications"), KMLFileName];
+				[self setValue:myMessage forKey:@"sheetMessage"];
+				[NSApp beginSheet:warningMessage modalForWindow:mainWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+			}
+			
+			[sender setTitle:NSLocalizedString(@"Create Google Earth Bookmarks", @"Default Button label (Create Google Earth Bookmarks)")];
+			[sender setEnabled:YES];
+			[sender display];
+			[self setValue:[NSNumber numberWithInt:0] forKey:@"currentPosition"];
+			[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
+			[progressBar setHidden:YES];
 		}
 	}
-
-	[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"currentPosition"];
-	[progressBar display];
-	
-#pragma mark -do2: Write KML
-	NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
-	[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
-	[kmlElement addChild: myXML];
-	NSXMLDocument * myXMLDocument = [[[NSXMLDocument alloc] initWithRootElement:kmlElement] autorelease];
-	[myXMLDocument setCharacterEncoding:@"utf-8"];
-	
-	NSData * xmlData = [myXMLDocument XMLData];
-	
-	//
-	// now compress the result
-	NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
-	NSString * XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
-	int i = 2;
-	
-	while ([[NSFileManager defaultManager] fileExistsAtPath:XMLpath]) {
-		KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
-		XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
-		i++;
-	}
-
-	[xmlData writeToFile:XMLpath atomically:YES];	
-	
-	/*
-	NSString * zipCommand = @"/usr/bin/zip";
-	NSArray * zipArguments = [NSArray arrayWithObjects:@"-r", path, folderNamePath, nil];
-	NSTask * zipTask = [NSTask launchedTaskWithLaunchPath:zipCommand arguments:zipArguments];
-	[zipTask waitUntilExit];
-    if ([zipTask terminationStatus] != 0) {
-		[self error: NSLocalizedString(@"Compression of the KMZ file failed", @"Compression of the KMZ file failed")];
-		return;
-	}
-		 
-	[[NSFileManager defaultManager] removeFileAtPath:pathName handler:nil];
-	*/	
-		
-#pragma mark -do2: Clean Up 	
-	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowWarning"]) {
-		NSString * myMessage =  [NSString stringWithFormat:NSLocalizedString(@"The file %@", @"Text telling that the conversion has finished along with the file name and warning about possibly privacy implications"), KMLFileName];
-		[self setValue:myMessage forKey:@"sheetMessage"];
-		[NSApp beginSheet:warningMessage modalForWindow:mainWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-	}
-	
-	[sender setTitle:NSLocalizedString(@"Create Google Earth Bookmarks", @"Default Button label (Create Google Earth Bookmarks)")];
-	[sender setEnabled:YES];
-	[sender display];
-	[self setValue:[NSNumber numberWithInt:0] forKey:@"currentPosition"];
-	[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
-	[progressBar setHidden:YES];
 	[myPool release];
 }
 

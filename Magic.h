@@ -14,6 +14,7 @@
 #define MENUNAME @"NAME"
 #define MENUOBJECT @"OBJECT"
 #define MENUITEMALL @"ALL"
+#define OMITNAMESDEFAULT @"Omit Names"
 #define ALLDICTIONARY [NSDictionary dictionaryWithObjectsAndKeys:MENUITEMALL, MENUOBJECT, NSLocalizedString(@"All Contacts", @"All Contacts"), MENUNAME, nil]
 
 
@@ -27,8 +28,8 @@
 	BOOL running;
 	int recordCount;
 	int currentPosition;
-	NSUserDefaultsController * UDC;
 }
+
 - (void) buildGroupList;
 - (IBAction) do:(id) sender;
 - (void) do2:(id) sender;

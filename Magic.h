@@ -35,13 +35,16 @@
 	
 	NSString * relevantPeopleInfo;
 
+	int addressesAreAvailable;
 	int notSearchedCount;
+	IBOutlet NSButton * runGeolocationButton;
+	IBOutlet NSButton * createKMLButton;
 	
 	IBOutlet NSWindow * mainWindow;
 	IBOutlet NSPanel * warningMessage;
-	NSString * sheetMessage;
 	
 	NSArray * groups;
+	BOOL noGroups;
 
 	NSMutableDictionary * locations;
 }
@@ -56,14 +59,14 @@
 - (IBAction) do:(id) sender;
 - (void) do2:(id) sender;
 
-
 - (NSArray*) relevantPeople;
-- (void) updateRelevantPeopleInfo;
+- (void) updateRelevantPeopleInfo:(NSArray*) people;
 
 - (NSString*) googleStringForAddressDictionary : (NSDictionary*) address;
 - (NSMutableString*) dictionaryKeyForAddressDictionary : (NSDictionary*) address;
 - (NSString*) cleanString:(NSString*) s from:(NSString*) evil ;
 
+- (BOOL) needToSearchNoticeHidden;
 - (NSData*) AddressBookIcon;
 - (NSData*) GoogleEarthIcon;
 
@@ -85,3 +88,5 @@
 @interface ABGroup (ESSortExtension)
 - (NSComparisonResult) groupByNameCompare:(ABGroup *)aGroup ;
 @end
+
+int nameSort(id person1, id person2, void *context);

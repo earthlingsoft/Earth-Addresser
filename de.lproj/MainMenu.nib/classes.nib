@@ -34,12 +34,16 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
+				<key>createKMLButton</key>
+				<string>NSButton</string>
 				<key>geocodingProgressBar</key>
 				<string>NSProgressIndicator</string>
 				<key>mainWindow</key>
 				<string>NSWindow</string>
 				<key>progressBar</key>
 				<string>NSProgressIndicator</string>
+				<key>runGeolocationButton</key>
+				<string>NSButton</string>
 				<key>warningMessage</key>
 				<string>NSPanel</string>
 			</dict>

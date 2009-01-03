@@ -13,48 +13,109 @@
 
 
 
+/*
+ Helper function for sorting the people array by name. 
+*/
+int nameSort(id person1, id person2, void *context)
+{
+	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];
+	if (!lastName1) {
+		lastName1 = [person1 valueForProperty:kABLastNameProperty];
+	}
+	NSString * lastName2 = [person2 valueForProperty:kABLastNamePhoneticProperty];
+	if (!lastName2) {
+		lastName2 = [person2 valueForProperty:kABLastNameProperty];
+	}
+	
+	NSComparisonResult result = [lastName1 localizedCaseInsensitiveCompare:lastName2];
+	
+	if (result == NSOrderedSame) {
+		NSString * firstName1 = [person1 valueForProperty:kABFirstNamePhoneticProperty];
+		if (!firstName1) {
+			firstName1 = [person1 valueForProperty:kABFirstNameProperty];
+		}
+		NSString * firstName2 = [person2 valueForProperty:kABFirstNamePhoneticProperty];
+		if (!firstName2) {
+			firstName2 = [person2 valueForProperty:kABFirstNameProperty];
+		}
+		
+		result = [firstName1 localizedCaseInsensitiveCompare:firstName2];
+		
+		if (result == NSOrderedSame) {
+			NSString * middleName1 = [person1 valueForProperty:kABMiddleNamePhoneticProperty];
+			if (!middleName1) {
+				middleName1 = [person1 valueForProperty:kABMiddleNameProperty];
+			}
+			NSString * middleName2 = [person2 valueForProperty:kABMiddleNamePhoneticProperty];
+			if (!middleName2) {
+				middleName2 = [person2 valueForProperty:kABMiddleNameProperty];
+			}
+			
+			result = [middleName1 localizedCaseInsensitiveCompare:middleName2];
+		}
+	}
+	
+	return result;
+}
+
+
+
+
 @implementation Magic
 
 - (id) init {
-	[super init];
-	[self buildGroupList];
-	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-		[NSNumber numberWithBool:NO], @"dontShowWarning", 
-		[NSNumber numberWithFloat:1.5], @"imageSize", 
-		[NSNumber numberWithInt:0], @"addressBookScope",
-		[NSNumber numberWithBool:YES], @"placemarkWithName",
-		@"\342\235\200", @"placemarkNameReplacement",
-		[NSNumber numberWithBool:YES], @"placemarkWithImage",
-		[NSNumber numberWithBool:NO], @"placemarkWithEMail",
-		[NSNumber numberWithBool:NO], @"placemarkWithPhone",
-	   [NSNumber numberWithBool:NO], @"hasReadInfo",
-	nil];
-	[UDC setInitialValues:standardDefaults];	
+	self = [super init];
+	if (self != nil) {
+		[self buildGroupList];
 
-	[[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(addressBookChanged:)
-                                                 name:kABDatabaseChangedExternallyNotification
-                                               object:nil];	
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(addressBookChanged:)
+													 name:kABDatabaseChangedExternallyNotification
+												   object:nil];	
+		
+		[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
+		[self setValue:[NSDate date] forKey:@"lastGeocodingProgressBarUpdate"];
+		
+		NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locations"];
+		if (myLocations) {
+			locations = [myLocations mutableCopy];
+		}
+		else {
+			locations = [[NSMutableDictionary alloc] init];
+		}
+		
+	}	
+	return self;
+}
 
-	[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
-	[self setValue:[NSDate date] forKey:@"lastGeocodingProgressBarUpdate"];
 
-	// look whether there are updates if necessary
+
+- (void)awakeFromNib {
+	[self relevantPeople];
+		
 	if ( [[UDC valueForKeyPath:@"values.lookForUpdate"] boolValue] ) {
 		[VersionChecker checkVersionForURLString:UPDATEURL silent:YES];
 	}
-	
-	NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locations"];
-	if (myLocations) {
-		locations = [myLocations mutableCopy];
-	}
-	else {
-		locations = [[NSMutableDictionary alloc] init];
-	}
+}
 
-	[self updateRelevantPeopleInfo];
-	
-	return self;
+
++ (void)initialize {
+    [self setKeys:[NSArray arrayWithObjects:@"running", @"notSearchedCount", nil]triggerChangeNotificationsForDependentKey:@"needToSearchNoticeHidden"];
+
+	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
+									   [NSNumber numberWithFloat:1.5], @"imageSize", 
+									   [NSNumber numberWithInt:0], @"addressBookScope",
+									   [NSNumber numberWithBool:YES], @"placemarkWithName",
+									   @"\342\235\200", @"placemarkNameReplacement",
+									   [NSNumber numberWithBool:YES], @"placemarkWithImage",
+									   [NSNumber numberWithBool:NO], @"placemarkWithEMail",
+									   [NSNumber numberWithBool:NO], @"placemarkWithPhone",
+									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
+									   [NSNumber numberWithBool:NO], @"hasReadInfo",
+									   nil];
+	[UDC setInitialValues:standardDefaults];
+	[UDC setAppliesImmediately:YES];
 }
 
 
@@ -65,7 +126,6 @@
 	[locations release];
 	[lastProgressBarUpdate release];
 	[lastGeocodingProgressBarUpdate release];
-	[sheetMessage release];
 	[groups release];
 	
 	[super dealloc];
@@ -90,7 +150,6 @@
 	NSArray * ABGroups = [ab groups];
 	ABGroups = [ABGroups sortedArrayUsingSelector:@selector(groupByNameCompare:)];
 	
-//	[a addObject:ALLDICTIONARY];
 	NSEnumerator * myEnum = [ABGroups objectEnumerator];
 	ABGroup * group;
 	while (group = [myEnum nextObject]) {
@@ -98,14 +157,28 @@
 	}
 	[self setValue:a forKey:@"groups"];
 	
-	// look whether the selected item still exists. If it doesn't reset to ALL group
-	NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
-	if ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) {
-		ABGroup * myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup];
-		if (!myGroup) {
-			// the group doesn't exist anymore => switch to all
-			[UDC setValue:ALLDICTIONARY forKeyPath:@"values.selectedGroup"];
+	if ([a count] > 0 ) {
+		// look whether the selected item still exists. If it doesn't reset to ALL group
+		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
+		if ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) {
+			ABGroup * myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup];
+			if (!myGroup) {
+				// the group doesn't exist anymore => switch to first group
+				if ([a count] > 0 ) {
+					group = [groups objectAtIndex:0];
+					[UDC setValue:[NSDictionary dictionaryWithObjectsAndKeys:[group uniqueId], MENUOBJECT, [group valueForProperty:kABGroupNameProperty], MENUNAME, nil] forKeyPath:@"values.selectedGroup"];
+				}
+				else {
+				}
+			}
 		}
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"noGroups"];
+	}
+	else {
+			// there are NO groups => deactivate the GUI
+			[UDC setValue:[NSNumber numberWithInt:0] forKeyPath:@"values.addressBookScope"];
+			[UDC setValue:[NSNull null] forKeyPath:@"values.selectedGroup"];
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"noGroups"];
 	}
 }
 
@@ -115,7 +188,7 @@
 	Tells us that the radio button changed
 */
 - (IBAction) addressBookScopeChanged: (id) sender {
-	[self updateRelevantPeopleInfo];	
+	[self relevantPeople];	
 }
 
 
@@ -125,14 +198,16 @@
 */
 - (IBAction) groupListSelectionChanged: (id) sender {
 	[UDC setValue:[NSNumber numberWithInt:1] forKeyPath:@"values.addressBookScope"];
-	[self updateRelevantPeopleInfo];
+	[self relevantPeople];
 }
+
 
 
 
 
 /*
  returns array with the people selected in the UI
+ the array is sorted
 */ 
 - (NSArray*) relevantPeople {
 	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
@@ -160,15 +235,22 @@
 		error = YES;
 	}
 
+	NSNumber * sortByFirstName;
+	sortByFirstName = [NSNumber numberWithBool:NO];
+	
+	people =  [people sortedArrayUsingFunction:nameSort context:sortByFirstName];
+
+	[self updateRelevantPeopleInfo:people];
+	
 	return people;
 }
 
 
 
-
-
-- (void) updateRelevantPeopleInfo {
-	NSArray * people = [self relevantPeople];
+/*
+	Sets strings and numbers determined by the array of relevant people
+*/
+- (void) updateRelevantPeopleInfo: (NSArray*) people {
 	int addressCount = 0;
 	int locatedAddressCount = 0;
 	int nonLocatedAddressCount = 0;
@@ -219,6 +301,15 @@
 	NSString * infoString = [firstPart stringByAppendingString:secondPart];
 	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
 	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
+	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
+	if (notYetLocatedAddressCount != 0 ) {
+		[createKMLButton setKeyEquivalent:@""];
+		[runGeolocationButton setKeyEquivalent:@"\r"];
+	}
+	else {
+		[runGeolocationButton setKeyEquivalent:@""];
+		[createKMLButton setKeyEquivalent:@"\r"];
+	}
 }
 
 
@@ -241,7 +332,7 @@
 	NSMutableString * addressString = [NSMutableString string];
 	NSString * addressPiece;
 	if (addressPiece = [address valueForKey:kABAddressStreetKey]) {
-		NSArray * evilWords = [NSArray arrayWithObjects: @"Zimmer ", @"Room ", @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach", nil];
+		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach", nil];
 		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
 		NSString * evilWord;
 		while (evilWord = [evilWordEnumerator nextObject]) {
@@ -324,7 +415,7 @@
 					NSNumber * longitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:3] doubleValue]];
 				
 					[locations setObject:[NSArray arrayWithObjects:accuracy, latitude, longitude, nil]  forKey:addressString];
-					[self updateRelevantPeopleInfo];
+					[self relevantPeople];
 				}
 				else {
 					[locations setObject:@"FAIL" forKey: addressString];
@@ -354,7 +445,11 @@
  Localises a number of strings, can return nil
 */
 - (NSString *) localisedLabelName: (NSString*) label {
-	NSString * localisedLabel;
+	NSString * localisedLabel = (NSString*) ABCopyLocalizedPropertyOrLabel((CFStringRef) label);
+	[localisedLabel autorelease];
+	return localisedLabel;
+	
+	/*	NSString * localisedLabel;
 	if ([label isEqualToString:kABHomeLabel]) {
 		localisedLabel =  NSLocalizedString(@"Home", @"Home (Address Label)");
 	}
@@ -367,7 +462,7 @@
 	else if ([label isEqualToString: kABPhoneMobileLabel]) {
 		localisedLabel = NSLocalizedString(@"Mobile", @"Mobile (Phone Label)");
 	}
-/*	else if ([label isEqualToString:kABHomeLabel]) {
+	else if ([label isEqualToString:kABHomeLabel]) {
 		localisedLabel =  NSLocalizedString(@"Home", @"Home (Phone Label)");
 	}
 	else if ([label isEqualToString: kABWorkLabel]) {
@@ -385,12 +480,13 @@
 	else if ([label isEqualToString: kABOtherLabel]) {
 		localisedLabel = NSLocalizedString(@"Other", @"Other (E-Mail Label)");
 	}
-*/
+
 	else {
 		localisedLabel = label;
 	}
  
 	return localisedLabel;
+*/
 }
 
 
@@ -570,17 +666,17 @@
 						[addressString replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
 						
 						if (fullImagePath) {
-							[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-2em;margin-left:1em;\">\n", 
+							[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-1em;margin-left:1em;\">\n", 
 							 [fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], 
 							 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
 						}
 												
-						[descriptionHTMLString appendFormat: @"%@<br /><a href=\"addressbook://%@\">%@</a>",
+						[descriptionHTMLString appendFormat: @"%@<br /><a href=\"addressbook://%@\">%@</a><hr style='width:20em;clear:all;visibility:hidden;' />",
 						 addressString,
 						 uniqueID, 
 						 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];			
 					
-#pragma mark -do2: EMail and Phone extras			
+#pragma mark -do2: EMail, Phone, Web extras			
 						if ([UDC valueForKeyPath:@"values.placemarkWithEMail"]) {
 							// include e-mail addresses in placemark
 							ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
@@ -610,6 +706,35 @@
 						}
 						
 
+						if ([UDC valueForKeyPath:@"values.placemarkWithWeblinks"]) {
+							// include e-mail addresses in placemark
+							ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
+							int weblinkCount = [weblinks count];
+							if (weblinkCount != 0) {
+								int index = 0;
+								[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)")];
+								NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
+								NSString * allWeblinks;
+								while (index < weblinkCount) {
+									NSString * weblink = [weblinks valueAtIndex:index];
+									if (weblink) {
+										NSString * localisedLabel = [self localisedLabelName:[weblinks labelAtIndex:index]];
+										if (localisedLabel) {
+											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+										}
+										else {
+											localisedLabel = @"";
+										}
+										[weblinkArray addObject:[NSString stringWithFormat:@"<a href='%@'>%@</a>%@", weblink, weblink, localisedLabel]];
+										allWeblinks = [weblinkArray componentsJoinedByString:@", "];
+									}
+									index++;
+								}
+								[descriptionHTMLString appendFormat:@"%@.", allWeblinks];
+							}
+						}
+						
+						
 						if ([UDC valueForKeyPath:@"values.placemarkWithPhone"]) {
 							// include e-mail addresses in placemark
 							ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
@@ -710,6 +835,16 @@
 }
 
 
+
+
+#pragma mark KVC
+
+
+- (BOOL) needToSearchNoticeHidden {
+	BOOL hidden = running || (notSearchedCount == 0);
+	return hidden;
+}
+
 - (NSData*) AddressBookIcon {
 	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:[[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"]];
 	[im setSize:NSMakeSize(128.0,128.0)];
@@ -765,7 +900,7 @@
 
 - (void)addressBookChanged:(NSNotification *)notification {
 	[self buildGroupList];
-	[self updateRelevantPeopleInfo];
+	[self relevantPeople];
 }
 
 
@@ -824,3 +959,4 @@
 }
 
 @end
+

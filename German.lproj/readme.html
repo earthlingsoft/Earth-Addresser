@@ -28,17 +28,25 @@ h3 { margin:3em 0em 1em 0em;}
 Deine Adressen in Google Earth.
 </p>
 <p>
-Das Adressbuch im Computer randvoll mit Adressen und begeistert von Google Earth? Dann wird Earth Addresser die perfekte Erg&auml;nzung sein. Das Programm schreibt die Adressen aus dem Adressbuch in eine &sbquo;KML&lsquo; Datei, die Google Earth lesen kann um dann die Adressen auf der Weltkarte anzuzeigen. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird anstelle der &uuml;blichen Stecknadel das Photo auf der Weltkarte angezeigt.
+Das Adressbuch im Computer randvoll mit Adressen und begeistert von Google Earth? Dann wird Earth Addresser die perfekte Erg&auml;nzung sein. Das Programm schreibt die Adressen aus dem Adressbuch in eine &sbquo;KML&lsquo; Datei, die Google Earth lesen kann, um dann die Adressen auf der Weltkarte anzuzeigen. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird anstelle der &uuml;blichen Stecknadel das Photo der Person auf der Weltkarte angezeigt.
 </p>
 <p>
-Um die Ortsmarken an der korrekten Stelle anzuzeigen mu&szlig; Google Earth zun&auml;chst die Adresse in Koordinaten umwandeln. Hierzu schickt Google Earth die Adresse an einen Server von Google. <em>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser nicht benutzen und die erzeugte Datei nicht mit Google Earth &ouml;ffnen.</em>
+Damit Google Earth die Adressen an der korrekten Stelle anzeigt, mu&szlig; zun&auml;chst die Adresse in Koordinaten auf der Erdkugel umgewandelt werden. Diese Umwandlung nimmt ein weiterer Dienst von Google vor. Das hei&szlig;t, da&szlig; jede vom Earth Addresser verarbeitet Adresse einmal zu Google geschickt wird. <em>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser nicht verwenden.</em> Bei dieser Umwandlung wird <em>nur</em> der Inhalt der Adressfelder im Adressbuch an Google gesendet. Der Name der Person und andere Kontaktinformationen werden nicht verschickt.
 </p>
 <p>
-Falls f&uuml;r manche Adressen keine Ortsmarke an der korrekten Stelle angezeigt wird kann das an verschiedenen Dingen liegen. Zum einen hat Google Earth noch nicht f&uuml;r jedes Land auf der Welt Stra&szlig;enpl&auml;ne, so da&szlig; Adressen in einigen L&auml;ndern nicht gefunden werden k&ouml;nnen. Zum anderen versteht Google Earth manche Adre&szlig;formate nicht, zum Beispiel wenn Wohnungsnummern oder &auml;hnliches in der Adresse vorkommen. Earth Addresser versucht, die g&auml;ngigsten  Bezeichnungen aus Adressen zu entfernen, es kann aber durchaus vorkommen, da&szlig; Dein Adressbuch Varianten enth&auml;lt, die nicht ber&uuml;cksichtigt werden. Alle Adressen, die Google Earth nicht finden konnte, werden auf dem Globus an der Stelle 0&deg;N, 0&deg;O angezeigt.
+Weiterhin kann der Google-Dienst nicht jede Adresse korrekt in Koordinaten umwandeln. Dies kann an mehreren Dingen liegen.
 </p>
-<p>
-Um das zu einer Adresse geh&ouml;rende Land zu ermitteln schaut Earth Addresser <em>nicht</em> in das &sbquo;Land&lsquo; Feld der Adresse, das h&auml;ufig leer ist. Stattdessen wird das f&uuml;r das Adressformat angegebene Land verwendet. Das Adressformat kann eingestellt werden, indem im Bearbeiten Modus auf das Etikett einer Adresse geklickt  und  das gew&uuml;nschte Land im Untermen&uuml; &sbquo;Adressformat &auml;ndern&lsquo; ausgew&auml;hlt wird.
-</p>
+<ol>
+<li>Landesinformationen: Um Probleme mit Tippfehlern und verschiedenen Sprachen zu vermeiden nutzt Earth Addresser <em>nicht</em> das eingetippte Land im Adressbuch. Stattdessen wird das  Land genutzt, f&uuml;r das das <em>Adressformat</em> der Adresse eingestellt wurde.  Das Adressformat kann eingestellt werden, indem im Bearbeiten Modus auf das Etikett einer Adresse geklickt  und  das gew&uuml;nschte Land im Untermen&uuml; &sbquo;Adressformat &auml;ndern&lsquo; ausgew&auml;hlt wird.
+
+</li>
+<li>
+Unbekannte Abk&uuml;rzungen in der Adresse: Google hat Schwierigkeiten mit einigen Adre&szlig;zus&auml;tzen wie &sbquo;Zimmer&lsquo; oder &sbquo;Postfach&lsquo;. Earth Addresser erkennt einige von diesen und entfernt sie. Es kann aber gut sein, da&szlig; andere Zus&auml;tze unerkannt bleiben. 
+</li>
+<li>
+Datenbestand von Google: In manchen L&auml;ndern hat Google nicht alle Stra&szlig;ennamen erfa&szlig;t. Adressen auf nicht erfa&szlig;ten Stra&szlig;en k&ouml;nnen nicht korrekt in Koordinaten umgewandelt werden und Earth Addresser entfernt diese aus den Ergebnissen.
+</li>
+</ol>
 <p>
 Vielen Dank an Nat Bletter, der die Idee f&uuml;r Earth Addresser angesto&szlig;en hat, an Dan Wood f&uuml;r seine Cocoa-Ratschl&auml;ge und an Ronald Leroux f&uuml;r die Franz&ouml;sische Lokalisierung.
 </p>
@@ -56,10 +64,20 @@ Viel Spa&szlig;.
 
 <h3>Versionsgeschichte</h3>
 <dl class="versions" id="latestversion">
+<dt>v2 (2009-01-03)</dt>
+<dd>
+<ul>
+<li>Vollst&auml;ndig &uuml;berarbeitete Benutzeroberfl&auml;che</li>
+<li>Die Umwandlung von Adressen wird nun von Earth Addresser und nicht von Google Earth vorgenommen. Ergebnisse werden hierbei gespeichert und wiederverwendet.</li>
+<li>Die Daten in der erzeugten KML Datei lassen sich feiner einstellen. Insbesondere k&ouml;nnen nun Dateien ohne Namen und mit Telephonnummern und E-Mail Adressen geschrieben werden.</li>
+<li>Die Ortsmarken in Google Earth enthalten nun Bilder.</li>
+<li>Die Links zum Adressbuch sind nun zuverl&auml;ssig klickbar.</li>
+</ul>
+</dd>
 
 <dt>v1 (2) (2007-04-26)</dt>
 <dd>
-Updatesuche korrigiert, so da§ sie nach den richtigen Updates sucht.
+Updatesuche korrigiert, so da&szlig; sie nach den richtigen Updates sucht.
 </dd>
 
 <dt>v1 (2007-03-30)</dt>

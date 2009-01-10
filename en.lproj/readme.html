@@ -31,13 +31,19 @@ Putting your addresses on the map.
 Love Google Earth and have all your friends&rsquo; contact information in your Mac&rsquo;s Address Book? Then you will like  Earth Addresser! It takes the addresses from your Address Book and writes them to a &lsquo;KML&rsquo; file which Google Earth can open to display your friends&rsquo; places right on the map. If you have added photos for them in your Address Book, those will appear instead of the usual drawing pin.
 </p>
 <p>
-To display those place marks in the correct position, Google Earth needs to look up addresses on Google&rsquo;s servers and turn them into a location on the map. Which means that on opening the bookmark file created by Earth Addresser, Google Earth will send each of your addresses to one of its servers to have its location looked up. <em>If you aren&rsquo;t comfortable with sending all those addresses to Google,  do not use Earth Addresser and do not open the file it creates with Google Earth</em>.
+For Google Earth to able to display your friends&rsquo; addresses in the correct location, they need to be converted to coordinates on the surface of the earth (longitude and latitude) first. That conversion is done by Google&rsquo;s Maps service which Earth Addresser send the addresses to. <em>If you aren&rsquo;t comfortable with sending all those addresses to Google,  do not use Earth Addresser and do not open the file it creates with Google Earth</em>.
 </p>
 <p>
-Please keep in mind that Google Earth does not have information for all countries. And that it isn&rsquo;t able to recognise all address formats. While Earth Addresser tries to &lsquo;clean&rsquo; addresses by removing information such as &lsquo;Room 101&rsquo; from them to increase the chance of Google Earth properly looking them up, it may not be smart enough to recognise all the terms you are using &ndash; which then leads to the address not being recognised. Such unrecognised addresses will be displayed in Google Earth at the position 0&deg;N, 0&deg;E.
-</p><p>
-Earth Addresser does not use the &lsquo;Country field&rsquo; from your Address Book entries but rather the Address Format field you can set by clicking the label next to the address in Address Book and then going into the &lsquo;Change Address Format&rsquo; submenu. In case you are getting wrong results, it may be worth checking whether the wrong Address Format has been specified.
+Please keep in mind that Google may be unable to determine the coordinates for some of the addresses in your address book. You can see a list of those addresses whose location could not be determined by using the &ldquo;List Non-locatable Addresses&rdquo; command in the Help menu. Typical reasons for addresses not being locatable are the following:
 </p>
+<ul>
+<li>Country Information: Earth Addresser does <em>not</em> use the country you typed into the address book when sending addresses to Google. This is done because there can be different styles and spellings for writing country names. Instead, Earth Addresser uses the address format which you have set up for the address. You can adjust the address format in the menu that appears when you click the address&rsquo; label while editing in the Address Book application.
+</li><li>
+Uknown acronyms in addresses: Frequently Google fails to correctly locate addresses which include auxiliary information like room numbers. Earth Addresser tries to filter the most common of those out, but it may not know the ones you are using.
+</li><li>
+Google Coverage: Google does not cover all countries on the planet to the same degree. In some countries their database will not know all the street names. In addition the spelling of addresses frequently depends on the language of the country the address is in. It may be necessary that the spelling you use matches the &lsquo;official&rsquo; spelling used by Google for lookups to succeed.
+</li>
+</ul>
 <p>
 Thanks to Nat Bletter for starting the discussion on this topic, to Dan Wood for Cocoa advice and to Ronald Leroux for the French localisation.
 </p>
@@ -56,7 +62,22 @@ Enjoy.
 <h3>Version History</h3>
 <dl class="versions" id="latestversion">
 
-<dt>v1 (2) (2007-04-25)</dt>
+<dt>v2b2 (9) (2009-01-10)</dt>
+<dd>
+<ul>
+<li>User Interface completely redesigned.</li>
+<li>Addresses are now looked up – and cached – by Earth Addresser.</li>
+<li>More options for what is written in the KML file.</li>
+<li>Info bubbles appearing in Google Earth now contain photos.</li>
+<li>Improved clickability of links to Address Book records in Google Earth.</li>
+<li>A list of addresses which could not be located can be displayed.</li>
+<li>Added English localisation for new user interface.</li>
+</ul>
+</dd>
+
+<dl class="versions" id="oldversions">
+
+<dt>v1r2 (2007-04-25)</dt>
 <dd>
 Fixed the version checker to do the right thing.
 </dd>
@@ -79,7 +100,6 @@ First public release.
 </ul>
 </dd>
 
-<dl class="versions" id="oldversions">
 <dt>version 1b2 (2007-03-27)</dt>
 <dd>
 hopefully fixed a problem that made the application stall

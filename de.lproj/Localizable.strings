@@ -1,35 +1,56 @@
-﻿/* Addresses */
-"Addresses" = "Adressen";
-
-/* All Contacts */
-"All Contacts" = "Alle Adressen";
-
-/* Contacts */
-"Contacts" = "Visitenkarten";
-
-
-
-/*
+﻿/*
 	STATUS STRINGS
 */
 
 /* 
-%i contacts with %i addresses.\n 
-(First line of info in top part of the window)
+singular and plural form of contact and address for use in count displayed in the top section of the window
 */
-"%i contacts with %i addresses.\n" = "%i Personen mit %i Adressen.\n";
+"address" = "Adresse";
+"addresses" = "Adressen";
+"contact" = "Visitenkarte";
+"contacts" = "Visitenkarten";
 
 /* 
-%i of these have been successfully located, %i of these could not be located and %i have not been looked up yet.
-(Second line of info in top line of window – variant used when addresses that haven't been looked up yet _do_ exist.)
+Info text in top section of the window 
 */
-"%i of these have been successfully located, %i of these could not be located and %i have not been looked up yet." = "Von diesen Adressen wurden %i gefunden, %i nicht gefunden und nach %i noch gar nicht gesucht.";
+"%i %@ with %i %@" = "%i %@ mit %i %@";
+
+
+/* 
+Info text in middle section of window – variant used when exactly one of the selected addresses have been looked up yet.
+*/
+"The selected contacts contain 1 address whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Die Auswahl enthält eine Adresse, deren Koordinaten noch nicht ermittelt wurden.";
+
+/* 
+Info text in middle section of window – variant used when more than one of the selected addresses have been looked up yet.
+*/
+"The selected contacts contain %i addresses whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Die Auswahl enthält %i Adressen, deren Koordinaten noch nicht ermittelt wurden.";
+
+
 
 /*
-%i of these have been successfully located previously while the remaining %i could not be located.
-(Second line of info in top section of the window –variant used when _no_ addresses that haven't been looked up yet exist.)
+Info text in middle section of window – variant used when everything has been looked up already and not all addresses were found.
 */
-"%i of these have been successfully located previously while the remaining %i could not be located." = "Von diesen Adressen wurden %i gefunden und %i nicht gefunden.";
+"All the addresses you selected have been looked up already. Unfortunately %i of them could not be located." = "Es wurden bereits alle Adressen nachgeschlagen.
+Für %i der Adressen konnten die zugehörigen Koordinaten nicht ermittelt werden.";
+
+/*
+Info text in middle section of window – variant used when everything has been looked up already successfully.
+*/
+"All the addresses you selected have been looked up already." = "Die Koordinaten aller ausgewählten Adressen sind bereits ermittelt.";
+
+
+
+/*
+Info text in middle section of window – variant used when the AddressBook selection contains no addresses.
+*/
+"The contacts you selected do not contain any addresses. Try a different selection for things to be more useful." = "Die Auswahl enthält keine Adressen.";
+
+
+/*
+Displayed in bottom section after Placemarks have been created.
+*/
+"File '%@' on your Desktop" = "Die Ortsmarkendatei „%@“ liegt auf dem Schreibtisch.";
 
 
 
@@ -59,19 +80,25 @@
 
 
 
-/* KML Filename */
-"Filename" = "Adressen";
 
 
 /*
-TEXT APPEARING WITHIN THE KML FILE
+TEXT APPEARING IN THE KML FILE
 */
+
+/* KML File Name */
+"Filename" = "Adressen";
+
+/* Name of Placemark group in KML file */
+"Addresses" = "Adressen";
 
 /* open in AddressBook */
 "open in AddressBook" = "Im Adressbuch anzeigen";
 
+
 /* Photo (alt tag for image) */
 "Photo" = "Photo";
+
 
 /* E-Mail (appears in Google Earth Info Balloon) */
 "E-Mail" = "E-Mail";
@@ -92,3 +119,28 @@ TEXT APPEARING WITHIN THE KML FILE
 
 /* Mobile (Phone Label) */
 "Mobile" = "Mobil";
+
+
+
+/*
+UNUSED
+*/
+
+/* UNUSED All Contacts */
+"All Contacts" = "Alle Adressen";
+
+/* UNUSED Contacts */
+"Contacts" = "Visitenkarten";
+
+/* 
+UNUSED
+(Second line of info in first section of the window – variant used when addresses that haven't been looked up yet _do_ exist.)
+*/
+"%i of these have been successfully located, %i of these could not be located and %i have not been looked up yet." = "Von diesen Adressen wurden %i gefunden, %i nicht gefunden und nach %i noch gar nicht gesucht.";
+
+/*
+UNUSED
+(Second line of info in first section of the window – variant used when _no_ addresses that haven't been looked up yet exist.)
+*/
+"%i of these have been successfully located previously while the remaining %i could not be located." = "Von diesen Adressen wurden %i gefunden und %i nicht gefunden.";
+

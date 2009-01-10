@@ -13,6 +13,8 @@
 				<string>id</string>
 				<key>convertAddresses</key>
 				<string>id</string>
+				<key>createListOfNonLocatableAddresses</key>
+				<string>id</string>
 				<key>dismissSheet</key>
 				<string>id</string>
 				<key>do</key>

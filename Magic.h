@@ -12,13 +12,19 @@
 #include <uuid/uuid.h>
 #include "VersionChecker.h"
 
-#define APIKEY @"ABQIAAAAlHKFjYnAwG075OeYhnD30xRxdMQYmQaEcayIZUdLHbQwQRmWDRQAobR9d1SmZ4paTmBsalsw0pvc4w"
+#define GOOGLEAPIKEY @"ABQIAAAAlHKFjYnAwG075OeYhnD30xRxdMQYmQaEcayIZUdLHbQwQRmWDRQAobR9d1SmZ4paTmBsalsw0pvc4w"
+#define GOOGLEGEOLOOKUPURL @"http://maps.google.com/maps/geo?output=csv&sensor=false&key=%@"
 #define MENUNAME @"NAME"
 #define MENUOBJECT @"OBJECT"
 #define MENUITEMALL @"ALL"
+#define FAILSTRING @"FAIL"
 #define OMITNAMESDEFAULT @"Omit Names"
 #define ALLDICTIONARY [NSDictionary dictionaryWithObjectsAndKeys:MENUITEMALL, MENUOBJECT, NSLocalizedString(@"All Contacts", @"All Contacts"), MENUNAME, nil]
 #define SECONDSBETWEENCOORDINATELOOKUPS 0.2
+#define UDC [NSUserDefaultsController sharedUserDefaultsController]
+#define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
+
+
 
 @interface Magic : NSObject {
 	IBOutlet NSProgressIndicator * progressBar;
@@ -34,7 +40,9 @@
 	int geocodingCurrentPosition;
 	
 	NSString * relevantPeopleInfo;
-
+	NSString * lookupInfo;
+	NSString * doneMessage;
+	
 	int addressesAreAvailable;
 	int notSearchedCount;
 	IBOutlet NSButton * runGeolocationButton;
@@ -78,10 +86,12 @@
 - (IBAction) dismissSheet:(id) sender;
 - (IBAction) showWarningInfo: (id) sender;
 
-- (void) readme:(id) sender;
+- (IBAction) createListOfNonLocatableAddresses:(id) sender;
+
+- (IBAction) readme:(id) sender;
 - (NSString*) myVersionString;
 - (IBAction) autoCheckForUpdates: (id) sender;
-- (IBAction)menuCheckVersion:(id)sender;
+- (IBAction) menuCheckVersion:(id)sender;
 
 @end
 

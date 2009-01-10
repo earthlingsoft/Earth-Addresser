@@ -8,56 +8,6 @@
 //
 
 #import "Magic.h"
-#define UDC [NSUserDefaultsController sharedUserDefaultsController]
-#define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
-
-
-
-/*
- Helper function for sorting the people array by name. 
-*/
-int nameSort(id person1, id person2, void *context)
-{
-	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];
-	if (!lastName1) {
-		lastName1 = [person1 valueForProperty:kABLastNameProperty];
-	}
-	NSString * lastName2 = [person2 valueForProperty:kABLastNamePhoneticProperty];
-	if (!lastName2) {
-		lastName2 = [person2 valueForProperty:kABLastNameProperty];
-	}
-	
-	NSComparisonResult result = [lastName1 localizedCaseInsensitiveCompare:lastName2];
-	
-	if (result == NSOrderedSame) {
-		NSString * firstName1 = [person1 valueForProperty:kABFirstNamePhoneticProperty];
-		if (!firstName1) {
-			firstName1 = [person1 valueForProperty:kABFirstNameProperty];
-		}
-		NSString * firstName2 = [person2 valueForProperty:kABFirstNamePhoneticProperty];
-		if (!firstName2) {
-			firstName2 = [person2 valueForProperty:kABFirstNameProperty];
-		}
-		
-		result = [firstName1 localizedCaseInsensitiveCompare:firstName2];
-		
-		if (result == NSOrderedSame) {
-			NSString * middleName1 = [person1 valueForProperty:kABMiddleNamePhoneticProperty];
-			if (!middleName1) {
-				middleName1 = [person1 valueForProperty:kABMiddleNameProperty];
-			}
-			NSString * middleName2 = [person2 valueForProperty:kABMiddleNamePhoneticProperty];
-			if (!middleName2) {
-				middleName2 = [person2 valueForProperty:kABMiddleNameProperty];
-			}
-			
-			result = [middleName1 localizedCaseInsensitiveCompare:middleName2];
-		}
-	}
-	
-	return result;
-}
-
 
 
 
@@ -99,9 +49,21 @@ int nameSort(id person1, id person2, void *context)
 }
 
 
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
+		[self showWarningInfo:nil];
+	}	
+}	
+
+
+
+
+
 + (void)initialize {
     [self setKeys:[NSArray arrayWithObjects:@"running", @"notSearchedCount", nil]triggerChangeNotificationsForDependentKey:@"needToSearchNoticeHidden"];
 
+	[self setKeys:[NSArray arrayWithObject:@"notSearchedCount"]triggerChangeNotificationsForDependentKey:@"nothingToSearch"];
+	
 	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
 									   [NSNumber numberWithFloat:1.5], @"imageSize", 
@@ -132,12 +94,26 @@ int nameSort(id person1, id person2, void *context)
 }
 
 
-- (void) saveLocations {
-	[UDC setValue:locations forKeyPath:@"values.locations"];
+
+/*
+	yup we want to quit on closing the window
+*/
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
+	return YES;
+}
+
+
+/*
+	when Address Book changes, update everything that depends on it
+*/
+- (void)addressBookChanged:(NSNotification *)notification {
+	[self buildGroupList];
+	[self relevantPeople];
 }
 
 
 
+#pragma mark Address Book People Selection
 
 /*
 	Rebuilds the Group list from the Address Book and re-sets the selection in case the selected object ceased existing after the rebuild.
@@ -211,7 +187,6 @@ int nameSort(id person1, id person2, void *context)
 */ 
 - (NSArray*) relevantPeople {
 	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
-	BOOL error = NO;
 	
 	NSArray * people = nil ;
 	NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
@@ -226,13 +201,11 @@ int nameSort(id person1, id person2, void *context)
 		else {
 			// the group doesn't exist anymore => switch to all
 			[self error: @"group doesn't exist anymore - this shouldn't happen"];
-			error = YES;
 		}
 	}
 	else {
 		// eeek!
 		[self error:NSLocalizedString(@"Selected group wasn't recognisable.",@"Selected group couldn't be recognised.")];
-		error = YES;
 	}
 
 	NSNumber * sortByFirstName;
@@ -286,22 +259,57 @@ int nameSort(id person1, id person2, void *context)
 		}
 	}
 	
-	NSString * firstPart = [NSString stringWithFormat:NSLocalizedString(@"%i contacts with %i addresses.\n", @"%i contacts with %i addresses.\n"), [people count], addressCount];
+	NSString * contactString;
+	if ([people count] == 1) {
+		contactString = NSLocalizedString(@"contact", @"");
+	}
+	else {
+		contactString = NSLocalizedString(@"contacts", @"");
+	}
+	
+	NSString * addressString;
+	if (addressCount == 1) {
+		addressString = NSLocalizedString(@"address", @"");
+	}
+	else {
+		addressString = NSLocalizedString(@"addresses", @"");
+	}
+		
+	NSString * firstPart = [NSString stringWithFormat:NSLocalizedString(@"%i %@ with %i %@", @""), [people count], contactString, addressCount, addressString];
 
-	NSString * secondPart = @"";
+	NSString * lookupPart = @"";
 	if (addressCount != 0) {
 		if (notYetLocatedAddressCount != 0) {
-			secondPart = [NSString stringWithFormat:NSLocalizedString(@"%i of these have been successfully located, %i of these could not be located and %i have not been looked up yet.", @"%i of these have been successfully located, %i of these could not be located and %i have not been looked up yet."), locatedAddressCount, nonLocatedAddressCount, notYetLocatedAddressCount];
+			// there are addresses and some still NEED lookup
+			if (notYetLocatedAddressCount == 1) {
+				lookupPart = [NSString stringWithFormat:NSLocalizedString(@"The selected contacts contain 1 address whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that.", @""), notYetLocatedAddressCount];
+			}
+			else {
+				lookupPart = [NSString stringWithFormat:NSLocalizedString(@"The selected contacts contain %i addresses whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that.", @""), notYetLocatedAddressCount];
+			}
 		}
 		else {
-			secondPart = [NSString stringWithFormat:NSLocalizedString(@"%i of these have been successfully located previously while the remaining %i could not be located.", @"%i of these have been successfully located previously while the remaining %i could not be located."), locatedAddressCount, nonLocatedAddressCount];
+			// there are addresses and all of them have been looked up already
+			if (nonLocatedAddressCount != 0) {
+				lookupPart = [NSString stringWithFormat:NSLocalizedString(@"All the addresses you selected have been looked up already. Unfortunately %i of them could not be located.", @""), nonLocatedAddressCount];
+			}
+			else{
+				lookupPart = NSLocalizedString(@"All the addresses you selected have been looked up already.", @"");
+			}
 		}
 	}
+	else {
+		// no addresses
+		lookupPart = NSLocalizedString(@"The contacts you selected do not contain any addresses. Try a different selection for things to be more useful.", @"Shown in middle section when the AddressBook selection contains no addresses");		
+	}
 			
-	NSString * infoString = [firstPart stringByAppendingString:secondPart];
+	NSString * infoString = firstPart; // = [firstPart stringByAppendingString:secondPart];
 	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
+	[self setValue:lookupPart forKey:@"lookupInfo"];
 	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
 	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
+	[self setValue:@"" forKey:@"doneMessage"];
+
 	if (notYetLocatedAddressCount != 0 ) {
 		[createKMLButton setKeyEquivalent:@""];
 		[runGeolocationButton setKeyEquivalent:@"\r"];
@@ -314,6 +322,9 @@ int nameSort(id person1, id person2, void *context)
 
 
 
+
+
+#pragma mark Convert Addresses to Relevant Formats
 
 
 - (NSString*) googleStringForAddressDictionary : (NSDictionary*) address {
@@ -359,25 +370,35 @@ int nameSort(id person1, id person2, void *context)
 
 
 
+#pragma mark Address Lookup
 
 
+/*
+ action for looking up addresses
+*/
 - (IBAction) convertAddresses: (id) sender {
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
 	[NSThread detachNewThreadSelector:@selector(convertAddresses2) toTarget:self withObject:nil];
 }
 
 
+/*
+ method looking up addresses
+ to be run in separate thread
+*/
 - (void) convertAddresses2 {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	NSArray * people = [self relevantPeople];
 	NSEnumerator * myEnum = [people objectEnumerator];
 	ABPerson * myPerson;
-	NSString * baseURL = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?output=csv&sensor=false&key=%@", APIKEY];
+	NSString * baseURL = [NSString stringWithFormat:GOOGLEGEOLOOKUPURL, GOOGLEAPIKEY];
 		
 	NSDate * previousLookup = nil;
 	
-	[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"geocodingRecordCount"];
+	[self setValue:[NSNumber numberWithInt:notSearchedCount] forKey:@"geocodingRecordCount"];
 	[self setValue:[NSNumber numberWithInt:0] forKey:@"geocodingCurrentPosition"];
+	[geocodingProgressBar display];
+
 	while (myPerson = [myEnum nextObject]) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		int addressCount = [addresses count];
@@ -418,16 +439,16 @@ int nameSort(id person1, id person2, void *context)
 					[self relevantPeople];
 				}
 				else {
-					[locations setObject:@"FAIL" forKey: addressString];
+					[locations setObject:FAILSTRING forKey: addressString];
 					NSLog(@"Geocoding query for '%@' failed with result %@", theAddress, [resultArray objectAtIndex:0]);
 				}
+				[self setValue:[NSNumber numberWithInt:geocodingCurrentPosition + 1] forKey:@"geocodingCurrentPosition"];
 			}
 			index++;
-		}
-		[self setValue:[NSNumber numberWithInt:geocodingCurrentPosition + 1] forKey:@"geocodingCurrentPosition"];
-		if (-[lastGeocodingProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
-			[geocodingProgressBar display];
-			[self setValue:[NSDate date] forKey:@"lastGeocodingProgressBarUpdate"];
+			if (-[lastGeocodingProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
+				[geocodingProgressBar display];
+				[self setValue:[NSDate date] forKey:@"lastGeocodingProgressBarUpdate"];
+			}
 		}
 		
 	}
@@ -440,65 +461,33 @@ int nameSort(id person1, id person2, void *context)
 }
 
 
-
-/*
- Localises a number of strings, can return nil
+/* 
+ saves variable with looked up locations to preferences
 */
-- (NSString *) localisedLabelName: (NSString*) label {
-	NSString * localisedLabel = (NSString*) ABCopyLocalizedPropertyOrLabel((CFStringRef) label);
-	[localisedLabel autorelease];
-	return localisedLabel;
-	
-	/*	NSString * localisedLabel;
-	if ([label isEqualToString:kABHomeLabel]) {
-		localisedLabel =  NSLocalizedString(@"Home", @"Home (Address Label)");
-	}
-	else if ([label isEqualToString: kABWorkLabel]) {
-		localisedLabel = NSLocalizedString(@"Work", @"(Work (Address Label)");
-	}
-	else if ([label isEqualToString: kABOtherLabel]) {
-		localisedLabel = nil; // NSLocalizedString(@"Other", @"Other (Address Label)");
-	}
-	else if ([label isEqualToString: kABPhoneMobileLabel]) {
-		localisedLabel = NSLocalizedString(@"Mobile", @"Mobile (Phone Label)");
-	}
-	else if ([label isEqualToString:kABHomeLabel]) {
-		localisedLabel =  NSLocalizedString(@"Home", @"Home (Phone Label)");
-	}
-	else if ([label isEqualToString: kABWorkLabel]) {
-		localisedLabel = NSLocalizedString(@"Work", @"Work (Phone Label)");
-	}
-	else if ([label isEqualToString: kABOtherLabel]) {
-		localisedLabel = NSLocalizedString(@"Other", @"Other (Phone Label)");
-	}
-	else if ([label isEqualToString:kABHomeLabel]) {
-		localisedLabel =  NSLocalizedString(@"Home", @"Home (E-Mail Label)");
-	}
-	else if ([label isEqualToString: kABWorkLabel]) {
-		localisedLabel = NSLocalizedString(@"Work", @"Work (E-Mail Label)");
-	}
-	else if ([label isEqualToString: kABOtherLabel]) {
-		localisedLabel = NSLocalizedString(@"Other", @"Other (E-Mail Label)");
-	}
-
-	else {
-		localisedLabel = label;
-	}
- 
-	return localisedLabel;
-*/
+- (void) saveLocations {
+	[UDC setValue:locations forKeyPath:@"values.locations"];
 }
 
 
 
 
 
+
+
+#pragma mark Write KML
+/*
+ action for writing KML file
+*/
 - (IBAction) do: (id) sender {
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"running"];
 	[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];
 }
 	
-	
+
+/*
+ method writing the KML file
+ to be run in separate thread
+*/
 - (void) do2:(id) sender {
 	NSAutoreleasePool * myPool = [[NSAutoreleasePool alloc] init];
 	BOOL error = NO;
@@ -685,7 +674,7 @@ int nameSort(id person1, id person2, void *context)
 								int index = 0;
 								[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)")];
 								NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
-								NSString * allEMails;
+								NSString * allEMails = nil;
 								while (index < eMailCount) {
 									NSString * eMailAddress = [eMails valueAtIndex:index];
 									if (eMailAddress) {
@@ -701,7 +690,9 @@ int nameSort(id person1, id person2, void *context)
 									}
 									index++;
 								}
-								[descriptionHTMLString appendFormat:@"%@.", allEMails];
+								if (allEMails) {
+									[descriptionHTMLString appendFormat:@"%@.", allEMails];
+								}
 							}
 						}
 						
@@ -714,7 +705,7 @@ int nameSort(id person1, id person2, void *context)
 								int index = 0;
 								[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)")];
 								NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
-								NSString * allWeblinks;
+								NSString * allWeblinks = nil;
 								while (index < weblinkCount) {
 									NSString * weblink = [weblinks valueAtIndex:index];
 									if (weblink) {
@@ -730,7 +721,9 @@ int nameSort(id person1, id person2, void *context)
 									}
 									index++;
 								}
-								[descriptionHTMLString appendFormat:@"%@.", allWeblinks];
+								if (allWeblinks) {
+									[descriptionHTMLString appendFormat:@"%@.", allWeblinks];
+								}
 							}
 						}
 						
@@ -743,7 +736,7 @@ int nameSort(id person1, id person2, void *context)
 								int index = 0;
 								[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Phone", @"Phone (appears in Google Earth Info Balloon)")];
 								NSMutableArray * phoneArray = [NSMutableArray arrayWithCapacity:phoneCount];
-								NSString * allPhoneNumbers;
+								NSString * allPhoneNumbers = nil;
 								while (index < phoneCount) {
 									NSString * phoneNumber = [phones valueAtIndex:index];
 									if (phoneNumber) {
@@ -759,7 +752,9 @@ int nameSort(id person1, id person2, void *context)
 									}
 									index++;
 								}
-								[descriptionHTMLString appendFormat:@"%@.", allPhoneNumbers];
+								if (allPhoneNumbers) {
+									[descriptionHTMLString appendFormat:@"%@.", allPhoneNumbers];
+								}
 							}
 						}
 	
@@ -815,6 +810,7 @@ int nameSort(id person1, id person2, void *context)
 		
 			[self setValue:[NSNumber numberWithInt:0] forKey:@"currentPosition"];
 			[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
+			[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @""), KMLFileName] forKey:@"doneMessage"];
 			[progressBar setHidden:YES];
 		}
 	}
@@ -823,7 +819,11 @@ int nameSort(id person1, id person2, void *context)
 
 
 
-#pragma mark AUXILIARIES
+
+
+
+
+#pragma mark Actions
 
 - (IBAction) showWarningInfo: (id) sender {
 	[NSApp beginSheet:warningMessage modalForWindow:mainWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
@@ -844,6 +844,13 @@ int nameSort(id person1, id person2, void *context)
 	BOOL hidden = running || (notSearchedCount == 0);
 	return hidden;
 }
+
+
+- (BOOL) nothingToSearch {
+	BOOL nothingToSearch = (notSearchedCount == 0);
+	return nothingToSearch;
+}
+
 
 - (NSData*) AddressBookIcon {
 	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:[[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"]];
@@ -866,6 +873,69 @@ int nameSort(id person1, id person2, void *context)
 }
 
 
+
+#pragma mark Non-Locatable Addresses
+
+- (IBAction) createListOfNonLocatableAddresses:(id) sender {
+	NSMutableString * s = [NSMutableString string];
+	NSArray * people = [[ABAddressBook sharedAddressBook] people];
+	NSEnumerator * myEnum = [people objectEnumerator];
+	ABPerson * myPerson;
+	
+	while (myPerson = [myEnum nextObject]) {
+		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
+		int totalAddresses = [addresses count];
+		int index = 0;
+		
+		while (totalAddresses > index) {
+			NSDictionary * addressDict = [addresses valueAtIndex:index];
+			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
+			NSObject * addressObject = [locations objectForKey: addressKey];
+			if (addressObject != nil) {
+				if (![addressObject isKindOfClass:[NSArray class]] && [addressObject isEqual:FAILSTRING]) {
+					[s appendFormat:@"%@\n***\n", addressKey];
+				}
+			}
+			index++;
+		}
+	}
+	
+	
+	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [self uuid]];
+	NSURL * saveURL = [NSURL fileURLWithPath:savePath];
+	NSError * myError = nil;
+	if ([s writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
+		[[NSWorkspace sharedWorkspace] openURL:saveURL];
+	}
+	else {
+		NSBeep();
+		NSLog(@"Couldn't write file with nonlocatable addresses: %@", [myError localizedDescription]);
+	}
+	
+}
+
+
+
+
+
+#pragma mark Utility Methods
+
+
+/*
+ Localises Address Boook labels, could return nil
+*/
+- (NSString *) localisedLabelName: (NSString*) label {
+	NSString * localisedLabel = (NSString*) ABCopyLocalizedPropertyOrLabel((CFStringRef) label);
+	[localisedLabel autorelease];
+	return localisedLabel;
+}
+
+
+
+
+/*
+ Creates a UUID
+*/
 - (NSString*) uuid {
 	unsigned char _uuid[16];
 	char _out[40];
@@ -874,23 +944,29 @@ int nameSort(id person1, id person2, void *context)
 	return [NSString stringWithUTF8String:_out];
 }
 
+
+
+/*
+ Removes lines from string which contain evil.
+*/ 
 - (NSString*) cleanString:(NSString*) s from:(NSString*) evil {
 	NSArray * lineArray = [s componentsSeparatedByString:@"\n"];
 	NSEnumerator * myEnum = [lineArray objectEnumerator];
 	NSMutableString * r = [NSMutableString stringWithCapacity:[s length]];
 	NSString * line;
 	while (line = [myEnum nextObject]) {
-		NSString * cleanedLine = [[line componentsSeparatedByString:evil] objectAtIndex:0];
-		[r appendFormat:@"%@\n", cleanedLine];
+		// only preserve lines not containing evil strings
+		if ([line rangeOfString:evil].location != NSNotFound) {
+			[r appendFormat:@"%@\n", line];
+		}
 	}
 	return [r stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
-	return YES;
-}
-
+/*
+ quarter-assed error handline
+*/
 - (void) error: (NSString*) error {
 	NSLog(error);
 	NSBeep();
@@ -898,14 +974,11 @@ int nameSort(id person1, id person2, void *context)
 }
 
 
-- (void)addressBookChanged:(NSNotification *)notification {
-	[self buildGroupList];
-	[self relevantPeople];
-}
 
-
-// for the various actions in the help menu
-- (void) readme:(id) sender {
+/* 
+ for the various actions in the help menu
+*/
+- (IBAction) readme:(id) sender {
 	NSWorkspace * WORKSPACE = [NSWorkspace sharedWorkspace];
 	int tag = [sender tag];
 	switch (tag) {
@@ -924,16 +997,28 @@ int nameSort(id person1, id person2, void *context)
 		case 5: // Readme
 			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"readme" ofType:@"html"]];
 			break;
+		case 6: // Google Earth Homepage
+			[WORKSPACE openURL:[NSURL URLWithString:@"http://earth.google.com"]];
+			break;
+		case 7: // Google Maps Geocoding FAQ
+			[WORKSPACE openURL:[NSURL URLWithString:@"http://code.google.com/support/bin/answer.py?answer=55180&topic=12266"]];
+			break;
 	}
 }
 
 
-// return version string
+
+/* 
+ returns version string
+*/
 - (NSString*) myVersionString {
 	return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 }
 
 
+
+
+#pragma mark Updating
 
 /*
  update Checking
@@ -947,8 +1032,10 @@ int nameSort(id person1, id person2, void *context)
 }
 
 
-
 @end
+
+
+
 
 @implementation ABGroup (ESSortExtension) 
 
@@ -959,4 +1046,52 @@ int nameSort(id person1, id person2, void *context)
 }
 
 @end
+
+
+
+
+/*
+ Helper function for sorting the people array by name. 
+ */
+int nameSort(id person1, id person2, void *context)
+{
+	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];
+	if (!lastName1) {
+		lastName1 = [person1 valueForProperty:kABLastNameProperty];
+	}
+	NSString * lastName2 = [person2 valueForProperty:kABLastNamePhoneticProperty];
+	if (!lastName2) {
+		lastName2 = [person2 valueForProperty:kABLastNameProperty];
+	}
+	
+	NSComparisonResult result = [lastName1 localizedCaseInsensitiveCompare:lastName2];
+	
+	if (result == NSOrderedSame) {
+		NSString * firstName1 = [person1 valueForProperty:kABFirstNamePhoneticProperty];
+		if (!firstName1) {
+			firstName1 = [person1 valueForProperty:kABFirstNameProperty];
+		}
+		NSString * firstName2 = [person2 valueForProperty:kABFirstNamePhoneticProperty];
+		if (!firstName2) {
+			firstName2 = [person2 valueForProperty:kABFirstNameProperty];
+		}
+		
+		result = [firstName1 localizedCaseInsensitiveCompare:firstName2];
+		
+		if (result == NSOrderedSame) {
+			NSString * middleName1 = [person1 valueForProperty:kABMiddleNamePhoneticProperty];
+			if (!middleName1) {
+				middleName1 = [person1 valueForProperty:kABMiddleNameProperty];
+			}
+			NSString * middleName2 = [person2 valueForProperty:kABMiddleNamePhoneticProperty];
+			if (!middleName2) {
+				middleName2 = [person2 valueForProperty:kABMiddleNameProperty];
+			}
+			
+			result = [middleName1 localizedCaseInsensitiveCompare:middleName2];
+		}
+	}
+	
+	return result;
+}
 

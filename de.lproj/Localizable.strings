@@ -26,8 +26,6 @@ Info text in middle section of window – variant used when more than one of the
 */
 "The selected contacts contain %i addresses whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Die Auswahl enthält %i Adressen, deren Koordinaten noch nicht ermittelt wurden.";
 
-
-
 /*
 Info text in middle section of window – variant used when everything has been looked up already and not all addresses were found.
 */
@@ -38,8 +36,6 @@ Für %i der Adressen konnten die zugehörigen Koordinaten nicht ermittelt werden
 Info text in middle section of window – variant used when everything has been looked up already successfully.
 */
 "All the addresses you selected have been looked up already." = "Die Koordinaten aller ausgewählten Adressen sind bereits ermittelt.";
-
-
 
 /*
 Info text in middle section of window – variant used when the AddressBook selection contains no addresses.
@@ -60,10 +56,10 @@ Displayed in bottom section after Placemarks have been created.
 */
 
 /* Couldn't create Application Support/EarthAddresser folder */
-"Couldn't create Application Support/EarthAddresser folder" = "Der Ordner Application Support/EarthAddresser konnte nicht erstellt werden";
+"Couldn't create Application Support/EarthAddresser folder" = "Der Ordner „~/Library/Application Support/Earth Addresser“ konnte nicht erstellt werden.";
 
 /* Couldn't create Application Support/EarthAddresser/Images folder */
-"Couldn't create Application Support/EarthAddresser/Images folder" = "Der Ordner Application Support/EarthAddresser/Images konnte nicht erstellt werden";
+"Couldn't create Application Support/EarthAddresser/Images folder" = "Der Ordner „~/Library/Application Support/Earth Addresser/Images“ konnte nicht erstellt werden.";
 
 
 /*
@@ -71,7 +67,7 @@ Displayed in bottom section after Placemarks have been created.
 */
 
 /* Couldn't create temporary folder */
-"Couldn't create temporary folder" = "Temporärer Ordner konnte nicht erstellt werden";
+"Couldn't create temporary folder" = "Temporärer Ordner konnte nicht erstellt werden.";
 
 /* Selected group couldn't be recognised. */
 "Selected group wasn't recognisable." = "Die ausgewählte Gruppe konnte nicht gefunden werden.";
@@ -106,41 +102,4 @@ TEXT APPEARING IN THE KML FILE
 /* Phone (appears in Google Earth Info Balloon) */
 "Phone" = "Telephon";
 
-
-
-/* Home (Address Label) */
-"Home" = "Privat";
-
-/* (Work (Address Label) */
-"Work" = "Arbeit";
-
-/* Other (Address Label) */
-"Other" = "Andere";
-
-/* Mobile (Phone Label) */
-"Mobile" = "Mobil";
-
-
-
-/*
-UNUSED
-*/
-
-/* UNUSED All Contacts */
-"All Contacts" = "Alle Adressen";
-
-/* UNUSED Contacts */
-"Contacts" = "Visitenkarten";
-
-/* 
-UNUSED
-(Second line of info in first section of the window – variant used when addresses that haven't been looked up yet _do_ exist.)
-*/
-"%i of these have been successfully located, %i of these could not be located and %i have not been looked up yet." = "Von diesen Adressen wurden %i gefunden, %i nicht gefunden und nach %i noch gar nicht gesucht.";
-
-/*
-UNUSED
-(Second line of info in first section of the window – variant used when _no_ addresses that haven't been looked up yet exist.)
-*/
-"%i of these have been successfully located previously while the remaining %i could not be located." = "Von diesen Adressen wurden %i gefunden und %i nicht gefunden.";
 

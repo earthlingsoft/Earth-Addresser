@@ -7,15 +7,27 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>addressBookScopeChanged</key>
+				<string>id</string>
+				<key>autoCheckForUpdates</key>
+				<string>id</string>
+				<key>convertAddresses</key>
+				<string>id</string>
+				<key>createListOfNonLocatableAddresses</key>
+				<string>id</string>
 				<key>dismissSheet</key>
 				<string>id</string>
 				<key>do</key>
 				<string>id</string>
 				<key>do2</key>
 				<string>id</string>
+				<key>groupListSelectionChanged</key>
+				<string>id</string>
 				<key>menuCheckVersion</key>
 				<string>id</string>
 				<key>readme</key>
+				<string>id</string>
+				<key>showWarningInfo</key>
 				<string>id</string>
 			</dict>
 			<key>CLASS</key>
@@ -24,10 +36,16 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
+				<key>createKMLButton</key>
+				<string>NSButton</string>
+				<key>geocodingProgressBar</key>
+				<string>NSProgressIndicator</string>
 				<key>mainWindow</key>
 				<string>NSWindow</string>
 				<key>progressBar</key>
 				<string>NSProgressIndicator</string>
+				<key>runGeolocationButton</key>
+				<string>NSButton</string>
 				<key>warningMessage</key>
 				<string>NSPanel</string>
 			</dict>

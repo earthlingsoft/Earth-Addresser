@@ -56,7 +56,6 @@
 		6C1569DB0F0F025F009C7B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DC0F0F026C009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DD0F0F026E009C7B5F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/Credits.html; sourceTree = "<group>"; };
-		6C1569DE0F0F027D009C7B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		6C1569DF0F0F0280009C7B5F /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		6C1569E00F0F0281009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		6C1569E30F0F0293009C7B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/readme.html; sourceTree = "<group>"; };
@@ -71,6 +70,7 @@
 		6C1569EC0F0F02BD009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C1569ED0F0F02BF009C7B5F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C26C4220BB711AC0001C5D3 /* plans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plans; sourceTree = "<group>"; };
+		6C2927A90F1906FD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		6C54D7D30BBAFCF200D4B7F2 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
 		6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
 		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
@@ -296,9 +296,9 @@
 		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6C1569DE0F0F027D009C7B5F /* en */,
-				6C1569DF0F0F0280009C7B5F /* fr */,
 				6C1569E00F0F0281009C7B5F /* de */,
+				6C2927A90F1906FD00B5059B /* en */,
+				6C1569DF0F0F0280009C7B5F /* fr */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";

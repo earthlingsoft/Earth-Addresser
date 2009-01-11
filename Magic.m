@@ -131,7 +131,7 @@
 	while (group = [myEnum nextObject]) {
 		[a addObject:[NSDictionary dictionaryWithObjectsAndKeys:[group uniqueId], MENUOBJECT, [group valueForProperty:kABGroupNameProperty], MENUNAME, nil]];
 	}
-	[self setValue:a forKey:@"groups"];
+	
 	
 	if ([a count] > 0 ) {
 		// look whether the selected item still exists. If it doesn't reset to ALL group
@@ -151,11 +151,17 @@
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"noGroups"];
 	}
 	else {
-			// there are NO groups => deactivate the GUI
-			[UDC setValue:[NSNumber numberWithInt:0] forKeyPath:@"values.addressBookScope"];
-			[UDC setValue:[NSNull null] forKeyPath:@"values.selectedGroup"];
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"noGroups"];
+		// there are NO groups => deactivate the GUI
+		NSString * selectGroupName = NSLocalizedString(@"Select Group", @"");
+		NSDictionary * selectGroupDictionary = [NSDictionary dictionaryWithObjectsAndKeys:selectGroupName, MENUOBJECT, selectGroupName , MENUNAME, nil];
+		[a addObject: selectGroupDictionary];
+		[UDC setValue:[NSNumber numberWithInt:0] forKeyPath:@"values.addressBookScope"];
+		[UDC setValue:selectGroupDictionary forKeyPath:@"values.selectedGroup"];
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"noGroups"];
+		// ... and put 'Select Group' string in the popup menu
 	}
+
+	[self setValue:a forKey:@"groups"];
 }
 
 
@@ -278,6 +284,7 @@
 	NSString * firstPart = [NSString stringWithFormat:NSLocalizedString(@"%i %@ with %i %@", @""), [people count], contactString, addressCount, addressString];
 
 	NSString * lookupPart = @"";
+	BOOL showNonLocatableAddressesButton = NO;
 	if (addressCount != 0) {
 		if (notYetLocatedAddressCount != 0) {
 			// there are addresses and some still NEED lookup
@@ -291,6 +298,7 @@
 		else {
 			// there are addresses and all of them have been looked up already
 			if (nonLocatedAddressCount != 0) {
+				showNonLocatableAddressesButton = YES;
 				lookupPart = [NSString stringWithFormat:NSLocalizedString(@"All the addresses you selected have been looked up already. Unfortunately %i of them could not be located.", @""), nonLocatedAddressCount];
 			}
 			else{
@@ -306,6 +314,7 @@
 	NSString * infoString = firstPart; // = [firstPart stringByAppendingString:secondPart];
 	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
 	[self setValue:lookupPart forKey:@"lookupInfo"];
+	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
 	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
 	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
 	[self setValue:@"" forKey:@"doneMessage"];

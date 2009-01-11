@@ -15,6 +15,10 @@ Info text in top section of the window
 */
 "%i %@ with %i %@" = "%i %@ mit %i %@";
 
+/*
+Text appearing in group selection menu when no groups are available
+*/
+"Select Group" = "Gruppe auswählen";
 
 /* 
 Info text in middle section of window – variant used when exactly one of the selected addresses have been looked up yet.

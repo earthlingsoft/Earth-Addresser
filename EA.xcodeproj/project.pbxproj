@@ -23,6 +23,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C29284E0F1A45C000B5059B /* MainMenu.xib */; };
 		6C54D7D50BBAFCF200D4B7F2 /* VersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */; };
 		6C54D7E00BBAFD0A00D4B7F2 /* VersionChecker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C54D7DE0BBAFD0A00D4B7F2 /* VersionChecker.strings */; };
 		6CEABD5C0BB322240059641A /* Magic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* Magic.m */; };
@@ -30,7 +31,6 @@
 		6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CEAC2720BB4B3290059641A /* Localizable.strings */; };
 		6CFB92660BBC498100191CDD /* readme.html in Resources */ = {isa = PBXBuildFile; fileRef = 6CFB92650BBC498100191CDD /* readme.html */; };
 		6CFB92680BBC499100191CDD /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 6CFB92670BBC499100191CDD /* Credits.html */; };
-		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -56,8 +56,6 @@
 		6C1569DB0F0F025F009C7B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DC0F0F026C009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DD0F0F026E009C7B5F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/Credits.html; sourceTree = "<group>"; };
-		6C1569DF0F0F0280009C7B5F /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		6C1569E00F0F0281009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		6C1569E30F0F0293009C7B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/readme.html; sourceTree = "<group>"; };
 		6C1569E40F0F0295009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/readme.html; sourceTree = "<group>"; };
 		6C1569E50F0F029D009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/VersionChecker.strings; sourceTree = "<group>"; };
@@ -70,7 +68,9 @@
 		6C1569EC0F0F02BD009C7B5F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C1569ED0F0F02BF009C7B5F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C26C4220BB711AC0001C5D3 /* plans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plans; sourceTree = "<group>"; };
-		6C2927A90F1906FD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		6C29284F0F1A45C000B5059B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C54D7D30BBAFCF200D4B7F2 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
 		6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
 		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 				6CFB92650BBC498100191CDD /* readme.html */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				6C29284E0F1A45C000B5059B /* MainMenu.xib */,
 				6CFB92670BBC499100191CDD /* Credits.html */,
 			);
 			name = Resources;
@@ -221,12 +221,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				6CFB92660BBC498100191CDD /* readme.html in Resources */,
 				6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */,
 				6C54D7E00BBAFD0A00D4B7F2 /* VersionChecker.strings in Resources */,
 				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
+				6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,14 +293,14 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+		6C29284E0F1A45C000B5059B /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6C1569E00F0F0281009C7B5F /* de */,
-				6C2927A90F1906FD00B5059B /* en */,
-				6C1569DF0F0F0280009C7B5F /* fr */,
+				6C29284F0F1A45C000B5059B /* de */,
+				6C2928530F1A45DD00B5059B /* en */,
+				6C2928540F1A463300B5059B /* fr */,
 			);
-			name = MainMenu.nib;
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		6C54D7DE0BBAFD0A00D4B7F2 /* VersionChecker.strings */ = {
@@ -369,7 +369,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 9;
+				Build_Number = 10;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -378,7 +378,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2;
+				Version_Number = 2b3;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -391,13 +391,13 @@
 					ppc,
 					i386,
 				);
-				Build_Number = 9;
+				Build_Number = 10;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2;
+				Version_Number = 2b3;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -45,6 +45,7 @@
 	
 	int addressesAreAvailable;
 	int notSearchedCount;
+	BOOL nonLocatableAddressesButtonHidden;
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
 	

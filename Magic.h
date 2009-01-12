@@ -34,7 +34,6 @@
 	int currentPosition;
 	
 	IBOutlet NSProgressIndicator * geocodingProgressBar;
-	NSDate * lastGeocodingProgressBarUpdate;
 	BOOL geocodingRunning;
 	int geocodingRecordCount;
 	int geocodingCurrentPosition;

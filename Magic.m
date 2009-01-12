@@ -24,7 +24,6 @@
 												   object:nil];	
 		
 		[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
-		[self setValue:[NSDate date] forKey:@"lastGeocodingProgressBarUpdate"];
 		
 		NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locations"];
 		if (myLocations) {
@@ -87,7 +86,6 @@
 	[self saveLocations];
 	[locations release];
 	[lastProgressBarUpdate release];
-	[lastGeocodingProgressBarUpdate release];
 	[groups release];
 	
 	[super dealloc];
@@ -336,7 +334,7 @@
 #pragma mark Convert Addresses to Relevant Formats
 
 
-- (NSString*) googleStringForAddressDictionary : (NSDictionary*) address {
+- (NSString *) googleStringForAddressDictionary : (NSDictionary*) address {
 	NSMutableString * addressString = [self dictionaryKeyForAddressDictionary: address];
 	
 	[addressString replaceOccurrencesOfString:@"\n" withString:@", " options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
@@ -348,7 +346,7 @@
 
 
 
-- (NSMutableString*) dictionaryKeyForAddressDictionary : (NSDictionary*) address {
+- (NSMutableString *) dictionaryKeyForAddressDictionary : (NSDictionary*) address {
 	NSMutableString * addressString = [NSMutableString string];
 	NSString * addressPiece;
 	if (addressPiece = [address valueForKey:kABAddressStreetKey]) {
@@ -373,7 +371,10 @@
 		[addressString appendFormat:@"%@", addressPiece];
 	}
 	
-	return addressString;
+	// NSLog(addressString);
+	NSMutableString * result = [[[addressString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy] autorelease];
+	
+	return result;
 }
 
 
@@ -452,12 +453,9 @@
 					NSLog(@"Geocoding query for '%@' failed with result %@", theAddress, [resultArray objectAtIndex:0]);
 				}
 				[self setValue:[NSNumber numberWithInt:geocodingCurrentPosition + 1] forKey:@"geocodingCurrentPosition"];
+				[geocodingProgressBar display];
 			}
 			index++;
-			if (-[lastGeocodingProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
-				[geocodingProgressBar display];
-				[self setValue:[NSDate date] forKey:@"lastGeocodingProgressBarUpdate"];
-			}
 		}
 		
 	}
@@ -887,7 +885,17 @@
 
 - (IBAction) createListOfNonLocatableAddresses:(id) sender {
 	NSMutableString * s = [NSMutableString string];
-	NSArray * people = [[ABAddressBook sharedAddressBook] people];
+	NSArray * people;
+	if ([sender isKindOfClass:[NSButton class]]) {
+		// the button in the window was user => only use non-found addresses in the current selection
+		people = [self relevantPeople];
+	}
+	else {
+		// the menu item was used => us _all_ non-found addresses
+		people = [[ABAddressBook sharedAddressBook] people];		
+	}
+		
+
 	NSEnumerator * myEnum = [people objectEnumerator];
 	ABPerson * myPerson;
 	
@@ -965,7 +973,7 @@
 	NSString * line;
 	while (line = [myEnum nextObject]) {
 		// only preserve lines not containing evil strings
-		if ([line rangeOfString:evil].location != NSNotFound) {
+		if ([line rangeOfString:evil].location == NSNotFound) {
 			[r appendFormat:@"%@\n", line];
 		}
 	}
@@ -974,7 +982,7 @@
 
 
 /*
- quarter-assed error handline
+ quarter-assed error handling
 */
 - (void) error: (NSString*) error {
 	NSLog(error);

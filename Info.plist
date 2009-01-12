@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>Icon</string>
 	<key>CFBundleIdentifier</key>
 	<string>net.earthlingsoft.earthaddresser</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -16,10 +16,10 @@
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>esEA</string>
 	<key>CFBundleShortVersionString</key>
 	<string>${Version_Number}</string>
+	<key>CFBundleSignature</key>
+	<string>esEA</string>
 	<key>CFBundleVersion</key>
 	<string>${Build_Number}</string>
 	<key>NSMainNibFile</key>

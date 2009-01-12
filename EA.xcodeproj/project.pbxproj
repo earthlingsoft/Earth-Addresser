@@ -24,6 +24,7 @@
 
 /* Begin PBXBuildFile section */
 		6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C29284E0F1A45C000B5059B /* MainMenu.xib */; };
+		6C29288E0F1AAED000B5059B /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C29288D0F1AAED000B5059B /* Icon.icns */; };
 		6C54D7D50BBAFCF200D4B7F2 /* VersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */; };
 		6C54D7E00BBAFD0A00D4B7F2 /* VersionChecker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C54D7DE0BBAFD0A00D4B7F2 /* VersionChecker.strings */; };
 		6CEABD5C0BB322240059641A /* Magic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* Magic.m */; };
@@ -71,6 +72,7 @@
 		6C29284F0F1A45C000B5059B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6C29288D0F1AAED000B5059B /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		6C54D7D30BBAFCF200D4B7F2 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
 		6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
 		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				6C29284E0F1A45C000B5059B /* MainMenu.xib */,
 				6CFB92670BBC499100191CDD /* Credits.html */,
+				6C29288D0F1AAED000B5059B /* Icon.icns */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				6C54D7E00BBAFD0A00D4B7F2 /* VersionChecker.strings in Resources */,
 				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
 				6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */,
+				6C29288E0F1AAED000B5059B /* Icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +373,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 10;
+				Build_Number = 11;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -378,7 +382,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2b3;
+				Version_Number = 2b4;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -391,13 +395,13 @@
 					ppc,
 					i386,
 				);
-				Build_Number = 10;
+				Build_Number = 11;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2b3;
+				Version_Number = 2b4;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

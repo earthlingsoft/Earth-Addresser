@@ -28,15 +28,11 @@
 
 @interface Magic : NSObject {
 	IBOutlet NSProgressIndicator * progressBar;
-	NSDate * lastProgressBarUpdate;
 	BOOL running;
-	int recordCount;
-	int currentPosition;
 	
+	NSThread * geocodingThread;
 	IBOutlet NSProgressIndicator * geocodingProgressBar;
 	BOOL geocodingRunning;
-	int geocodingRecordCount;
-	int geocodingCurrentPosition;
 	
 	NSString * relevantPeopleInfo;
 	NSString * lookupInfo;

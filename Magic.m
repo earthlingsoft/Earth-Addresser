@@ -22,9 +22,7 @@
 												 selector:@selector(addressBookChanged:)
 													 name:kABDatabaseChangedExternallyNotification
 												   object:nil];	
-		
-		[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
-		
+				
 		NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locations"];
 		if (myLocations) {
 			locations = [myLocations mutableCopy];
@@ -61,7 +59,9 @@
 + (void)initialize {
     [self setKeys:[NSArray arrayWithObjects:@"running", @"notSearchedCount", nil]triggerChangeNotificationsForDependentKey:@"needToSearchNoticeHidden"];
 
-	[self setKeys:[NSArray arrayWithObject:@"notSearchedCount"]triggerChangeNotificationsForDependentKey:@"nothingToSearch"];
+	[self setKeys:[NSArray arrayWithObject:@"notSearchedCount"] triggerChangeNotificationsForDependentKey:@"nothingToSearch"];
+
+	[self setKeys:[NSArray arrayWithObject:@"geocodingRunning"] triggerChangeNotificationsForDependentKey:@"geocodingButtonLabel"];
 	
 	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
@@ -73,6 +73,7 @@
 									   [NSNumber numberWithBool:NO], @"placemarkWithEMail",
 									   [NSNumber numberWithBool:NO], @"placemarkWithPhone",
 									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
+									   [NSNumber numberWithBool:YES], @"placemarkWithAddressBookLink",
 									   [NSNumber numberWithBool:NO], @"hasReadInfo",
 									   nil];
 	[UDC setInitialValues:standardDefaults];
@@ -83,9 +84,12 @@
 
 
 - (void) dealloc {
-	[self saveLocations];
+// NSSThread -cancel is X.5 only
+/*	if (geocodingRunning && geocodingThread) {
+		[geocodingThread cancel];
+	}
+ */
 	[locations release];
-	[lastProgressBarUpdate release];
 	[groups release];
 	
 	[super dealloc];
@@ -129,23 +133,23 @@
 	while (group = [myEnum nextObject]) {
 		[a addObject:[NSDictionary dictionaryWithObjectsAndKeys:[group uniqueId], MENUOBJECT, [group valueForProperty:kABGroupNameProperty], MENUNAME, nil]];
 	}
+	[self setValue:a forKey:@"groups"];
 	
 	
 	if ([a count] > 0 ) {
 		// look whether the selected item still exists. If it doesn't reset to ALL group
-		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
-		if ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) {
-			ABGroup * myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup];
-			if (!myGroup) {
-				// the group doesn't exist anymore => switch to first group
-				if ([a count] > 0 ) {
-					group = [groups objectAtIndex:0];
-					[UDC setValue:[NSDictionary dictionaryWithObjectsAndKeys:[group uniqueId], MENUOBJECT, [group valueForProperty:kABGroupNameProperty], MENUNAME, nil] forKeyPath:@"values.selectedGroup"];
-				}
-				else {
-				}
-			}
+		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup2"] objectForKey:MENUOBJECT];
+		ABGroup * myGroup;		
+		
+		if (selectedGroup 
+				&& ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) 
+				&&  (myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup]) ) {
 		}
+		else {				
+			group = [groups objectAtIndex:0];
+			[UDC setValue:group forKeyPath:@"values.selectedGroup2"];
+		}
+
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"noGroups"];
 	}
 	else {
@@ -154,12 +158,11 @@
 		NSDictionary * selectGroupDictionary = [NSDictionary dictionaryWithObjectsAndKeys:selectGroupName, MENUOBJECT, selectGroupName , MENUNAME, nil];
 		[a addObject: selectGroupDictionary];
 		[UDC setValue:[NSNumber numberWithInt:0] forKeyPath:@"values.addressBookScope"];
-		[UDC setValue:selectGroupDictionary forKeyPath:@"values.selectedGroup"];
+		[UDC setValue:selectGroupDictionary forKeyPath:@"values.selectedGroup2"];
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"noGroups"];
 		// ... and put 'Select Group' string in the popup menu
 	}
 
-	[self setValue:a forKey:@"groups"];
 }
 
 
@@ -193,7 +196,7 @@
 	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
 	
 	NSArray * people = nil ;
-	NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup"] objectForKey:MENUOBJECT];
+	NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup2"] objectForKey:MENUOBJECT];
 	if ([[UDC valueForKeyPath:@"values.addressBookScope"] intValue] == 0) {
 		people = [ab people];
 	}
@@ -387,9 +390,20 @@
  action for looking up addresses
 */
 - (IBAction) convertAddresses: (id) sender {
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
-	[NSThread detachNewThreadSelector:@selector(convertAddresses2) toTarget:self withObject:nil];
+	if (!geocodingRunning) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
+		[NSThread detachNewThreadSelector:@selector(convertAddresses2) toTarget:self withObject:nil];
+	}
+	else {
+		// Cancel
+		/* // NSSThread -cancel is X.5 only
+		if (geocodingThread) {
+			[geocodingThread cancel];
+		}
+		*/ 
+	}
 }
+
 
 
 /*
@@ -402,14 +416,13 @@
 	NSEnumerator * myEnum = [people objectEnumerator];
 	ABPerson * myPerson;
 	NSString * baseURL = [NSString stringWithFormat:GOOGLEGEOLOOKUPURL, GOOGLEAPIKEY];
-		
 	NSDate * previousLookup = nil;
+	double geocodingCurrentPosition = .000001;
 	
-	[self setValue:[NSNumber numberWithInt:notSearchedCount] forKey:@"geocodingRecordCount"];
-	[self setValue:[NSNumber numberWithInt:0] forKey:@"geocodingCurrentPosition"];
-	[geocodingProgressBar display];
-
-	while (myPerson = [myEnum nextObject]) {
+	[geocodingProgressBar setHidden: NO];
+	[geocodingProgressBar setMaxValue: notSearchedCount];
+	
+	while (myPerson = [myEnum nextObject]) { //  && ![[NSThread currentThread] isCancelled]) { <-- X.5 only
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		int addressCount = [addresses count];
 		int index = 0;
@@ -419,27 +432,32 @@
 			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 			
 			if (! [locations objectForKey:addressString]) {
+				[geocodingProgressBar setDoubleValue: geocodingCurrentPosition];
+				[geocodingProgressBar display];
+				geocodingCurrentPosition += 1.;
+				
 				// Look up address if we don't know its coordinates already
 				NSString * theAddress = [self googleStringForAddressDictionary:addressDict];
 				NSString * URLString = [NSString stringWithFormat:@"%@&q=%@", baseURL, addressString];
 				NSURL * geocodeURL = [NSURL URLWithString:[URLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
 				];
 			
-				NSURLRequest * geocodeRequest = [NSURLRequest requestWithURL:geocodeURL];
-				NSURLResponse * geocodeResponse = nil;
-				NSError * geocodeError = nil;
-
 				// throttle Google queries
 				if (previousLookup) {
 					[NSThread sleepUntilDate:[previousLookup addTimeInterval:SECONDSBETWEENCOORDINATELOOKUPS]];
 				}
 				previousLookup = [NSDate date];
+
 				
+				NSURLRequest * geocodeRequest = [NSURLRequest requestWithURL:geocodeURL];
+				NSURLResponse * geocodeResponse = nil;
+				NSError * geocodeError = nil;
 				NSData * requestAnswer = [NSURLConnection sendSynchronousRequest:geocodeRequest returningResponse:&geocodeResponse error:&geocodeError];
 				
 				
 				NSString * resultString = [[[NSString alloc] initWithData:requestAnswer encoding:NSUTF8StringEncoding] autorelease];
 				NSArray * resultArray = [resultString componentsSeparatedByString:@","];
+				
 				if ([[resultArray objectAtIndex:0] intValue] == 200) {
 					NSNumber * accuracy = [NSNumber numberWithInt:[[resultArray objectAtIndex:1] intValue]];
 					NSNumber * latitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:2] doubleValue]];
@@ -452,20 +470,19 @@
 					[locations setObject:FAILSTRING forKey: addressString];
 					NSLog(@"Geocoding query for '%@' failed with result %@", theAddress, [resultArray objectAtIndex:0]);
 				}
-				[self setValue:[NSNumber numberWithInt:geocodingCurrentPosition + 1] forKey:@"geocodingCurrentPosition"];
-				[geocodingProgressBar display];
 			}
 			index++;
 		}
 		
 	}
-	
-	[self saveLocations];
-	[self setValue:[NSNumber numberWithInt:0] forKey:@"geocodingCurrentPosition"];
+
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
 	[geocodingProgressBar setHidden:YES];	
+	[self saveLocations];
 	[pool release];
 }
+
+
 
 
 /* 
@@ -497,9 +514,10 @@
 */
 - (void) do2:(id) sender {
 	NSAutoreleasePool * myPool = [[NSAutoreleasePool alloc] init];
+	double currentPosition = .000001;
+	NSDate * lastProgressBarUpdate = [NSDate distantPast];
 	BOOL error = NO;
 	
-	[self setValue:[NSNumber numberWithInt:0] forKey:@"currentPosition"];
 	
 #pragma mark -do2: Folder Setup
 	
@@ -526,8 +544,6 @@
 
 #pragma mark -do2: get people	
 		if (people) {
-			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"recordCount"];
-			
 			NSEnumerator * myEnum = [people objectEnumerator];
 			ABPerson * person;
 			
@@ -545,6 +561,15 @@
 			// Run through all people in the list
 			//
 			while (person = [myEnum nextObject]) {
+				[progressBar setHidden:NO];
+				[progressBar setMaxValue: [people count]];
+				[progressBar setDoubleValue: currentPosition];
+				if (-[lastProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
+					[progressBar display];
+					lastProgressBarUpdate = [NSDate date];
+				}
+				currentPosition += 1.;
+												
 				NSString * uniqueID = [person uniqueId];
 				NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] -9]];
 				int flags = [[person valueForProperty:kABPersonFlags] intValue];
@@ -595,7 +620,6 @@
 							[styleElement addAttribute:[NSXMLNode attributeWithName:@"id" stringValue:ID]];
 							NSXMLElement * iconStyleElement = [NSXMLElement elementWithName:@"IconStyle"];	
 							NSXMLElement * iconElement = [NSXMLElement elementWithName:@"Icon"];
-							//NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:[[@"." stringByAppendingPathComponent:imagesName] stringByAppendingPathComponent:imageFileName]];
 							NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:fullImagePath];
 							[iconElement addChild: hrefElement];
 							[iconStyleElement addChild:iconElement];
@@ -666,14 +690,16 @@
 							 [fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], 
 							 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
 						}
-												
-						[descriptionHTMLString appendFormat: @"%@<br /><a href=\"addressbook://%@\">%@</a><hr style='width:20em;clear:all;visibility:hidden;' />",
-						 addressString,
-						 uniqueID, 
-						 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];			
+						
+						if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
+							[descriptionHTMLString appendFormat: @"%@<br /><a href=\"addressbook://%@\">%@</a><hr style='width:20em;clear:all;visibility:hidden;' />",
+							 addressString,
+							 uniqueID, 
+							 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
+						}
 					
 #pragma mark -do2: EMail, Phone, Web extras			
-						if ([UDC valueForKeyPath:@"values.placemarkWithEMail"]) {
+						if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
 							// include e-mail addresses in placemark
 							ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
 							int eMailCount = [eMails count];
@@ -704,7 +730,7 @@
 						}
 						
 
-						if ([UDC valueForKeyPath:@"values.placemarkWithWeblinks"]) {
+						if ([[UDC valueForKeyPath:@"values.placemarkWithWeblinks"] boolValue]) {
 							// include e-mail addresses in placemark
 							ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
 							int weblinkCount = [weblinks count];
@@ -735,7 +761,7 @@
 						}
 						
 						
-						if ([UDC valueForKeyPath:@"values.placemarkWithPhone"]) {
+						if ([[UDC valueForKeyPath:@"values.placemarkWithPhone"] boolValue]) {
 							// include e-mail addresses in placemark
 							ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
 							int phoneCount = [phones count];
@@ -778,15 +804,9 @@
 					}
 					index++;
 				}
-				
-				[self setValue:[NSNumber numberWithInt:currentPosition + 1] forKey:@"currentPosition"];
-				if (-[lastProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
-					[progressBar display];
-					[self setValue:[NSDate date] forKey:@"lastProgressBarUpdate"];
-				}
 			}
 
-			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"currentPosition"];
+			[progressBar setDoubleValue:[people count]];
 			[progressBar display];
 			
 		#pragma mark -do2: Write KML
@@ -815,7 +835,6 @@
 				
 #pragma mark -do2: Clean Up 	
 		
-			[self setValue:[NSNumber numberWithInt:0] forKey:@"currentPosition"];
 			[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
 			[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @""), KMLFileName] forKey:@"doneMessage"];
 			[progressBar setHidden:YES];
@@ -856,6 +875,18 @@
 - (BOOL) nothingToSearch {
 	BOOL nothingToSearch = (notSearchedCount == 0);
 	return nothingToSearch;
+}
+
+
+- (NSString*) geocodingButtonLabel {
+	NSString * label;
+	if (geocodingRunning) {
+		label = NSLocalizedString(@"Cancel geocoding", @"Text displayed in geocoding button while geocoding is running");
+	}
+	else {
+		label = NSLocalizedString(@"Look up coordinates", @"Text displayed in geocoding button when geocoding is not running");
+	}
+	return label;
 }
 
 

@@ -3,23 +3,10 @@
 <html>
 <head>
 <title>Earth Addresser</title>
-<style type="text/css">
-body { background:#eee; color:555; text-align:center; font-family:Georgia, Garamond,Palatino,Times,serif; }
-#main { max-width:35em; padding:3em 1em 1em 0;margin:auto; line-height:1.4em;}
-h1 { font-family:Zapfino; font-weight:normal;}
-dl dt { font-style:italic; margin:2em 0em 0.5em 0em;}
-ul {list-style-type:none; padding:0px; }
-ul li, dl dd ul, dl dd {margin:0px; padding:0px;}
-ul.links li { display : inline;}
-ul.links li:before { content: '\002022'; margin:0em 0.3em; }
-ul.links li.i1:before { content:'';}
-a {text-decoration:none;}
-#oldversions  { display:none;}
-#oldversions:target + p { display:none;}
-#oldversions:target { display:block;} 
-h3 { margin:3em 0em 1em 0em;}
-</style>
+<meta content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="../Help.css">
 </head>
+
 <body>
 <div id="main">
 <h1>Earth Addresser</h1>
@@ -28,22 +15,27 @@ h3 { margin:3em 0em 1em 0em;}
 Putting your addresses on the map.
 </p>
 <p>
-Love Google Earth and have all your friends&rsquo; contact information in your Mac&rsquo;s Address Book? Then you will like  Earth Addresser! It takes the addresses from your Address Book and writes them to a &lsquo;KML&rsquo; file which Google Earth can open to display your friends&rsquo; places right on the map. If you have added photos for them in your Address Book, those will appear instead of the usual drawing pin.
+Love <a href="http://earth.google.com/">Google Earth</a> and have all your friends&rsquo; contact information in your Mac&rsquo;s Address Book? Then you will like  Earth Addresser! It takes the addresses from your Address Book and writes them to a <a href="http://code.google.com/apis/kml/documentation/">KML Placemark file</a> which Google Earth can open to display your friends&rsquo; places right on the map. If you have added photos for them in your Address Book, those will appear instead of the usual drawing pin when viewing things on your own computer.
 </p>
 <p>
-For Google Earth to able to display your friends&rsquo; addresses in the correct location, they need to be converted to coordinates on the surface of the earth (longitude and latitude) first. That conversion is done by Google&rsquo;s Maps service which Earth Addresser send the addresses to. <em>If you aren&rsquo;t comfortable with sending all those addresses to Google,  do not use Earth Addresser and do not open the file it creates with Google Earth</em>.
+For Google Earth to able to display your friends&rsquo; addresses in the correct location, they need to be converted to coordinates on the surface of the earth (longitude and latitude) first. That <a href="http://code.google.com/support/bin/answer.py?answer=55180&amp;topic=12266">conversion is done by Google&rsquo;s Maps service</a> which Earth Addresser send the addresses to. <em>If you are not comfortable with sending all those addresses to Google, be sure to <em>not</em> use Earth Addresser.</em>
 </p>
 <p>
-Please keep in mind that Google may be unable to determine the coordinates for some of the addresses in your address book. You can see a list of those addresses whose location could not be determined by using the &ldquo;List Non-locatable Addresses&rdquo; command in the Help menu. Typical reasons for addresses not being locatable are the following:
+Please keep in mind that Google may be unable to determine the coordinates for some of the addresses in your address book. A complete list of those addresses can be seen by using the &ldquo;List All Non-locatable Addresses&rdquo; command in the Help menu. Typical reasons for addresses not being locatable are the following:
 </p>
-<ul>
-<li>Country Information: Earth Addresser does <em>not</em> use the country you typed into the address book when sending addresses to Google. This is done because there can be different styles and spellings for writing country names. Instead, Earth Addresser uses the address format which you have set up for the address. You can adjust the address format in the menu that appears when you click the address&rsquo; label while editing in the Address Book application.
-</li><li>
-Uknown acronyms in addresses: Frequently Google fails to correctly locate addresses which include auxiliary information like room numbers. Earth Addresser tries to filter the most common of those out, but it may not know the ones you are using.
-</li><li>
-Google Coverage: Google does not cover all countries on the planet to the same degree. In some countries their database will not know all the street names. In addition the spelling of addresses frequently depends on the language of the country the address is in. It may be necessary that the spelling you use matches the &lsquo;official&rsquo; spelling used by Google for lookups to succeed.
-</li>
-</ul>
+<dl>
+<dt>Country Information:</dt>
+<dd>Earth Addresser does <em>not</em> use the country you typed into the Address Book when looking up addresses. This is done because there can be different styles, spellings and language versions of country names. Instead, Earth Addresser uses the address format which you have set up for the address – usually this defaults to the format of your home country. You can adjust the address format in the menu that appears when you click the address&rsquo; label while editing in the Address Book application.
+</dd>
+<dt>Uknown acronyms in addresses:</dt>
+<dd>Frequently Google fails to correctly locate addresses which include auxiliary information like room numbers. Earth Addresser tries to filter the most common of those out by leaving out the lines in the address containing terms like ‘Room’, but it may not know the ones you are using.
+</dd>
+<dt>Google’s Coverage:</dt>
+<dd>Google’s map services don’t cover all countries on the planet to the same degree. In some countries their database will not know all the street names. In addition to that the native spelling of an addresses can differ from the one you may find logical. It may take a bit of tinkering to figure out whether Google can ultimately locate an address.
+</dd>
+</dl>
+
+
 <p>
 Thanks to Nat Bletter for starting the discussion on this topic, to Dan Wood for Cocoa advice and to Ronald Leroux for the French localisation.
 </p>
@@ -62,7 +54,7 @@ Enjoy.
 <h3>Version History</h3>
 <dl class="versions" id="latestversion">
 
-<dt>v2b2 (9) (2009-01-10)</dt>
+<dt>v2 (2009-01-10)</dt>
 <dd>
 <ul>
 <li>User Interface completely redesigned.</li>
@@ -74,6 +66,8 @@ Enjoy.
 <li>Added English localisation for new user interface.</li>
 </ul>
 </dd>
+</dl> 
+
 
 <dl class="versions" id="oldversions">
 
@@ -88,7 +82,6 @@ Fixed the version checker to do the right thing.
 First public release.
 </dd>
 
-</dl>
 
 <dt>version 1b3 (2007-03-28)</dt>
 <dd>

@@ -2,24 +2,11 @@
         "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
 <html>
 <head>
-<title>Earth Addresser</title>
-<style type="text/css">
-body { background:#eee; color:555; text-align:center; font-family:Georgia, Garamond,Palatino,Times,serif; }
-#main { max-width:35em; padding:3em 1em 1em 0;margin:auto; line-height:1.4em;}
-h1 { font-family:Zapfino; font-weight:normal;}
-dl dt { font-style:italic; margin:2em 0em 0.5em 0em;}
-ul {list-style-type:none; padding:0px; }
-ul li, dl dd ul, dl dd {margin:0px; padding:0px;}
-ul.links li { display : inline;}
-ul.links li:before { content: '\002022'; margin:0em 0.3em; }
-ul.links li.i1:before { content:'';}
-a {text-decoration:none;}
-#oldversions  { display:none;}
-#oldversions:target + p { display:none;}
-#oldversions:target { display:block;} 
-h3 { margin:3em 0em 1em 0em;}
-</style>
+	<title>Earth Addresser</title>
+	<meta content="text/html;charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="../Help.css">
 </head>
+
 <body>
 <div id="main">
 <h1>Earth Addresser</h1>
@@ -28,24 +15,25 @@ h3 { margin:3em 0em 1em 0em;}
 Deine Adressen in Google Earth.
 </p>
 <p>
-Das Adressbuch im Computer randvoll mit Adressen und begeistert von Google Earth? Dann wird Earth Addresser die perfekte Erg&auml;nzung sein. Das Programm schreibt die Adressen aus dem Adressbuch in eine &sbquo;KML&lsquo; Datei, die Google Earth lesen kann, um dann die Adressen auf der Weltkarte anzuzeigen. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird anstelle der &uuml;blichen Stecknadel das Photo der Person auf der Weltkarte angezeigt.
+Das Adressbuch im Computer randvoll mit Adressen und begeistert von <a href="http://earth.google.com/">Google Earth</a>? Dann wird Earth Addresser die perfekte Erg&auml;nzung sein. Das Programm schreibt die Adressen aus dem Adressbuch in eine <a href="http://code.google.com/apis/kml/documentation/">KML Ortsmarkendatei</a>, die Google Earth lesen kann, um dann die Adressen auf dem Globus anzuzeigen. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird auf dem eigenen Computer anstelle der &uuml;blichen Stecknadel das Photo der Person auf der Weltkarte angezeigt.
 </p>
 <p>
-Damit Google Earth die Adressen an der korrekten Stelle anzeigt, mu&szlig; zun&auml;chst die Adresse in Koordinaten auf der Erdkugel umgewandelt werden. Diese Umwandlung nimmt ein weiterer Dienst von Google vor. Das hei&szlig;t, da&szlig; jede von Earth Addresser verarbeitet Adresse einmal zu Google geschickt wird. <em>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser nicht verwenden.</em> Bei dieser Umwandlung wird <em>nur</em> der Inhalt der Adressfelder im Adressbuch an Google gesendet. Der Name der Person und andere Kontaktinformationen werden nicht verschickt.
+Damit Google Earth eine Adresse an der korrekten Stelle anzeigt, mu&szlig; sie zunächst in Koordinaten auf der Erdkugel umgewandelt werden. Diese Umwandlung nimmt <a href="http://code.google.com/support/bin/answer.py?answer=55180&amp;topic=12266">ein Teil des Google Maps Dienstes</a> vor. Das hei&szlig;t: jede von Earth Addresser verarbeitete Adresse wird zu Google geschickt. <em>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser <em>nicht</em> verwenden.</em> Bei dieser Umwandlung wird ausschließlich der Inhalt der Adressfelder im Adressbuch an Google gesandt. Der Name der Person und andere Kontaktinformationen werden von Earth Addresser nicht verschickt sondern nur in die KML Datei geschrieben.
 </p>
 <p>
-Weiterhin kann der Google Dienst nicht jede Adresse korrekt in Koordinaten umwandeln. Die nicht auffindbaren Adressen k&ouml;nnen &uuml;ber den Befehl &bdquo;Liste der Problemadressen&ldquo; im Hilfe-Men&uuml; angezeigt werden. H&auml;ufig liegt dies an einem der folgenden Punkte:
+Auch Google kann nicht jede Adresse korrekt in Koordinaten umwandeln. Die nicht auffindbaren Adressen k&ouml;nnen &uuml;ber den Befehl &bdquo;Alle nicht aufgefundenen Adressen zeigen&ldquo; im Hilfe-Men&uuml; angezeigt werden. H&auml;ufige Gründe für das Nichtauffinden einer Adresse sind:
 </p>
-<ol>
-<li>Landesinformationen: Um Probleme mit Tippfehlern und verschiedenen Sprachen zu vermeiden nutzt Earth Addresser <em>nicht</em> das eingetippte Land im Adressbuch. Stattdessen wird das  Land genutzt, f&uuml;r das das <em>Adressformat</em> der Adresse eingestellt wurde.  Das Adressformat kann eingestellt werden, indem im Bearbeiten Modus auf das Etikett einer Adresse geklickt  und  das gew&uuml;nschte Land im Untermen&uuml; &sbquo;Adressformat &auml;ndern&lsquo; ausgew&auml;hlt wird.
-</li>
-<li>
-Unbekannte Abk&uuml;rzungen in der Adresse: Google hat Schwierigkeiten mit einigen Adre&szlig;zus&auml;tzen wie &sbquo;Zimmer&lsquo; oder &sbquo;Postfach&lsquo;. Earth Addresser erkennt einige von diesen und entfernt sie. Es kann aber gut sein, da&szlig; andere Zus&auml;tze unerkannt bleiben. 
-</li>
-<li>
-Datenbestand von Google: In manchen L&auml;ndern hat Google nicht alle Stra&szlig;ennamen erfa&szlig;t. Adressen auf nicht erfa&szlig;ten Stra&szlig;en k&ouml;nnen nicht korrekt in Koordinaten umgewandelt werden und Earth Addresser entfernt diese aus den Ergebnissen.
-</li>
-</ol>
+<dl>
+<dt>Landesinformationen:</dt>
+<dd>Um Probleme mit Tippfehlern und verschiedenen Sprachen zu vermeiden nutzt Earth Addresser <em>nicht</em> das eingetippte Land im Adressbuch. Stattdessen wird das  Land genutzt, f&uuml;r das das <em>Adressformat</em> der Adresse eingestellt wurde.  Das Adressformat kann eingestellt werden, indem im Bearbeiten Modus auf das Etikett einer Adresse geklickt  und  das gew&uuml;nschte Land im Untermen&uuml; &sbquo;Adressformat &auml;ndern&lsquo; ausgew&auml;hlt wird.
+</dd>
+<dt>Unbekannte Abk&uuml;rzungen in der Adresse:</dt>
+<dd> Google hat Schwierigkeiten mit Adre&szlig;zus&auml;tzen wie &sbquo;Zimmer&lsquo; oder &sbquo;Postfach&lsquo;. Earth Addresser erkennt einige von diesen und entfernt die sie enthaltene Zeile. Es kann aber gut sein, da&szlig; andere Zus&auml;tze unerkannt bleiben. 
+</dd>
+<dt>Datenbestand von Google:</dt>
+<dd>In manchen L&auml;ndern kennt Google nicht alle Stra&szlig;ennamen. Adressen in diesen Ländern k&ouml;nnen nicht korrekt in Koordinaten umgewandelt werden und Earth Addresser entfernt diese aus den Ergebnissen.
+</dd>
+</dl>
 <p>
 Vielen Dank an Nat Bletter, der die Idee f&uuml;r Earth Addresser angesto&szlig;en hat, an Dan Wood f&uuml;r seine Cocoa-Ratschl&auml;ge und an Ronald Leroux f&uuml;r die Franz&ouml;sische Lokalisierung.
 </p>
@@ -57,7 +45,7 @@ Viel Spa&szlig;.
 <li><a href="http://earthlingsoft.net/">earthlingsoft Website</a></li>
 <li><a href="https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&amp;item_name=Earth%20Addresser&amp;no_shipping=1&amp;cn=Comments&amp;tax=0&amp;currency_code=EUR">Spenden</a></li>
 <li><a href="mailto:earthlingsoft@earthlingsoft.net?subject=Earth%20Addresser">E-Mail senden</a></li>
-<li><a href="http://earthlingsoft.net/ssp/blog/2007/03/earth_addresser#comments">Kommentar hinterlassen</a></li>
+<li><a href="http://earthlingsoft.net/ssp/blog/2009/01/earth_addresser_2#comments">Kommentar hinterlassen</a></li>
 </ul>
 
 
@@ -65,29 +53,20 @@ Viel Spa&szlig;.
 
 <dl class="versions" id="latestversion">
 
-<dt>v2b2 (9) (2009-01-10)</dt>
-<dd>
-<ul>
-<li>Aufger&auml;umtere Benutzeroberfl&auml;che.</li>
-<li>Verbesserte Adresserkennung.</li>
-<li>M&ouml;glichkeit, nicht auffindbare Adressen anzeigen zu lassen.</li>
-<li>Englische Lokalisierung.</li>
-</ul>
-</dd>
-
-
-<dt>v2b1 (8) (2009-01-03)</dt>
+<dt>v2  (2009-01-10)</dt>
 <dd>
 <ul>
 <li>Vollst&auml;ndig &uuml;berarbeitete Benutzeroberfl&auml;che.</li>
 <li>Die Umwandlung von Adressen wird nun von Earth Addresser und nicht von Google Earth vorgenommen. Ergebnisse werden hierbei gespeichert und wiederverwendet.</li>
-<li>Die Daten in der erzeugten KML Datei lassen sich feiner einstellen. Insbesondere k&ouml;nnen nun Dateien ohne Namen und mit Telephonnummern und E-Mail Adressen geschrieben werden.</li>
+<li>Die Daten in der erzeugten KML Datei lassen sich feiner einstellen. Insbesondere k&ouml;nnen nun Dateien ohne Namen und mit Telephonnummern, E-Mail Adressen und Web-Links geschrieben werden.</li>
 <li>Die aufgeklappten Ortsmarken in Google Earth enthalten nun Bilder.</li>
 <li>Die Links zum Adressbuch sind nun zuverl&auml;ssig klickbar.</li>
 </ul>
 </dd>
 
+
 </dl>
+
 
 
 <dl class="versions" id="oldversions">
@@ -156,7 +135,7 @@ hopefully fixed a problem that made the application stall
 
 
 
-<p id="morehistorylinks"><a href="#oldversions" id="showolder">Complete list</a></p>
+<p id="morehistorylinks"><a href="#oldversions" id="showolder">Vollständige Liste</a></p>
 
 </div>
 </body>

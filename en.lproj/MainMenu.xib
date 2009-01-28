@@ -309,7 +309,7 @@
 						</object>
 						<object class="NSProgressIndicator" id="570013796">
 							<reference key="NSNextResponder" ref="230539147"/>
-							<int key="NSvFlags">1290</int>
+							<int key="NSvFlags">-2147482358</int>
 							<object class="NSPSMatrix" key="NSDrawMatrix"/>
 							<string key="NSFrame">{{182, 186}, {285, 20}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
@@ -809,7 +809,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="NSContents"/>
 								<reference key="NSSupport" ref="433704967"/>
 								<reference key="NSControlView" ref="1031413694"/>
-								<int key="NSButtonFlags">-2038415105</int>
+								<int key="NSButtonFlags">-2038152961</int>
 								<int key="NSButtonFlags2">33</int>
 								<string key="NSAlternateContents"/>
 								<string key="NSKeyEquivalent"/>
@@ -1563,10 +1563,6 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="565851004">
-				<object class="NSMutableArray" key="NSDeclaredKeys">
-					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>selectedGroup2</string>
-				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -3100,6 +3096,26 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					</object>
 					<int key="connectionID">880</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: running</string>
+						<reference key="source" ref="867174016"/>
+						<reference key="destination" ref="1000509216"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="867174016"/>
+							<reference key="NSDestination" ref="1000509216"/>
+							<string key="NSLabel">enabled: running</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">running</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">NSNegateBoolean</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">882</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -4328,10 +4344,10 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
-					<string>{{-886, 19}, {653, 496}}</string>
+					<string>{{87, 260}, {653, 496}}</string>
 					<boolean value="NO" id="6"/>
 					<reference ref="6"/>
-					<string>{{-886, 19}, {653, 496}}</string>
+					<string>{{87, 260}, {653, 496}}</string>
 					<reference ref="5"/>
 					<reference ref="5"/>
 					<reference ref="6"/>
@@ -4550,7 +4566,7 @@ ciBkZW4gTmFtZW4gZWluZXIgR3J1cHBlIGF1cyBkZW0gQWRyZXNzYnVjaCBhdXN3w6RobGVuLg</stri
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">880</int>
+			<int key="maxID">882</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

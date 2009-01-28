@@ -458,7 +458,8 @@
 				NSString * resultString = [[[NSString alloc] initWithData:requestAnswer encoding:NSUTF8StringEncoding] autorelease];
 				NSArray * resultArray = [resultString componentsSeparatedByString:@","];
 				
-				if ([[resultArray objectAtIndex:0] intValue] == 200) {
+				int result = [[resultArray objectAtIndex:0] intValue];
+				if (result == 200) {
 					NSNumber * accuracy = [NSNumber numberWithInt:[[resultArray objectAtIndex:1] intValue]];
 					NSNumber * latitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:2] doubleValue]];
 					NSNumber * longitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:3] doubleValue]];
@@ -466,8 +467,16 @@
 					[locations setObject:[NSArray arrayWithObjects:accuracy, latitude, longitude, nil]  forKey:addressString];
 					[self relevantPeople];
 				}
-				else {
+				else if (result == 602) {
+					// Failed to locate to the address
 					[locations setObject:FAILSTRING forKey: addressString];
+				}
+				else if (result == 620) {
+					// Too many queries sent, possibly handle this
+					NSLog(@"Earth Addresser exceeded Google's query limit for determining addresses. Only waiting and trying again could help");
+				}
+				else {
+					// no idea what this could be
 					NSLog(@"Geocoding query for '%@' failed with result %@", theAddress, [resultArray objectAtIndex:0]);
 				}
 			}
@@ -515,7 +524,6 @@
 - (void) do2:(id) sender {
 	NSAutoreleasePool * myPool = [[NSAutoreleasePool alloc] init];
 	double currentPosition = .000001;
-	NSDate * lastProgressBarUpdate = [NSDate distantPast];
 	BOOL error = NO;
 	
 	
@@ -544,6 +552,9 @@
 
 #pragma mark -do2: get people	
 		if (people) {
+			[progressBar setHidden:NO];
+			[progressBar setMaxValue: [people count]];
+
 			NSEnumerator * myEnum = [people objectEnumerator];
 			ABPerson * person;
 			
@@ -561,13 +572,7 @@
 			// Run through all people in the list
 			//
 			while (person = [myEnum nextObject]) {
-				[progressBar setHidden:NO];
-				[progressBar setMaxValue: [people count]];
 				[progressBar setDoubleValue: currentPosition];
-				if (-[lastProgressBarUpdate timeIntervalSinceNow] > 0.06) { // limit fps
-					[progressBar display];
-					lastProgressBarUpdate = [NSDate date];
-				}
 				currentPosition += 1.;
 												
 				NSString * uniqueID = [person uniqueId];
@@ -691,13 +696,16 @@
 							 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
 						}
 						
+						[descriptionHTMLString appendFormat:@"%@", addressString];
+						
 						if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
-							[descriptionHTMLString appendFormat: @"%@<br /><a href=\"addressbook://%@\">%@</a><hr style='width:20em;clear:all;visibility:hidden;' />",
-							 addressString,
+							[descriptionHTMLString appendFormat: @"<br /><a href=\"addressbook://%@\">%@</a>",
 							 uniqueID, 
 							 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
 						}
 					
+						[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;' />"];
+						
 #pragma mark -do2: EMail, Phone, Web extras			
 						if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
 							// include e-mail addresses in placemark
@@ -837,6 +845,7 @@
 		
 			[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
 			[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @""), KMLFileName] forKey:@"doneMessage"];
+			[progressBar setDoubleValue: 0.0];
 			[progressBar setHidden:YES];
 		}
 	}
@@ -891,23 +900,37 @@
 
 
 - (NSData*) AddressBookIcon {
-	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:[[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"]];
-	[im setSize:NSMakeSize(128.0,128.0)];
-	return [im TIFFRepresentation];
+	NSData * result = nil;
+	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"];
+	if (appPath) {
+		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
+		[im setSize:NSMakeSize(128.0,128.0)];
+		result = [im TIFFRepresentation];
+	}
+	return result;
 }
 
 
 - (NSData*) GoogleEarthIcon {
-	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:[[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.Google.GoogleEarthPlus"]];
-	[im setSize:NSMakeSize(128.0,128.0)];
-	return [im TIFFRepresentation];
+	NSData * result = nil;
+	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.Google.GoogleEarthPlus"];
+	if (appPath) {
+		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
+		[im setSize:NSMakeSize(128.0,128.0)];
+		result = [im TIFFRepresentation];
+	}
+	return result;
 }
 
 
 - (NSData*) KMLIcon {
+	NSData * result = nil;
 	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFileType:@"kml"];
-	[im setSize:NSMakeSize(128.0,128.0)];
-	return [im TIFFRepresentation];
+	if (im) {
+		[im setSize:NSMakeSize(128.0,128.0)];
+		result = [im TIFFRepresentation];
+	}
+	return result;
 }
 
 

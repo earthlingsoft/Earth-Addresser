@@ -306,7 +306,7 @@ cG91ciBsZXMgIGFkcmVzc2VzIHPDqWxlY3Rpb25uw6llcy4</string>
 						</object>
 						<object class="NSProgressIndicator" id="596062204">
 							<reference key="NSNextResponder" ref="50895041"/>
-							<int key="NSvFlags">1290</int>
+							<int key="NSvFlags">-2147482358</int>
 							<object class="NSPSMatrix" key="NSDrawMatrix"/>
 							<string key="NSFrame">{{182, 189}, {238, 20}}</string>
 							<reference key="NSSuperview" ref="50895041"/>
@@ -1560,11 +1560,6 @@ IHBvdXIgdHJvdXZlciBsZXVycyBjb29yZG9ubsOpZXM</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="1045311591">
-				<object class="NSMutableArray" key="NSDeclaredKeys">
-					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>placemarkWithAddressBookLink</string>
-					<string>selectedGroup2</string>
-				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>

@@ -107,3 +107,12 @@ TEXT APPEARING IN THE KML FILE
 "Phone" = "Telephon";
 
 
+
+
+/*
+TEXT IN LINKS
+*/
+
+/* PayPal Region Code - used in PayPal URL */
+"PayPal Region Code" = "DE";
+

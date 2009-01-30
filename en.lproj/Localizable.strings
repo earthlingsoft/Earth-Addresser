@@ -107,3 +107,12 @@ TEXT APPEARING WITHIN THE KML FILE
 
 /* Phone (appears in Google Earth Info Balloon) */
 "Phone" = "Phone";
+
+
+
+/*
+TEXT IN LINKS
+*/
+
+/* PayPal Region Code - used in PayPal URL */
+"PayPal Region Code" = "US";

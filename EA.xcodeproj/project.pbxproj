@@ -184,6 +184,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				6C1C86850F334B4100F99B63 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -266,6 +267,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# compress the distribution folder\nrm -f \"$BUILT_PRODUCTS_DIR/Earth Addresser.zip\"\ncd \"$BUILT_PRODUCTS_DIR\"\nzip -y -r \"Earth Addresser.zip\" \"Earth Addresser.app\"";
+		};
+		6C1C86850F334B4100F99B63 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$BUILT_PRODUCTS_DIR\"\ncd \"Earth Addresser.app/Contents/Resources\"\n\n# /bin/ln -sf en.lproj/readme.html fr.lproj/readme.html\n/bin/cp -f en.lproj/readme.html fr.lproj/readme.html";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -377,7 +391,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 15;
+				Build_Number = 16;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -399,7 +413,7 @@
 					ppc,
 					i386,
 				);
-				Build_Number = 15;
+				Build_Number = 16;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;

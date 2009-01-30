@@ -1055,6 +1055,7 @@
 */
 - (IBAction) readme:(id) sender {
 	NSWorkspace * WORKSPACE = [NSWorkspace sharedWorkspace];
+
 	int tag = [sender tag];
 	switch (tag) {
 		case 1: // earthlingsoft
@@ -1067,7 +1068,7 @@
 			[WORKSPACE openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Earth%%20Addresser%%20%@", [self myVersionString]]]];
 			break;
 		case 4: // Paypal
-			[WORKSPACE openURL: [NSURL URLWithString:@"https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&item_name=Earth%20Addresser&no_shipping=1&cn=Comments&tax=0&currency_code=EUR"]];
+			[WORKSPACE openURL: [NSURL URLWithString:[@"https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=earthlingsoft%40earthlingsoft.net&item_name=Earth%20Addresser&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&lc=" stringByAppendingString: NSLocalizedString(@"PayPal Region Code", @"PayPal Region Code - used in PayPal URL")]]];
 			break;
 		case 5: // Readme
 			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"readme" ofType:@"html"]];

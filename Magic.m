@@ -416,7 +416,7 @@
 	NSEnumerator * myEnum = [people objectEnumerator];
 	ABPerson * myPerson;
 	NSString * baseURL = [NSString stringWithFormat:GOOGLEGEOLOOKUPURL, GOOGLEAPIKEY];
-	NSDate * previousLookup = nil;
+	NSTimeInterval previousLookup = 0;
 	double geocodingCurrentPosition = .000001;
 	
 	[geocodingProgressBar setHidden: NO];
@@ -428,12 +428,13 @@
 		int index = 0;
 
 		while (addressCount > index) {
+			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
+
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 			
 			if (! [locations objectForKey:addressString]) {
 				[geocodingProgressBar setDoubleValue: geocodingCurrentPosition];
-				[geocodingProgressBar display];
 				geocodingCurrentPosition += 1.;
 				
 				// Look up address if we don't know its coordinates already
@@ -443,10 +444,12 @@
 				];
 			
 				// throttle Google queries
-				if (previousLookup) {
-					[NSThread sleepUntilDate:[previousLookup addTimeInterval:SECONDSBETWEENCOORDINATELOOKUPS]];
+				if (previousLookup != 0) {
+					NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:previousLookup + SECONDSBETWEENCOORDINATELOOKUPS];
+					[NSThread sleepUntilDate:wakeUpTime];
 				}
-				previousLookup = [NSDate date];
+				
+				previousLookup = [NSDate timeIntervalSinceReferenceDate];
 
 				
 				NSURLRequest * geocodeRequest = [NSURLRequest requestWithURL:geocodeURL];
@@ -481,6 +484,7 @@
 				}
 			}
 			index++;
+			[innerPool release];
 		}
 		
 	}

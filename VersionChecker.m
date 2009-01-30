@@ -49,9 +49,9 @@ static NSString *EVCURLKey = @"URL";
 - (id)initWithURL:(NSURL *)inURL {
     self = [super init];
     if(self) {
-        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         if(!version)
-            version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
         if(!version)
             version = @"0";
         infoDict = [[NSMutableDictionary alloc] initWithCapacity:5];

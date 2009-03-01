@@ -19,6 +19,9 @@
 #define MENUITEMALL @"ALL"
 #define FAILSTRING @"FAIL"
 #define OMITNAMESDEFAULT @"Omit Names"
+#define EAGENERICSTYLEPREFIX @"EarthAddresser-generic-"
+#define GENERICHOMEICONNAME @"home"
+#define GENERICWORKICONNAME @"work"
 #define ALLDICTIONARY [NSDictionary dictionaryWithObjectsAndKeys:MENUITEMALL, MENUOBJECT, NSLocalizedString(@"All Contacts", @"All Contacts"), MENUNAME, nil]
 #define SECONDSBETWEENCOORDINATELOOKUPS 0.2
 #define UDC [NSUserDefaultsController sharedUserDefaultsController]
@@ -32,6 +35,7 @@
 	
 	NSThread * geocodingThread;
 	IBOutlet NSProgressIndicator * geocodingProgressBar;
+	NSString * geocodingError;
 	BOOL geocodingRunning;
 	
 	NSString * relevantPeopleInfo;
@@ -60,6 +64,12 @@
 - (IBAction) groupListSelectionChanged: (id) sender;
 
 - (IBAction) convertAddresses: (id) sender;
+
+- (NSString *) imagesFolderPath;
+- (NSString *) fullPNGImagePathForName: (NSString *) name;
+- (NSXMLElement *) createStyleForImageData: (NSData *) image withID:(NSString *) ID;
+- (NSXMLElement *) genericStyleNamed:(NSString *) name;
+
 - (IBAction) do:(id) sender;
 - (void) do2:(id) sender;
 

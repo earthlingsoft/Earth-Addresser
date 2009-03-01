@@ -24,10 +24,12 @@
 
 /* Begin PBXBuildFile section */
 		6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C29284E0F1A45C000B5059B /* MainMenu.xib */; };
-		6C29288E0F1AAED000B5059B /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C29288D0F1AAED000B5059B /* Icon.icns */; };
 		6C292AA00F1D15CD00B5059B /* Help.css in Resources */ = {isa = PBXBuildFile; fileRef = 6C292A9F0F1D15CD00B5059B /* Help.css */; };
 		6C54D7D50BBAFCF200D4B7F2 /* VersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */; };
 		6C54D7E00BBAFD0A00D4B7F2 /* VersionChecker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C54D7DE0BBAFD0A00D4B7F2 /* VersionChecker.strings */; };
+		6C916E650F58C384003EA1EB /* work.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E630F58C384003EA1EB /* work.png */; };
+		6C916E660F58C384003EA1EB /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E640F58C384003EA1EB /* home.png */; };
+		6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C916EBD0F5963A4003EA1EB /* Icon Large.icns */; };
 		6CEABD5C0BB322240059641A /* Magic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* Magic.m */; };
 		6CEABD780BB322BC0059641A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CEABD770BB322BC0059641A /* AddressBook.framework */; };
 		6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CEAC2720BB4B3290059641A /* Localizable.strings */; };
@@ -73,10 +75,12 @@
 		6C29284F0F1A45C000B5059B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		6C29288D0F1AAED000B5059B /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		6C292A9F0F1D15CD00B5059B /* Help.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = Help.css; sourceTree = "<group>"; };
 		6C54D7D30BBAFCF200D4B7F2 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
 		6C54D7D40BBAFCF200D4B7F2 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
+		6C916E630F58C384003EA1EB /* work.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = work.png; sourceTree = "<group>"; };
+		6C916E640F58C384003EA1EB /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
+		6C916EBD0F5963A4003EA1EB /* Icon Large.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Icon Large.icns"; sourceTree = "<group>"; };
 		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
 		6CEABD5B0BB322240059641A /* Magic.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Magic.m; sourceTree = "<group>"; };
 		6CEABD770BB322BC0059641A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
@@ -159,7 +163,9 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				6C29284E0F1A45C000B5059B /* MainMenu.xib */,
 				6CFB92670BBC499100191CDD /* Credits.html */,
-				6C29288D0F1AAED000B5059B /* Icon.icns */,
+				6C916EBD0F5963A4003EA1EB /* Icon Large.icns */,
+				6C916E630F58C384003EA1EB /* work.png */,
+				6C916E640F58C384003EA1EB /* home.png */,
 				6C292A9F0F1D15CD00B5059B /* Help.css */,
 			);
 			name = Resources;
@@ -234,8 +240,10 @@
 				6C54D7E00BBAFD0A00D4B7F2 /* VersionChecker.strings in Resources */,
 				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
 				6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */,
-				6C29288E0F1AAED000B5059B /* Icon.icns in Resources */,
 				6C292AA00F1D15CD00B5059B /* Help.css in Resources */,
+				6C916E650F58C384003EA1EB /* work.png in Resources */,
+				6C916E660F58C384003EA1EB /* home.png in Resources */,
+				6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +399,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 16;
+				Build_Number = 18;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -400,7 +408,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.1;
+				Version_Number = 2.2b2;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -413,13 +421,13 @@
 					ppc,
 					i386,
 				);
-				Build_Number = 16;
+				Build_Number = 18;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.1;
+				Version_Number = 2.2b2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

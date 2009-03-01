@@ -65,6 +65,9 @@ Displayed in bottom section after Placemarks have been created.
 /* Couldn't create Application Support/EarthAddresser/Images folder */
 "Couldn't create Application Support/EarthAddresser/Images folder" = "Der Ordner „~/Library/Application Support/Earth Addresser/Images“ konnte nicht erstellt werden.";
 
+/* Address lookup failed. Introductory string in which %@ is the description coming from NSError */
+"Geocoding failed: %@" = "Ermitteln der Koordinaten fehlgeschlagen: %@.";
+
 
 /*
 	ODD ERROR MESSAGES

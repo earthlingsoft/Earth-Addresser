@@ -69,6 +69,11 @@ Displayed in bottom section after Placemarks have been created.
 /* Couldn't create Application Support/EarthAddresser/Images folder */
 "Couldn't create Application Support/EarthAddresser/Images folder" = "Earth Addresser was unable to create the “~/Library/Application Support/Earth Addresser/Images” folder.";
 
+/* Address lookup failed. Introductory string in which %@ is the description coming from NSError */
+"Geocoding failed: %@" = "Looking up coordinates failed: %@.";
+
+
+
 
 /*
 	ODD ERROR MESSAGES
@@ -86,7 +91,7 @@ Displayed in bottom section after Placemarks have been created.
 
 
 /*
-TEXT APPEARING WITHIN THE KML FILE
+TEXT APPEARING IN THE KML FILE
 */
 
 /* KML File Name */

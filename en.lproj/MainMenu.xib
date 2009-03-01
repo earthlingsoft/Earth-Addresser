@@ -985,6 +985,22 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<int key="NSPeriodicInterval">25</int>
 							</object>
 						</object>
+						<object class="NSTextField" id="63428328">
+							<reference key="NSNextResponder" ref="230539147"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{181, 184}, {287, 28}}</string>
+							<reference key="NSSuperview" ref="230539147"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="666946668">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">272760832</int>
+								<string key="NSContents">Test</string>
+								<reference key="NSSupport" ref="26"/>
+								<reference key="NSControlView" ref="63428328"/>
+								<reference key="NSBackgroundColor" ref="351498912"/>
+								<reference key="NSTextColor" ref="673209950"/>
+							</object>
+						</object>
 					</object>
 					<string key="NSFrameSize">{653, 496}</string>
 					<reference key="NSSuperview"/>
@@ -3116,6 +3132,22 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					</object>
 					<int key="connectionID">882</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: geocodingError</string>
+						<reference key="source" ref="63428328"/>
+						<reference key="destination" ref="1000509216"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="63428328"/>
+							<reference key="NSDestination" ref="1000509216"/>
+							<string key="NSLabel">value: geocodingError</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">geocodingError</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">885</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -3190,6 +3222,7 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 							<reference ref="210290737"/>
 							<reference ref="437664994"/>
 							<reference ref="31121896"/>
+							<reference ref="63428328"/>
 						</object>
 						<reference key="parent" ref="1029617068"/>
 					</object>
@@ -4022,6 +4055,20 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 						<reference key="object" ref="162557212"/>
 						<reference key="parent" ref="867174016"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">883</int>
+						<reference key="object" ref="63428328"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="666946668"/>
+						</object>
+						<reference key="parent" ref="230539147"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">884</int>
+						<reference key="object" ref="666946668"/>
+						<reference key="parent" ref="63428328"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -4263,6 +4310,9 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					<string>877.IBPluginDependency</string>
 					<string>877.ImportedFromIB2</string>
 					<string>878.IBPluginDependency</string>
+					<string>883.IBPluginDependency</string>
+					<string>883.ImportedFromIB2</string>
+					<string>884.IBPluginDependency</string>
 					<string>92.IBPluginDependency</string>
 					<string>92.ImportedFromIB2</string>
 				</object>
@@ -4544,6 +4594,9 @@ ciBkZW4gTmFtZW4gZWluZXIgR3J1cHBlIGF1cyBkZW0gQWRyZXNzYnVjaCBhdXN3w6RobGVuLg</stri
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="5"/>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -4566,7 +4619,7 @@ ciBkZW4gTmFtZW4gZWluZXIgR3J1cHBlIGF1cyBkZW0gQWRyZXNzYnVjaCBhdXN3w6RobGVuLg</stri
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">882</int>
+			<int key="maxID">885</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

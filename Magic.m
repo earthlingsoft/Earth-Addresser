@@ -353,7 +353,7 @@
 	NSMutableString * addressString = [NSMutableString string];
 	NSString * addressPiece;
 	if (addressPiece = [address valueForKey:kABAddressStreetKey]) {
-		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach", nil];
+		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach ", nil];
 		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
 		NSString * evilWord;
 		while (evilWord = [evilWordEnumerator nextObject]) {
@@ -674,7 +674,7 @@
 		genericStyle = [self genericStyleNamed:@"work"];
 		if (genericStyle) {	[myXML addChild:genericStyle]; }
 		
-
+		NSMutableDictionary * addressLabelGroups = [NSMutableDictionary dictionary];
 #pragma mark -do2: People loop
 		//
 		// Run through all people in the list
@@ -901,8 +901,24 @@
 					if (styleURLElement) {
 						[placemarkElement addChild:styleURLElement];
 					}
-					
-					[myXML addChild: placemarkElement];
+					if (![[UDC valueForKeyPath:@"values.groupByAddressType"] boolValue]) {
+						// create a group for each address label and add the addresses accordingly
+						NSXMLElement * addressGroup = [addressLabelGroups objectForKey:addressLabel];
+						if (addressGroup == nil) {
+							// group doesn't exist yet => create it
+							addressGroup = [NSXMLElement elementWithName:@"Folder"];
+							NSXMLElement * groupChild = [NSXMLElement elementWithName:@"name" stringValue:addressLabel];
+							[addressGroup addChild:groupChild];
+							[addressLabelGroups setObject:addressGroup forKey:addressLabel];
+							[myXML addChild:addressGroup];
+						}
+						// add element to this group
+						[addressGroup addChild:placemarkElement];
+					}
+					else {
+						// add element to the main group
+						[myXML addChild: placemarkElement];
+					}
 				}
 				index++;
 				
@@ -947,6 +963,7 @@
 	
 	[myPool release];
 }
+
 
 
 

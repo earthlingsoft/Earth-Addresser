@@ -13,7 +13,6 @@
 #include "VersionChecker.h"
 
 #define GOOGLEAPIKEY @"ABQIAAAAlHKFjYnAwG075OeYhnD30xRxdMQYmQaEcayIZUdLHbQwQRmWDRQAobR9d1SmZ4paTmBsalsw0pvc4w"
-#define GOOGLEGEOLOOKUPURL @"http://maps.google.com/maps/geo?output=csv&sensor=false&key=%@"
 #define MENUNAME @"NAME"
 #define MENUOBJECT @"OBJECT"
 #define MENUITEMALL @"ALL"
@@ -26,7 +25,8 @@
 #define SECONDSBETWEENCOORDINATELOOKUPS 0.2
 #define UDC [NSUserDefaultsController sharedUserDefaultsController]
 #define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
-
+// Text in 'Old' labels whose groups are automatically hidden -> Localised
+#define OLDLABELS [NSArray arrayWithObjects:@"Old", @"Alt", @"Ancienne", nil]
 
 
 @interface Magic : NSObject {
@@ -44,6 +44,7 @@
 	
 	int addressesAreAvailable;
 	int notSearchedCount;
+	BOOL nonLocatableAddressesExist;
 	BOOL nonLocatableAddressesButtonHidden;
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
@@ -64,6 +65,7 @@
 - (IBAction) groupListSelectionChanged: (id) sender;
 
 - (IBAction) convertAddresses: (id) sender;
+- (IBAction) convertAddresses2: (id) sender;
 
 - (NSString *) imagesFolderPath;
 - (NSString *) fullPNGImagePathForName: (NSString *) name;
@@ -91,8 +93,11 @@
 
 - (IBAction) dismissSheet:(id) sender;
 - (IBAction) showWarningInfo: (id) sender;
-
+- (IBAction) toggleGroupByLabel: (id) sender;
+- (IBAction) toggleHideOldByDefault: (id) sender;
 - (IBAction) createListOfNonLocatableAddresses:(id) sender;
+- (IBAction) lookupNonLocatableAddresses: (id) sender;
+
 
 - (IBAction) readme:(id) sender;
 - (NSString*) myVersionString;

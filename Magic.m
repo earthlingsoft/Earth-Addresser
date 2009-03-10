@@ -75,6 +75,7 @@
 									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
 									   [NSNumber numberWithBool:YES], @"placemarkWithAddressBookLink",
 									   [NSNumber numberWithBool:NO], @"hasReadInfo",
+									   [NSNumber numberWithBool:NO], @"groupByAddressLabel",						
 									   nil];
 	[UDC setInitialValues:standardDefaults];
 	[UDC setAppliesImmediately:YES];
@@ -300,7 +301,12 @@
 			// there are addresses and all of them have been looked up already
 			if (nonLocatedAddressCount != 0) {
 				showNonLocatableAddressesButton = YES;
-				lookupPart = [NSString stringWithFormat:NSLocalizedString(@"All the addresses you selected have been looked up already. Unfortunately %i of them could not be located.", @""), nonLocatedAddressCount];
+				if (nonLocatedAddressCount > 1) {
+					lookupPart = [NSString stringWithFormat:NSLocalizedString(@"All the addresses you selected have been looked up already. Unfortunately %i of them could not be located.", @"Info text in middle section of window - variant used when everything has been looked up already and more than one was addresses not found."), nonLocatedAddressCount];
+				}
+				else {
+					lookupPart = NSLocalizedString(@"All the addresses you selected have been looked up already. Unfortunately one of them could not be located.", @"Info text in middle section of window - variant used when everything has been looked up already and exactly one address was not found.");
+				}
 			}
 			else{
 				lookupPart = NSLocalizedString(@"All the addresses you selected have been looked up already.", @"");
@@ -316,6 +322,8 @@
 	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
 	[self setValue:lookupPart forKey:@"lookupInfo"];
 	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
+	BOOL b = ([[locations allKeysForObject:FAILSTRING] count] > 1);
+	[self setValue:[NSNumber numberWithBool:b] forKey:@"nonLocatableAddressesExist"];
 	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
 	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
 	[self setValue:@"" forKey:@"doneMessage"];
@@ -392,7 +400,7 @@
 - (IBAction) convertAddresses: (id) sender {
 	if (!geocodingRunning) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
-		[NSThread detachNewThreadSelector:@selector(convertAddresses2) toTarget:self withObject:nil];
+		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
 	else {
 		// Cancel
@@ -410,12 +418,20 @@
  method looking up addresses
  to be run in separate thread
 */
-- (void) convertAddresses2 {
+- (void) convertAddresses2: (id) sender {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	NSArray * people = [self relevantPeople];
+	NSArray * people;
+	if (sender == self) {
+		// if message comes from self, look up all remaining addresses...
+		people = [[ABAddressBook sharedAddressBook] people];
+	}
+	else {
+		// ... otherwise (messages comes from GUI) only look up for current selection.
+		people = [self relevantPeople];
+	}
 	NSEnumerator * myEnum = [people objectEnumerator];
 	ABPerson * myPerson;
-	NSString * baseURL = [NSString stringWithFormat:GOOGLEGEOLOOKUPURL, GOOGLEAPIKEY];
+	NSString * baseURL = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?output=csv&oe=utf8&sensor=false&key=%@", GOOGLEAPIKEY];
 	NSTimeInterval previousLookup = 0;
 	double geocodingCurrentPosition = .000001;
 	BOOL error = NO;
@@ -465,12 +481,11 @@
 				
 					int result = [[resultArray objectAtIndex:0] intValue];
 					if (result == 200) {
-					NSNumber * accuracy = [NSNumber numberWithInt:[[resultArray objectAtIndex:1] intValue]];
-					NSNumber * latitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:2] doubleValue]];
-					NSNumber * longitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:3] doubleValue]];
+						NSNumber * accuracy = [NSNumber numberWithInt:[[resultArray objectAtIndex:1] intValue]];
+						NSNumber * latitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:2] doubleValue]];
+						NSNumber * longitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:3] doubleValue]];
 				
-					[locations setObject:[NSArray arrayWithObjects:accuracy, latitude, longitude, nil]  forKey:addressString];
-					[self relevantPeople];
+						[locations setObject:[NSArray arrayWithObjects:accuracy, latitude, longitude, nil]  forKey:addressString];
 					}
 					else if (result == 602) {
 						// Failed to locate to the address
@@ -478,12 +493,18 @@
 					}
 					else if (result == 620) {
 						// Too many queries sent, possibly handle this
+						NSString * errorString =  NSLocalizedString(@"Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists.", @"Error message for Google Geocoding 602 error.");
+						[self setValue: errorString forKey:@"geocodingError"];
+						
 						NSLog(@"Earth Addresser exceeded Google's query limit for determining addresses. Only waiting and trying again could help");
+						
+						error = YES;
 					}
 					else {
 						// no idea what this could be
 						NSLog(@"Geocoding query for '%@' failed with result %@", theAddress, [resultArray objectAtIndex:0]);
 					}
+					[self relevantPeople];
 				}
 				else { // geocodeError != nil
 					NSString * errorString = [NSString stringWithFormat:NSLocalizedString(@"Geocoding failed: %@", @""), [geocodeError localizedDescription]];
@@ -740,21 +761,25 @@
 					// only include addresses we resolved before
 					NSString * addressName = [addresses labelAtIndex:index];
 					NSString * addressLabel = [self localisedLabelName: addressName];
+					NSString * normalisedLabel = [addressLabel capitalizedString];
 
 					NSString * nameAndLabel;
 					if (addressLabel) {
-						nameAndLabel = [name stringByAppendingFormat:@" (%@)", addressLabel];
+						nameAndLabel = [name stringByAppendingFormat:@" (%@)", normalisedLabel];
 					}
 					else {
 						nameAndLabel = name;
 					}
+					
 					
 #pragma mark -do2: Address String
 					NSXMLElement * placemarkElement = [NSXMLElement elementWithName:@"Placemark"];
 					// [placemarkElement addAttribute: [NSXMLNode attributeWithName:@"id" stringValue:ID]];
 					NSXMLElement * nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];
 					[placemarkElement addChild: nameElement];
-					NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: @"1"];
+										
+					NSString * visibilityString = ([OLDLABELS containsObject:normalisedLabel]) ? @"0" : @"1";
+					NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: visibilityString];
 					[placemarkElement addChild: visibilityElement];
 											
 					NSXMLElement * pointElement = [NSXMLElement elementWithName:@"Point"];
@@ -762,8 +787,7 @@
 					[pointElement addChild:coordinatesElement];
 					[placemarkElement addChild:pointElement];
 					
-					
-					
+				
 					NSMutableString * descriptionHTMLString = [NSMutableString string];
 					NSMutableString * addressString = [self dictionaryKeyForAddressDictionary:theAddress];
 					[addressString replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
@@ -901,22 +925,28 @@
 					if (styleURLElement) {
 						[placemarkElement addChild:styleURLElement];
 					}
-					if (![[UDC valueForKeyPath:@"values.groupByAddressType"] boolValue]) {
+					if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
 						// create a group for each address label and add the addresses accordingly
-						NSXMLElement * addressGroup = [addressLabelGroups objectForKey:addressLabel];
+						NSXMLElement * addressGroup = [addressLabelGroups objectForKey:normalisedLabel];
+					
 						if (addressGroup == nil) {
 							// group doesn't exist yet => create it
 							addressGroup = [NSXMLElement elementWithName:@"Folder"];
-							NSXMLElement * groupChild = [NSXMLElement elementWithName:@"name" stringValue:addressLabel];
-							[addressGroup addChild:groupChild];
+
+							[addressGroup addChild:[NSXMLNode elementWithName:@"name" stringValue:normalisedLabel]];
 							[addressLabelGroups setObject:addressGroup forKey:addressLabel];
-							[myXML addChild:addressGroup];
+							
+							if ([OLDLABELS containsObject:normalisedLabel]) {
+								// this is the group for old addresses
+								[addressGroup addChild:[NSXMLNode elementWithName:@"visibility" stringValue: @"0"]];
+							}
 						}
 						// add element to this group
 						[addressGroup addChild:placemarkElement];
+						// groups will be sorted and added to the main XML tree after the loop has finished
 					}
 					else {
-						// add element to the main group
+						// add element to the main group immediately
 						[myXML addChild: placemarkElement];
 					}
 				}
@@ -925,6 +955,17 @@
 			} // end of address loop
 		} // end of people loop
 
+		if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
+			// sort and add folders of contacts for each group to main XML tree
+			NSArray * sortedLabels = [[addressLabelGroups allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+			NSEnumerator * labelEnumerator = [sortedLabels objectEnumerator];
+			id label;
+			
+			while (label = [labelEnumerator nextObject]) {
+				[myXML addChild: [addressLabelGroups objectForKey:label]];
+			}
+		}
+		
 
 		[progressBar setDoubleValue:[people count]];
 		[progressBar display];
@@ -973,13 +1014,102 @@
 
 #pragma mark Actions
 
+/*
+	Displays warning sheet about privacy issues
+*/
 - (IBAction) showWarningInfo: (id) sender {
 	[NSApp beginSheet:warningMessage modalForWindow:mainWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
 
+/*
+	for OK button of warning sheet about privacy issues
+*/
 - (IBAction) dismissSheet:(id) sender {
 	[NSApp endSheet: warningMessage];
 	[warningMessage orderOut:self];
+}
+
+/*
+	toggles groupByAddressLabel user default
+*/ 
+- (IBAction) toggleGroupByLabel: (id) sender {
+	
+}
+
+/*
+ toggles hideOldByDefault user default
+ */ 
+- (IBAction) toggleHideOldByDefault: (id) sender {
+	
+}
+
+
+
+
+/*
+	1. clears all FAIL marks for locations
+	2. initiates a look-up for addresses
+*/
+- (IBAction) lookupNonLocatableAddresses: (id) sender {
+	NSArray * FAILAddresses = [locations allKeysForObject:FAILSTRING];
+	[locations removeObjectsForKeys:FAILAddresses];
+	[self updateRelevantPeopleInfo:[[ABAddressBook sharedAddressBook] people]];
+
+	[self convertAddresses:self];
+}
+
+
+
+
+
+#pragma mark Non-Locatable Addresses
+
+- (IBAction) createListOfNonLocatableAddresses:(id) sender {
+	NSMutableString * s = [NSMutableString string];
+	NSArray * people;
+	if ([sender isKindOfClass:[NSButton class]]) {
+		// the button in the window was user => only use non-found addresses in the current selection
+		people = [self relevantPeople];
+	}
+	else {
+		// the menu item was used => us _all_ non-found addresses
+		people = [[ABAddressBook sharedAddressBook] people];		
+	}
+	
+	
+	NSEnumerator * myEnum = [people objectEnumerator];
+	ABPerson * myPerson;
+	
+	while (myPerson = [myEnum nextObject]) {
+		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
+		int totalAddresses = [addresses count];
+		int index = 0;
+		
+		while (totalAddresses > index) {
+			NSDictionary * addressDict = [addresses valueAtIndex:index];
+			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
+			NSObject * addressObject = [locations objectForKey: addressKey];
+			if (addressObject != nil) {
+				if (![addressObject isKindOfClass:[NSArray class]] && [addressObject isEqual:FAILSTRING]) {
+					[s appendFormat:@"%@\n***\n", addressKey];
+				}
+			}
+			index++;
+		}
+	}
+	
+	
+	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [self uuid]];
+	NSURL * saveURL = [NSURL fileURLWithPath:savePath];
+	NSError * myError = nil;
+	if ([s writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
+		[[NSWorkspace sharedWorkspace] openURL:saveURL];
+	}
+	else {
+		NSBeep();
+		NSLog(@"Couldn't write file with nonlocatable addresses: %@", [myError localizedDescription]);
+	}
+	
 }
 
 
@@ -1046,57 +1176,6 @@
 	return result;
 }
 
-
-
-#pragma mark Non-Locatable Addresses
-
-- (IBAction) createListOfNonLocatableAddresses:(id) sender {
-	NSMutableString * s = [NSMutableString string];
-	NSArray * people;
-	if ([sender isKindOfClass:[NSButton class]]) {
-		// the button in the window was user => only use non-found addresses in the current selection
-		people = [self relevantPeople];
-	}
-	else {
-		// the menu item was used => us _all_ non-found addresses
-		people = [[ABAddressBook sharedAddressBook] people];		
-	}
-		
-
-	NSEnumerator * myEnum = [people objectEnumerator];
-	ABPerson * myPerson;
-	
-	while (myPerson = [myEnum nextObject]) {
-		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
-		int totalAddresses = [addresses count];
-		int index = 0;
-		
-		while (totalAddresses > index) {
-			NSDictionary * addressDict = [addresses valueAtIndex:index];
-			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = [locations objectForKey: addressKey];
-			if (addressObject != nil) {
-				if (![addressObject isKindOfClass:[NSArray class]] && [addressObject isEqual:FAILSTRING]) {
-					[s appendFormat:@"%@\n***\n", addressKey];
-				}
-			}
-			index++;
-		}
-	}
-	
-	
-	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [self uuid]];
-	NSURL * saveURL = [NSURL fileURLWithPath:savePath];
-	NSError * myError = nil;
-	if ([s writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
-		[[NSWorkspace sharedWorkspace] openURL:saveURL];
-	}
-	else {
-		NSBeep();
-		NSLog(@"Couldn't write file with nonlocatable addresses: %@", [myError localizedDescription]);
-	}
-	
-}
 
 
 

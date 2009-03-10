@@ -31,10 +31,18 @@ Info text in middle section of window – variant used when more than one of the
 "The selected contacts contain %i addresses whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Die Auswahl enthält %i Adressen, deren Koordinaten noch nicht ermittelt wurden.";
 
 /*
-Info text in middle section of window – variant used when everything has been looked up already and not all addresses were found.
+Info text in middle section of window – variant used when everything has been looked up already and more than one was addresses not found.
 */
 "All the addresses you selected have been looked up already. Unfortunately %i of them could not be located." = "Es wurden bereits alle Adressen nachgeschlagen.
 Für %i der Adressen konnten die zugehörigen Koordinaten nicht ermittelt werden.";
+
+/*
+Info text in middle section of window – variant used when everything has been looked up already and exactly one address was not found.
+*/
+"All the addresses you selected have been looked up already. Unfortunately one of them could not be located." = "Es wurden bereits alle Adressen nachgeschlagen.
+Für eine der Adressen konnten die zugehörigen Koordinaten nicht ermittelt werden.";
+
+
 
 /*
 Info text in middle section of window – variant used when everything has been looked up already successfully.
@@ -67,6 +75,12 @@ Displayed in bottom section after Placemarks have been created.
 
 /* Address lookup failed. Introductory string in which %@ is the description coming from NSError */
 "Geocoding failed: %@" = "Ermitteln der Koordinaten fehlgeschlagen: %@.";
+
+/* Error message for Google Geocoding 602 error. */
+"Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists." = "Koordinatenermittlung fehlgeschlagen. Bitte versuchen Sie es in ein paar Minuten noch einmal und senden Sie uns eine E-Mail falls das Problem bestehen bleibt.";
+
+
+
 
 
 /*

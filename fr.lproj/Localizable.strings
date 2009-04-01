@@ -41,7 +41,7 @@ Malheureusement, %i d’entre elles n’ont pas pu être localisées.";
 Info text in middle section of window – variant used when everything has been looked up already and exactly one address was not found.
 */
 "All the addresses you selected have been looked up already. Unfortunately one of them could not be located." = "Toutes les adresses sélectionnées ont déjà été regardées.
-Malheureusement, une d’entre elles n’a pas pu être localisée.";
+Malheureusement, l’une d’elles n’a pas pu être localisée.";
 
 
 

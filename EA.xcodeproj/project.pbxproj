@@ -366,8 +366,8 @@
 		6CFB92670BBC499100191CDD /* Credits.html */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6C1569DC0F0F026C009C7B5F /* de */,
 				6C1569DB0F0F025F009C7B5F /* en */,
+				6C1569DC0F0F026C009C7B5F /* de */,
 				6C1569DD0F0F026E009C7B5F /* fr */,
 			);
 			name = Credits.html;
@@ -428,7 +428,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.3b1;
+				Version_Number = 2.3;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

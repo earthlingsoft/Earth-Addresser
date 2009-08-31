@@ -679,6 +679,7 @@
 	if (people) {
 		[progressBar setHidden:NO];
 		[progressBar setMaxValue: [people count]];
+//		[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLMaximum"]; /* works in X.6 only */
 		NSEnumerator * myEnum = [people objectEnumerator];
 		ABPerson * person;
 			
@@ -705,6 +706,7 @@
 		while (person = [myEnum nextObject]) {
 			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
 			[progressBar setDoubleValue: currentPosition];
+//			[self setValue:[NSNumber numberWithInt:currentPosition] forKey:@"KMLProgress"];
 			currentPosition += 1.;
 												
 			NSString * uniqueID = [person uniqueId];
@@ -971,7 +973,7 @@
 			}
 		}
 		
-
+//		[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLProgress"];
 		[progressBar setDoubleValue:[people count]];
 		[progressBar display];
 			
@@ -1003,6 +1005,7 @@
 		
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
 		[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @""), KMLFileName] forKey:@"doneMessage"];
+//		[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];
 		[progressBar setDoubleValue: 0.0];
 		[progressBar setHidden:YES];
 	}

@@ -41,6 +41,8 @@
 
 @interface Magic : NSObject {
 	IBOutlet NSProgressIndicator * progressBar;
+//	double KMLProgress;
+//	double KMLMaximum;
 	BOOL running;
 	
 	NSThread * geocodingThread;
@@ -52,8 +54,8 @@
 	NSString * lookupInfo;
 	NSString * doneMessage;
 	
-	int addressesAreAvailable;
-	int notSearchedCount;
+	NSInteger addressesAreAvailable;
+	NSInteger notSearchedCount;
 	BOOL nonLocatableAddressesExist;
 	BOOL nonLocatableAddressesButtonHidden;
 	IBOutlet NSButton * runGeolocationButton;

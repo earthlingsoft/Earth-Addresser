@@ -178,7 +178,7 @@ static NSString *EVCURLKey = @"URL";
     NSString *tempFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"VersionChecker PList.tmp"];
     NSString *contentsOfTempFile;
     if([infoDict writeToFile:tempFile atomically:YES]) {
-        contentsOfTempFile = [NSString stringWithContentsOfFile:tempFile];
+        contentsOfTempFile = [NSString stringWithContentsOfFile:tempFile encoding:NSUTF8StringEncoding error:NULL];
         unlink([tempFile UTF8String]);
         return contentsOfTempFile;
     }

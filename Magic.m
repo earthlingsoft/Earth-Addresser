@@ -8,6 +8,7 @@
 //
 
 #import "Magic.h"
+#import <AddressBook/ABAddressBookC.h>
 
 
 
@@ -65,7 +66,7 @@
 	
 	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
-									   [NSNumber numberWithFloat:1.5], @"imageSize", 
+									   [NSNumber numberWithDouble:1.5], @"imageSize", 
 									   [NSNumber numberWithInt:0], @"addressBookScope",
 									   [NSNumber numberWithBool:YES], @"placemarkWithName",
 									   @"\342\235\200", @"placemarkNameReplacement",
@@ -140,11 +141,10 @@
 	if ([a count] > 0 ) {
 		// look whether the selected item still exists. If it doesn't reset to ALL group
 		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup2"] objectForKey:MENUOBJECT];
-		ABGroup * myGroup;		
 		
 		if (selectedGroup 
 				&& ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) 
-				&&  (myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup]) ) {
+				&&  [ab recordForUniqueId:selectedGroup] ) {
 		}
 		else {				
 			group = [groups objectAtIndex:0];
@@ -216,10 +216,9 @@
 		[self error:NSLocalizedString(@"Selected group wasn't recognisable.",@"Selected group couldn't be recognised.")];
 	}
 
-	NSNumber * sortByFirstName;
-	sortByFirstName = [NSNumber numberWithBool:NO];
+	NSNumber * sortByFirstName = [NSNumber numberWithBool:NO];
 	
-	people =  [people sortedArrayUsingFunction:nameSort context:sortByFirstName];
+	people =  [people sortedArrayUsingFunction:nameSort context: sortByFirstName];
 
 	[self updateRelevantPeopleInfo:people];
 	
@@ -241,8 +240,8 @@
 	ABPerson * myPerson;
 	while (myPerson = [myEnum nextObject]) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
-		int totalAddresses = [addresses count];
-		int index = 0;
+		NSUInteger totalAddresses = [addresses count];
+		NSUInteger index = 0;
 		
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
@@ -399,6 +398,7 @@
 */
 - (IBAction) convertAddresses: (id) sender {
 	if (!geocodingRunning) {
+		[Magic disableSuddenTermination];
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
 		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
@@ -442,8 +442,8 @@
 	
 	while ((myPerson = [myEnum nextObject]) && !error) { //  && ![[NSThread currentThread] isCancelled]) { <-- X.5 only
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
-		int addressCount = [addresses count];
-		int index = 0;
+		NSUInteger addressCount = [addresses count];
+		NSUInteger index = 0;
 
 		while (addressCount > index && !error) {
 			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
@@ -510,7 +510,7 @@
 					NSString * errorString = [NSString stringWithFormat:NSLocalizedString(@"Geocoding failed: %@", @""), [geocodeError localizedDescription]];
 					[self setValue:errorString forKey:@"geocodingError"];
 					
-					NSLog([NSString stringWithFormat: @"%@ - %@ - %@", errorString, [geocodeError localizedFailureReason], [geocodeError localizedRecoverySuggestion]]);
+					NSLog(@"%@ - %@ - %@", errorString, [geocodeError localizedFailureReason], [geocodeError localizedRecoverySuggestion]);
 				
 					error = YES; // gets us out of the loop 
 				}
@@ -524,6 +524,7 @@
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
 	[geocodingProgressBar setHidden:YES];	
 	[self saveLocations];
+	[Magic enableSuddenTermination];
 	[pool release];
 }
 
@@ -600,9 +601,9 @@
 		NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:imageData];
 		if (imageRep != nil) {
 			// create PNG data and write it
-			BOOL success;
 			NSData * PNGData = [imageRep representationUsingType:NSPNGFileType properties:nil];
-			if (success = [PNGData writeToFile:fullImagePath atomically:YES]) {
+			BOOL PNGWriteSuccess = [PNGData writeToFile:fullImagePath atomically:YES];
+			if (PNGWriteSuccess) {
 				// now that we have written the image, create the style for it
 				styleElement = [NSXMLElement elementWithName:@"Style"];
 				[styleElement addAttribute:[NSXMLNode attributeWithName:@"id" stringValue:ID]];
@@ -656,8 +657,10 @@
  action for writing KML file
  */
 - (IBAction) do: (id) sender {
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"running"];
+	[Magic disableSuddenTermination];
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"running"];	
 	[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];
+//	[self do2:sender];
 }
 
 
@@ -681,8 +684,7 @@
 			
 		// Basic XML setup for KML file
 		NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
-		CFUUIDRef UUID = CFUUIDCreate(NULL);
-		NSString * uuidString = [(NSString *)CFUUIDCreateString(NULL, UUID) autorelease];
+		NSString * uuidString = [self uuid];
 		if (uuidString) {
 			NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:uuidString];
 			[myXML addAttribute:documentID];
@@ -701,6 +703,7 @@
 		// Run through all people in the list
 		//
 		while (person = [myEnum nextObject]) {
+			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
 			[progressBar setDoubleValue: currentPosition];
 			currentPosition += 1.;
 												
@@ -747,8 +750,8 @@
 			// 
 			// now cycle through the various addresses and create placemarks
 			ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
-			int addressCount = [addresses count];
-			int index = 0;
+			NSUInteger addressCount = [addresses count];
+			NSUInteger index = 0;
 
 			while (addressCount > index) {
 
@@ -812,7 +815,7 @@
 					if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
 						// include e-mail addresses in placemark
 						ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
-						int eMailCount = [eMails count];
+						NSUInteger eMailCount = [eMails count];
 						if (eMailCount != 0) {
 							int index = 0;
 							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)")];
@@ -843,7 +846,7 @@
 					if ([[UDC valueForKeyPath:@"values.placemarkWithWeblinks"] boolValue]) {
 						// include e-mail addresses in placemark
 						ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
-						int weblinkCount = [weblinks count];
+						NSUInteger weblinkCount = [weblinks count];
 						if (weblinkCount != 0) {
 							int index = 0;
 							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)")];
@@ -874,7 +877,7 @@
 					if ([[UDC valueForKeyPath:@"values.placemarkWithPhone"] boolValue]) {
 						// include e-mail addresses in placemark
 						ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
-						int phoneCount = [phones count];
+						NSUInteger phoneCount = [phones count];
 						if (phoneCount != 0) {
 							int index = 0;
 							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Phone", @"Phone (appears in Google Earth Info Balloon)")];
@@ -950,9 +953,11 @@
 						[myXML addChild: placemarkElement];
 					}
 				}
+
 				index++;
-				
 			} // end of address loop
+
+			[innerPool release];
 		} // end of people loop
 
 		if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
@@ -1002,6 +1007,7 @@
 		[progressBar setHidden:YES];
 	}
 	
+	[Magic enableSuddenTermination];
 	[myPool release];
 }
 
@@ -1082,8 +1088,8 @@
 	
 	while (myPerson = [myEnum nextObject]) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
-		int totalAddresses = [addresses count];
-		int index = 0;
+		NSUInteger totalAddresses = [addresses count];
+		NSUInteger index = 0;
 		
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
@@ -1147,7 +1153,7 @@
 	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"];
 	if (appPath) {
 		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
-		[im setSize:NSMakeSize(128.0,128.0)];
+		[im setSize:NSMakeSize(128.0, 128.0)];
 		result = [im TIFFRepresentation];
 	}
 	return result;
@@ -1187,10 +1193,10 @@
 /*
  Localises Address Boook labels, could return nil
 */
-- (NSString *) localisedLabelName: (NSString*) label {
-	NSString * localisedLabel = (NSString*) ABCopyLocalizedPropertyOrLabel((CFStringRef) label);
-	[localisedLabel autorelease];
-	return localisedLabel;
+- (NSString *) localisedLabelName: (NSString*) labelName {
+	NSString * localisedLabelName = (NSString*) ABCopyLocalizedPropertyOrLabel((CFStringRef)labelName);
+	[localisedLabelName autorelease];
+	return localisedLabelName;
 }
 
 
@@ -1231,7 +1237,7 @@
  quarter-assed error handling
 */
 - (void) error: (NSString*) error {
-	NSLog(error);
+	NSLog(@"%@", error);
 	NSBeep();
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
 }
@@ -1296,6 +1302,30 @@
 }
 
 
+
+
+#pragma mark SUDDEN TERMINATION
+/*
+ uglyuglyugly but sudden termination seems worth the hassle
+ */
++ (void) enableSuddenTermination {
+	NSProcessInfo * pI = [NSProcessInfo processInfo];
+	SEL enableSuddenTerminationSelector = @selector(enableSuddenTermination);
+	if ([pI respondsToSelector:enableSuddenTerminationSelector]) { // we're running X.6 or higher
+		[pI performSelector:enableSuddenTerminationSelector];
+	}
+}
+
++ (void) disableSuddenTermination {
+	NSProcessInfo * pI = [NSProcessInfo processInfo];
+	SEL enableSuddenTerminationSelector = @selector(disableSuddenTermination);
+	if ([pI respondsToSelector:enableSuddenTerminationSelector]) { // we're running X.6 or higher
+		[pI performSelector:enableSuddenTerminationSelector];
+	}
+}
+
+
+
 @end
 
 
@@ -1317,7 +1347,7 @@
 /*
  Helper function for sorting the people array by name. 
  */
-int nameSort(id person1, id person2, void *context)
+NSInteger nameSort(id person1, id person2, void *context)
 {
 	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];
 	if (!lastName1) {
@@ -1358,4 +1388,7 @@ int nameSort(id person1, id person2, void *context)
 	
 	return result;
 }
+
+
+
 

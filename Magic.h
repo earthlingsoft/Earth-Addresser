@@ -6,6 +6,16 @@
 //  Copyright 2006-2009 earthlingsoft. All rights reserved.
 //
 
+/*
+#if __LP64__
+#else
+#define NSInteger long
+#define NSUInteger unsigned long
+#define CGFloat float
+#define integerValue intValue
+#endif
+*/
+
 
 #import <Cocoa/Cocoa.h>
 #import <AddressBook/AddressBook.h>
@@ -104,10 +114,14 @@
 - (IBAction) autoCheckForUpdates: (id) sender;
 - (IBAction) menuCheckVersion:(id)sender;
 
+
++ (void) disableSuddenTermination;
++ (void) enableSuddenTermination;
+
 @end
 
 @interface ABGroup (ESSortExtension)
 - (NSComparisonResult) groupByNameCompare:(ABGroup *)aGroup ;
 @end
 
-int nameSort(id person1, id person2, void *context);
+NSInteger nameSort(id person1, id person2, void *context);

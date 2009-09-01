@@ -16,6 +16,8 @@
 #endif
 */
 
+#define isX5OrHigher (NSAppKitVersionNumber >= 949.0)
+#define isX6OrHigher (NSAppKitVersionNumber >= 1038.0)
 
 #import <Cocoa/Cocoa.h>
 #import <AddressBook/AddressBook.h>
@@ -40,13 +42,16 @@
 
 
 @interface Magic : NSObject {
+	NSThread * KMLThread;
 	IBOutlet NSProgressIndicator * progressBar;
-//	double KMLProgress;
-//	double KMLMaximum;
-	BOOL running;
+	double KMLProgress;
+	double KMLMaximum;
+	BOOL KMLRunning;
 	
 	NSThread * geocodingThread;
 	IBOutlet NSProgressIndicator * geocodingProgressBar;
+	double geocodingProgress;
+	double geocodingMaximum;
 	NSString * geocodingError;
 	BOOL geocodingRunning;
 	
@@ -119,7 +124,7 @@
 
 + (void) disableSuddenTermination;
 + (void) enableSuddenTermination;
-
++ (NSInvocation*) isCancelledInvocation;
 @end
 
 @interface ABGroup (ESSortExtension)

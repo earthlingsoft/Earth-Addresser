@@ -58,11 +58,13 @@
 
 
 + (void)initialize {
-    [self setKeys:[NSArray arrayWithObjects:@"running", @"notSearchedCount", nil]triggerChangeNotificationsForDependentKey:@"needToSearchNoticeHidden"];
+    [self setKeys:[NSArray arrayWithObjects:@"KMLRunning", @"notSearchedCount", nil]triggerChangeNotificationsForDependentKey:@"needToSearchNoticeHidden"];
 
 	[self setKeys:[NSArray arrayWithObject:@"notSearchedCount"] triggerChangeNotificationsForDependentKey:@"nothingToSearch"];
 
 	[self setKeys:[NSArray arrayWithObject:@"geocodingRunning"] triggerChangeNotificationsForDependentKey:@"geocodingButtonLabel"];
+
+	[self setKeys:[NSArray arrayWithObject:@"KMLRunning"] triggerChangeNotificationsForDependentKey:@"KMLWritingButtonLabel"];	
 	
 	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
@@ -76,8 +78,9 @@
 									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
 									   [NSNumber numberWithBool:YES], @"placemarkWithAddressBookLink",
 									   [NSNumber numberWithBool:NO], @"hasReadInfo",
-									   [NSNumber numberWithBool:NO], @"groupByAddressLabel",						
+									   [NSNumber numberWithBool:NO], @"groupByAddressLabel",
 									   nil];
+	
 	[UDC setInitialValues:standardDefaults];
 	[UDC setAppliesImmediately:YES];
 }
@@ -86,11 +89,17 @@
 
 
 - (void) dealloc {
-// NSSThread -cancel is X.5 only
-/*	if (geocodingRunning && geocodingThread) {
-		[geocodingThread cancel];
+	// NSSThread -cancel is X.5 or higher only
+	if (isX5OrHigher) {
+		SEL cancelSelector = @selector(cancel);
+		if (geocodingRunning && [geocodingThread respondsToSelector:cancelSelector]) {
+			[geocodingThread performSelector:cancelSelector];
+		}
+		if (KMLRunning && [KMLThread respondsToSelector:cancelSelector]) {
+			[KMLThread performSelector:cancelSelector];
+		}
 	}
- */
+
 	[locations release];
 	[groups release];
 	
@@ -399,16 +408,21 @@
 - (IBAction) convertAddresses: (id) sender {
 	if (!geocodingRunning) {
 		[Magic disableSuddenTermination];
+		if (isX6OrHigher) {
+			[self setValue:[NSNumber numberWithDouble:.0] forKey:@"geocodingProgress"];			
+		}
+		else {
+			[geocodingProgressBar setDoubleValue:.0];
+		}
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
 		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
-	else {
-		// Cancel
-		/* // NSSThread -cancel is X.5 only
-		if (geocodingThread) {
-			[geocodingThread cancel];
+	else if (geocodingRunning && isX5OrHigher) {
+		// NSSThread -cancel is in >= X.5 only
+		SEL cancelSelector = @selector(cancel);
+		if ([geocodingThread respondsToSelector:cancelSelector]) {
+			[geocodingThread performSelector:cancelSelector];
 		}
-		*/ 
 	}
 }
 
@@ -420,6 +434,12 @@
 */
 - (void) convertAddresses2: (id) sender {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+	geocodingThread = [NSThread currentThread];
+	BOOL threadIsCancelled = NO;
+	NSInvocation * isCancelledInvocation = [Magic isCancelledInvocation];
+	double geocodingCurrentPosition = .000001;
+
+
 	NSArray * people;
 	if (sender == self) {
 		// if message comes from self, look up all remaining addresses...
@@ -433,26 +453,37 @@
 	ABPerson * myPerson;
 	NSString * baseURL = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?output=csv&oe=utf8&sensor=false&key=%@", GOOGLEAPIKEY];
 	NSTimeInterval previousLookup = 0;
-	double geocodingCurrentPosition = .000001;
 	BOOL error = NO;
 	
 	[self setValue:@"" forKey:@"geocodingError"];
-	[geocodingProgressBar setHidden: NO];
-	[geocodingProgressBar setMaxValue: notSearchedCount];
-	
-	while ((myPerson = [myEnum nextObject]) && !error) { //  && ![[NSThread currentThread] isCancelled]) { <-- X.5 only
+
+	if (isX6OrHigher) {
+		[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
+	}
+	else {
+		[geocodingProgressBar setHidden: NO];
+		[geocodingProgressBar setMaxValue: notSearchedCount];		
+	}
+		
+	while ((myPerson = [myEnum nextObject]) && !error && !threadIsCancelled) {
+		NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
+		
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		NSUInteger addressCount = [addresses count];
 		NSUInteger index = 0;
 
 		while (addressCount > index && !error) {
-			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
-
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 			
 			if (! [locations objectForKey:addressString]) {
-				[geocodingProgressBar setDoubleValue: geocodingCurrentPosition];
+				if (isX6OrHigher) {
+					[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
+				}
+				else {
+					[geocodingProgressBar setDoubleValue: geocodingCurrentPosition];
+				}
+
 				geocodingCurrentPosition += 1.;
 				
 				// Look up address if we don't know its coordinates already
@@ -516,13 +547,21 @@
 				}
 			}
 			index++;
-			[innerPool release];
 		}
 		
+		if (isX5OrHigher) { 
+			[isCancelledInvocation invoke];
+			[isCancelledInvocation getReturnValue:&threadIsCancelled];
+		}
+		[innerPool release];
 	}
 
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
-	[geocodingProgressBar setHidden:YES];	
+	geocodingThread = nil;
+	
+	if (!isX6OrHigher) {
+		[geocodingProgressBar setHidden:YES];			
+	}
 	[self saveLocations];
 	[Magic enableSuddenTermination];
 	[pool release];
@@ -655,12 +694,26 @@
 #pragma mark Write KML
 /*
  action for writing KML file
- */
+*/
 - (IBAction) do: (id) sender {
-	[Magic disableSuddenTermination];
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"running"];	
-	[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];
-//	[self do2:sender];
+	if (!KMLRunning) {
+		[Magic disableSuddenTermination];
+		if (isX6OrHigher) {
+			[self setValue:[NSNumber numberWithDouble:.0] forKey:@"KMLProgress"];			
+		}
+		else {
+			[progressBar setDoubleValue:.0];
+		}
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"KMLRunning"];	
+		[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];		
+	}
+	else if (KMLRunning && isX5OrHigher) {
+		// NSSThread -cancel is in >= X.5 only
+		SEL cancelSelector = @selector(cancel);
+		if ([KMLThread respondsToSelector:cancelSelector]) {
+			[KMLThread performSelector:cancelSelector];
+		}		
+	}
 }
 
 
@@ -671,15 +724,23 @@
 */
 - (void) do2:(id) sender {
 	NSAutoreleasePool * myPool = [[NSAutoreleasePool alloc] init];
+	KMLThread = [NSThread currentThread];
 	double currentPosition = .000001;
 
+	BOOL threadIsCancelled = NO;
+	NSInvocation * isCancelledInvocation = [Magic isCancelledInvocation];	
 	
 	NSArray * people = [self relevantPeople];
 
 	if (people) {
-		[progressBar setHidden:NO];
-		[progressBar setMaxValue: [people count]];
-//		[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLMaximum"]; /* works in X.6 only */
+		if (isX6OrHigher) {
+			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLMaximum"];
+		}
+		else {
+			[progressBar setHidden:NO];
+			[progressBar setMaxValue: [people count]];			
+		}
+
 		NSEnumerator * myEnum = [people objectEnumerator];
 		ABPerson * person;
 			
@@ -703,10 +764,21 @@
 		//
 		// Run through all people in the list
 		//
-		while (person = [myEnum nextObject]) {
+		
+		while ((person = [myEnum nextObject]) && !threadIsCancelled) {
 			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
-			[progressBar setDoubleValue: currentPosition];
-//			[self setValue:[NSNumber numberWithInt:currentPosition] forKey:@"KMLProgress"];
+
+			if (isX5OrHigher) { 
+				[isCancelledInvocation invoke];
+				[isCancelledInvocation getReturnValue:&threadIsCancelled];
+			}
+
+			if (isX6OrHigher) {
+				[self setValue:[NSNumber numberWithInt:currentPosition] forKey:@"KMLProgress"];				
+			}
+			else {
+				[progressBar setDoubleValue: currentPosition];
+			}
 			currentPosition += 1.;
 												
 			NSString * uniqueID = [person uniqueId];
@@ -962,6 +1034,8 @@
 			[innerPool release];
 		} // end of people loop
 
+		
+		
 		if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
 			// sort and add folders of contacts for each group to main XML tree
 			NSArray * sortedLabels = [[addressLabelGroups allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -972,42 +1046,54 @@
 				[myXML addChild: [addressLabelGroups objectForKey:label]];
 			}
 		}
-		
-//		[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLProgress"];
-		[progressBar setDoubleValue:[people count]];
-		[progressBar display];
-			
-#pragma mark -do2: Write KML
-		NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
-		[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
-		[kmlElement addChild: myXML];
-		NSXMLDocument * myXMLDocument = [[[NSXMLDocument alloc] initWithRootElement:kmlElement] autorelease];
-		[myXMLDocument setCharacterEncoding:@"utf-8"];
-			
-		NSData * xmlData = [myXMLDocument XMLData];
-			
-		//
-		// now compress the result
-		NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
-		NSString * XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
-		int i = 2;
-			
-		while ([[NSFileManager defaultManager] fileExistsAtPath:XMLpath]) {
-			KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
-			XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
-			i++;
-		}
 
-		[xmlData writeToFile:XMLpath atomically:YES];	
+		if (isX6OrHigher) {
+			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLProgress"];			
+		}
+		else {
+			[progressBar setDoubleValue:[people count]];
+			[progressBar display];	
+		}
 			
+		if (!threadIsCancelled) {
+#pragma mark -do2: Write KML
+			NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
+			[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
+			[kmlElement addChild: myXML];
+			NSXMLDocument * myXMLDocument = [[[NSXMLDocument alloc] initWithRootElement:kmlElement] autorelease];
+			[myXMLDocument setCharacterEncoding:@"utf-8"];
+				
+			NSData * xmlData = [myXMLDocument XMLData];
+				
+			//
+			// now compress the result
+			NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
+			NSString * XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
+			int i = 2;
+				
+			while ([[NSFileManager defaultManager] fileExistsAtPath:XMLpath]) {
+				KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
+				XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
+				i++;
+			}
+
+			[xmlData writeToFile:XMLpath atomically:YES];	
+			[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName] forKey:@"doneMessage"];
+		}
+		else {
+			[self setValue:NSLocalizedString(@"Placemark generation was cancelled.", @"Status message after cancelled KML file creation.") forKey:@"doneMessage"];
+		}
 				
 #pragma mark -do2: Clean Up 	
 		
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
-		[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @""), KMLFileName] forKey:@"doneMessage"];
-//		[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];
-		[progressBar setDoubleValue: 0.0];
-		[progressBar setHidden:YES];
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
+		if (isX6OrHigher) {
+			[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];			
+		}
+		else {
+			[progressBar setDoubleValue: 0.0];
+			[progressBar setHidden:YES];		
+		}
 	}
 	
 	[Magic enableSuddenTermination];
@@ -1128,7 +1214,7 @@
 
 
 - (BOOL) needToSearchNoticeHidden {
-	BOOL hidden = running || (notSearchedCount == 0);
+	BOOL hidden = KMLRunning || (notSearchedCount == 0);
 	return hidden;
 }
 
@@ -1139,16 +1225,67 @@
 }
 
 
-- (NSString*) geocodingButtonLabel {
-	NSString * label;
+- (BOOL) geocodingRunningAndCanBeCancelled {
+	BOOL result;
 	if (geocodingRunning) {
-		label = NSLocalizedString(@"Cancel geocoding", @"Text displayed in geocoding button while geocoding is running");
+		if (isX5OrHigher) {
+			result = YES;
+		}
+		else {
+			result = NO;
+		}
 	}
 	else {
-		label = NSLocalizedString(@"Look up coordinates", @"Text displayed in geocoding button when geocoding is not running");
+		result = YES;
+	}
+	return result;
+}
+
+
+- (NSString*) geocodingButtonLabel {
+	NSString * label;
+	if (geocodingRunning && [self geocodingRunningAndCanBeCancelled]) {
+		label = NSLocalizedString(@"Cancel Lookup", @"Title of geocoding button while geocoding is running and can be cancelled.");
+	}
+	else {
+		label = NSLocalizedString(@"Look up coordinates", @"Standard Title of geocoding button while geocoding is not running.");
 	}
 	return label;
 }
+
+
+
+- (BOOL) KMLRunningAndCanBeCancelled {
+	BOOL result;
+	if (KMLRunning) {
+		if (isX5OrHigher) {
+			result = YES;
+		}
+		else {
+			result = NO;
+		}
+	}
+	else {
+		result = YES;
+	}
+	return result;
+}
+
+
+
+- (NSString*) KMLWritingButtonLabel {
+	NSString * label;
+	if (KMLRunning && [self KMLRunningAndCanBeCancelled]) {
+		label = NSLocalizedString(@"Cancel Placemark Creation", @"Text displayed in KML Creation button while KML Creation is running.");
+	}
+	else {
+		label = NSLocalizedString(@"Create Placemarks", @"Text displayed in KML Creation button when KML Creation is not running.");
+	}
+	return label;
+	
+}
+
+
 
 
 - (NSData*) AddressBookIcon {
@@ -1242,7 +1379,7 @@
 - (void) error: (NSString*) error {
 	NSLog(@"%@", error);
 	NSBeep();
-	[self setValue:[NSNumber numberWithBool:NO] forKey:@"running"];
+	[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
 }
 
 
@@ -1307,7 +1444,7 @@
 
 
 
-#pragma mark SUDDEN TERMINATION
+#pragma mark METHODS FOR X.5 AND ABOVE
 /*
  uglyuglyugly but sudden termination seems worth the hassle
  */
@@ -1319,6 +1456,7 @@
 	}
 }
 
+
 + (void) disableSuddenTermination {
 	NSProcessInfo * pI = [NSProcessInfo processInfo];
 	SEL enableSuddenTerminationSelector = @selector(disableSuddenTermination);
@@ -1328,6 +1466,23 @@
 }
 
 
+/*
+ NSInvocation for cancelling threads, only available in X.5 and higher
+*/
++ (NSInvocation*) isCancelledInvocation {
+	NSInvocation * invocation = nil;
+	
+	if (isX5OrHigher) {
+		SEL isCancelledSelector = @selector(isCancelled);
+		NSThread * thread = [NSThread currentThread];
+		NSMethodSignature * sig = [thread methodSignatureForSelector:isCancelledSelector];
+		invocation = [NSInvocation invocationWithMethodSignature:sig];
+		[invocation setSelector:isCancelledSelector];
+		[invocation setTarget:thread];
+	}
+	
+	return invocation;
+}
 
 @end
 

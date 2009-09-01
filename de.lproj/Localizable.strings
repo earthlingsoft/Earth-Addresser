@@ -60,7 +60,34 @@ Displayed in bottom section after Placemarks have been created.
 */
 "File '%@' on your Desktop" = "Die Ortsmarkendatei „%@“ liegt auf dem Schreibtisch.";
 
+/*
+ Status message after cancelled KML file creation.
+*/
+"Placemark generation was cancelled." = "Das Erzeugen der Ortsmarkendatei wurde abgebrochen.";
 
+
+
+/*
+ Standard Title of geocoding button while geocoding is not running.
+*/
+"Look up coordinates" = "Koordinaten ermitteln";
+
+
+/*
+ Title of geocoding button while geocoding is running and can be cancelled.
+*/
+"Cancel Lookup" = "Abbrechen";
+
+
+/*
+ Text displayed in KML Creation button when KML Creation is not running.
+*/
+"Create Placemarks" = "Ortsmarken erzeugen";
+
+/*
+ Text displayed in KML Creation button while KML Creation is running and can be cancelled.
+*/
+"Cancel Placemark Creation" = "Abbrechen";
 
 
 /* 

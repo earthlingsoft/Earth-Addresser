@@ -61,6 +61,34 @@ Displayed in bottom section after Placemarks have been created.
 */
 "File '%@' on your Desktop" = "Un fichier de repères « %@ » a été créé sur le Bureau.";
 
+/*
+ Status message after cancelled KML file creation.
+*/
+"Placemark generation was cancelled." = "Creation of Placemarks file was cancelled.";
+
+
+
+/*
+ Standard Title of geocoding button while geocoding is not running.
+*/
+"Look up coordinates" = "Rechercher les coordonnées";
+
+/*
+ Title of geocoding button while geocoding is running and can be cancelled.
+*/
+"Cancel Lookup" = "Cancel Lookup";
+
+
+/*
+ Text displayed in KML Creation button while KML Creation is running
+*/
+"Cancel Placemark Creation" = "Cancel";
+
+/*
+ Text displayed in KML Creation button when KML Creation is not running.
+*/
+"Create Placemarks" = "Créer des repères";
+
 
 
 

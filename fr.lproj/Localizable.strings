@@ -64,7 +64,7 @@ Displayed in bottom section after Placemarks have been created.
 /*
  Status message after cancelled KML file creation.
 */
-"Placemark generation was cancelled." = "Creation of Placemarks file was cancelled.";
+"Placemark generation was cancelled." = "Création du fichier de repères annulée.";
 
 
 
@@ -76,13 +76,13 @@ Displayed in bottom section after Placemarks have been created.
 /*
  Title of geocoding button while geocoding is running and can be cancelled.
 */
-"Cancel Lookup" = "Cancel Lookup";
+"Cancel Lookup" = "Annuler la recherche";
 
 
 /*
  Text displayed in KML Creation button while KML Creation is running
 */
-"Cancel Placemark Creation" = "Cancel";
+"Cancel Placemark Creation" = "Annuler";
 
 /*
  Text displayed in KML Creation button when KML Creation is not running.

@@ -653,7 +653,7 @@
 				[iconElement addChild: hrefElement];
 				[iconStyleElement addChild:iconElement];
 				
-				NSXMLElement * sizeElement = [NSXMLNode elementWithName:@"scale" stringValue:[UDC valueForKeyPath:@"values.imageSize"]];
+				NSXMLElement * sizeElement = [NSXMLNode elementWithName:@"scale" stringValue: [[UDC valueForKeyPath:@"values.imageSize"] stringValue]];
 				[iconStyleElement addChild:sizeElement];
 				NSXMLElement * hotSpotElement = [NSXMLNode elementWithName:@"hotSpot"];
 				[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"x" stringValue:@"0.5"]];
@@ -774,7 +774,7 @@
 			}
 
 			if (isX6OrHigher) {
-				[self setValue:[NSNumber numberWithInt:currentPosition] forKey:@"KMLProgress"];				
+				[self setValue:[NSNumber numberWithDouble:currentPosition] forKey:@"KMLProgress"];				
 			}
 			else {
 				[progressBar setDoubleValue: currentPosition];
@@ -812,12 +812,15 @@
 
 			//
 			// insert style with appropriate image for this person
-			NSData * imageData = [person imageData];
-			NSXMLElement * styleXML = [self createStyleForImageData:imageData withID:ID];
 			NSString * fullImagePath = nil; // need this later to put image into contact description
-			if (styleXML) { 
-				[myXML addChild:styleXML]; 
-				fullImagePath = [self fullPNGImagePathForName:ID];
+			NSData * imageData = nil; // need this later to put image into contact description
+			if ([[UDC valueForKeyPath:@"values.placemarkWithImage"] boolValue]) {
+				imageData = [person imageData];
+				NSXMLElement * styleXML = [self createStyleForImageData:imageData withID:ID];
+				if (styleXML) { 
+					[myXML addChild:styleXML]; 
+					fullImagePath = [self fullPNGImagePathForName:ID];
+				}
 			}
 			
 
@@ -1293,7 +1296,7 @@
 	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"];
 	if (appPath) {
 		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
-		[im setSize:NSMakeSize(128.0, 128.0)];
+		[im setSize:NSMakeSize(128, 128)];
 		result = [im TIFFRepresentation];
 	}
 	return result;
@@ -1305,7 +1308,7 @@
 	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.Google.GoogleEarthPlus"];
 	if (appPath) {
 		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
-		[im setSize:NSMakeSize(128.0,128.0)];
+		[im setSize:NSMakeSize(128, 128)];
 		result = [im TIFFRepresentation];
 	}
 	return result;
@@ -1316,7 +1319,7 @@
 	NSData * result = nil;
 	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFileType:@"kml"];
 	if (im) {
-		[im setSize:NSMakeSize(128.0,128.0)];
+		[im setSize:NSMakeSize(128, 128)];
 		result = [im TIFFRepresentation];
 	}
 	return result;

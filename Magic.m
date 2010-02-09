@@ -77,6 +77,7 @@
 									   [NSNumber numberWithBool:NO], @"placemarkWithPhone",
 									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
 									   [NSNumber numberWithBool:YES], @"placemarkWithAddressBookLink",
+									   [NSNumber numberWithBool:NO], @"noHomeWorkIcons",
 									   [NSNumber numberWithBool:NO], @"hasReadInfo",
 									   [NSNumber numberWithBool:NO], @"groupByAddressLabel",
 									   nil];
@@ -993,12 +994,15 @@
 						styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[@"#" stringByAppendingString:ID]];
 					}
 					else {
-						// if we don't have and image for the person, use own generic home and work images
-						if ([addressName isEqualToString:kABAddressHomeLabel]) {
-							styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICHOMEICONNAME]];
-						} 
-						else if ([addressName isEqualToString:kABAddressWorkLabel]) {
-							styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICWORKICONNAME]];
+						// if we don't have and image for the person, use own generic home and work images unless the hidden noHomeWorkIcons preference is set to YES
+						BOOL wantImages = ![[UDC valueForKeyPath:@"values.noHomeWorkIcons"] boolValue];
+						if (wantImages) {
+							if ([addressName isEqualToString:kABAddressHomeLabel]) {
+								styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICHOMEICONNAME]];
+							}
+							else if ([addressName isEqualToString:kABAddressWorkLabel]) {
+								styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICWORKICONNAME]];
+							}
 						}
 						// don't specify a style if there is neither an image nor a home or work address
 					}

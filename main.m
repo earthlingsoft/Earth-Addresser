@@ -2,7 +2,7 @@
 //  main.m
 //  EA
 //
-//  Created by  Sven on 22.03.07.
+//  Created by Sven on 22.03.07.
 //  Copyright earthlingsoft 2007. All rights reserved.
 //
 

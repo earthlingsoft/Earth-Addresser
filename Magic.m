@@ -1,9 +1,9 @@
 //
 //  Magic.m
-//  Mailboxer / Earth Addresser
+//  Earth Addresser / Mailboxer
 //
-//  Created by  Sven on 21.03.07.
-//  Copyright 2007 earthlingsoft. All rights reserved.
+//  Created by Sven on 21.03.07.
+//  Copyright 2006-2010 earthlingsoft. All rights reserved.
 //
 //
 

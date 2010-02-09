@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10A432</string>
-		<string key="IBDocument.InterfaceBuilderVersion">732</string>
-		<string key="IBDocument.AppKitVersion">1038</string>
-		<string key="IBDocument.HIToolboxVersion">437.00</string>
+		<string key="IBDocument.SystemVersion">10D538</string>
+		<string key="IBDocument.InterfaceBuilderVersion">740</string>
+		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.HIToolboxVersion">460.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">732</string>
+			<string key="NS.object.0">740</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -50,7 +50,7 @@
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
-				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMaxSize">{653, 494}</string>
 				<string key="NSWindowContentMinSize">{653, 494}</string>
 				<object class="NSView" key="NSWindowView" id="230539147">
 					<reference key="NSNextResponder"/>
@@ -198,24 +198,7 @@
 								</object>
 								<int key="NSPeriodicDelay">400</int>
 								<int key="NSPeriodicInterval">75</int>
-								<object class="NSMenuItem" key="NSMenuItem" id="950780024">
-									<reference key="NSMenu" ref="818299871"/>
-									<string key="NSTitle">Item1</string>
-									<string key="NSKeyEquiv"/>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<int key="NSState">1</int>
-									<object class="NSCustomResource" key="NSOnImage" id="373332278">
-										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">NSMenuCheckmark</string>
-									</object>
-									<object class="NSCustomResource" key="NSMixedImage" id="703765307">
-										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">NSMenuMixedState</string>
-									</object>
-									<string key="NSAction">_popUpItemAction:</string>
-									<reference key="NSTarget" ref="965404517"/>
-								</object>
+								<nil key="NSMenuItem"/>
 								<bool key="NSMenuItemRespectAlignment">YES</bool>
 								<object class="NSMenu" key="NSMenu" id="818299871">
 									<object class="NSMutableString" key="NSTitle">
@@ -223,31 +206,9 @@
 									</object>
 									<object class="NSMutableArray" key="NSMenuItems">
 										<bool key="EncodedWithXMLCoder">YES</bool>
-										<reference ref="950780024"/>
-										<object class="NSMenuItem" id="594036232">
-											<reference key="NSMenu" ref="818299871"/>
-											<string key="NSTitle">Item2</string>
-											<string key="NSKeyEquiv"/>
-											<int key="NSKeyEquivModMask">1048576</int>
-											<int key="NSMnemonicLoc">2147483647</int>
-											<reference key="NSOnImage" ref="373332278"/>
-											<reference key="NSMixedImage" ref="703765307"/>
-											<string key="NSAction">_popUpItemAction:</string>
-											<reference key="NSTarget" ref="965404517"/>
-										</object>
-										<object class="NSMenuItem" id="463032147">
-											<reference key="NSMenu" ref="818299871"/>
-											<string key="NSTitle">Item3</string>
-											<string key="NSKeyEquiv"/>
-											<int key="NSKeyEquivModMask">1048576</int>
-											<int key="NSMnemonicLoc">2147483647</int>
-											<reference key="NSOnImage" ref="373332278"/>
-											<reference key="NSMixedImage" ref="703765307"/>
-											<string key="NSAction">_popUpItemAction:</string>
-											<reference key="NSTarget" ref="965404517"/>
-										</object>
 									</object>
 								</object>
+								<int key="NSSelectedIndex">-1</int>
 								<int key="NSPreferredEdge">3</int>
 								<bool key="NSUsesItemFromMenu">YES</bool>
 								<bool key="NSAltersState">YES</bool>
@@ -338,6 +299,10 @@
 									<reference key="NSControlView" ref="566487545"/>
 									<int key="NSButtonFlags">1211912703</int>
 									<int key="NSButtonFlags2">0</int>
+									<object class="NSCustomResource" key="NSNormalImage" id="510241974">
+										<string key="NSClassName">NSImage</string>
+										<string key="NSResourceName">NSRadioButton</string>
+									</object>
 									<object class="NSButtonImageSource" key="NSAlternateImage" id="6470588">
 										<string key="NSImageName">NSRadioButton</string>
 									</object>
@@ -355,103 +320,9 @@
 									<int key="NSTag">1</int>
 									<int key="NSButtonFlags">1211912703</int>
 									<int key="NSButtonFlags2">0</int>
-									<object class="NSImage" key="NSNormalImage">
-										<int key="NSImageFlags">549453824</int>
-										<string key="NSSize">{18, 18}</string>
-										<object class="NSMutableArray" key="NSReps">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<object class="NSArray">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="0"/>
-												<object class="NSBitmapImageRep">
-													<object class="NSData" key="NSTIFFRepresentation">
-														<bytes key="NS.bytes">TU0AKgAABRgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAMAAAADAAAAAwAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAADwRERGLJycnySsrK/A1NTXw
-IyMjyRwcHIsJCQk8AAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFFRUVdVBQUOCoqKj/
-29vb//n5+f/6+vr/2tra/6qqqv9UVFTgHx8fdQAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUZGRl5
-dXV198PDw//8/Pz////////////////////////////U1NT/fHx89yUlJXkAAAAFAAAAAAAAAAAAAAAA
-AAAAAxEREUZqamrmtbW1/+3t7f/+/v7//v7+//7+/v/9/f3//f39//39/f/39/f/xMTE/3d3d+YZGRlG
-AAAAAwAAAAAAAAAAAAAACkJCQqGtra3/xsbG/+vr6//y8vL/9fX1//X19f/z8/P/9fX1//Ly8v/u7u7/
-0tLS/6+vr/9KSkqhAAAACgAAAAAAAAAAAAAAF3h4eN2/v7//z8/P/93d3f/q6ur/7+/v/+/v7//w8PD/
-7e3t/+3t7f/i4uL/zs7O/8XFxf98fHzdAAAAFwAAAAAAAAADAAAAJKSkpPjOzs7/2dnZ/+Dg4P/i4uL/
-5eXl/+bm5v/n5+f/5eXl/+Li4v/e3t7/2tra/9DQ0P+srKz4AAAAJAAAAAMAAAADAAAALrCwsPrW1tb/
-3t7e/+Tk5P/p6en/6+vr/+zs7P/p6en/6+vr/+fn5//k5OT/4ODg/9nZ2f+zs7P6AAAALgAAAAMAAAAD
-AAAALp2dnezg4OD/5eXl/+rq6v/u7u7/8PDw//Dw8P/x8fH/8PDw/+7u7v/q6ur/5ubm/+Hh4f+ZmZns
-AAAALgAAAAMAAAADAAAAJG5ubs/l5eX/6enp/+/v7//y8vL/9vb2//r6+v/5+fn/9/f3//b29v/x8fH/
-6+vr/+Tk5P9ra2vPAAAAJAAAAAMAAAAAAAAAFy4uLpPCwsL67Ozs//Pz8//5+fn//v7+//7+/v/+/v7/
-/v7+//v7+//19fX/8PDw/8LCwvosLCyTAAAAFwAAAAAAAAAAAAAACgAAAENfX1/S5OTk/vn5+f/+/v7/
-///////////////////////////8/Pz/5ubm/l9fX9IAAABDAAAACgAAAAAAAAAAAAAAAwAAABcAAABl
-YmJi3NLS0v3////////////////////////////////V1dX9ZGRk3AAAAGUAAAAXAAAAAwAAAAAAAAAA
-AAAAAAAAAAUAAAAfAAAAZTMzM8KAgIDwv7+//O3t7f/t7e3/v7+//ICAgPAzMzPCAAAAZQAAAB8AAAAF
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAFwAAAEMAAAB3AAAAnwAAALMAAACzAAAAnwAAAHcAAABD
-AAAAFwAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAoAAAAXAAAAJAAAAC4AAAAu
-AAAAJAAAABcAAAAKAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAwAAAAMAAAADAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgEAAAMAAAABABIAAAEB
-AAMAAAABABIAAAECAAMAAAAEAAAFxgEDAAMAAAABAAEAAAEGAAMAAAABAAIAAAERAAQAAAABAAAACAES
-AAMAAAABAAEAAAEVAAMAAAABAAQAAAEWAAMAAAABABIAAAEXAAQAAAABAAAFEAEcAAMAAAABAAEAAAFS
-AAMAAAABAAEAAAFTAAMAAAAEAAAFzodzAAcAAAwYAAAF1gAAAAAACAAIAAgACAABAAEAAQABAAAMGGFw
-cGwCAAAAbW50clJHQiBYWVogB9YABAADABMALAASYWNzcEFQUEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAPbWAAEAAAAA0y1hcHBsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAOclhZWgAAASwAAAAUZ1hZWgAAAUAAAAAUYlhZWgAAAVQAAAAUd3RwdAAAAWgAAAAUY2hhZAAA
-AXwAAAAsclRSQwAAAagAAAAOZ1RSQwAAAbgAAAAOYlRSQwAAAcgAAAAOdmNndAAAAdgAAAMSbmRpbgAA
-BOwAAAY+ZGVzYwAACywAAABkZHNjbQAAC5AAAAAubW1vZAAAC8AAAAAoY3BydAAAC+gAAAAtWFlaIAAA
-AAAAAF1KAAA0kQAACCVYWVogAAAAAAAAdCAAALRgAAAjPVhZWiAAAAAAAAAlbAAAFyoAAKfDWFlaIAAA
-AAAAAPNSAAEAAAABFs9zZjMyAAAAAAABDEIAAAXe///zJgAAB5IAAP2R///7ov///aMAAAPcAADAbGN1
-cnYAAAAAAAAAAQHNAABjdXJ2AAAAAAAAAAEBzQAAY3VydgAAAAAAAAABAc0AAHZjZ3QAAAAAAAAAAAAD
-AQAAAQACBAUGBwkKCw0ODxASExQWFxgaGxweHyAiIyQmJygpKywtLzAxMjM1Njc4OTs8PT5AQUJDREZH
-SElKS0xOT1BRUlNUVVZXWFlaW1xdXl9hYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5/gIGCg4SF
-hoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnZ6foKGio6SlpqanqKmqq6ytra6vsLGysrO0tba3uLi5uru8
-vL2+v8DBwcLDxMXGxsfIycrKy8zNzs7P0NHS0tPU1dbW19jZ2drb3Nzd3t/g4eLi4+Tl5ufo6enq6+zt
-7u/w8fHy8/T19vf4+fr7/P3+/v8AAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR8gISIjJCUnKCkq
-Ky0uLzAxMzQ1Njc4OTo7PD0/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaWltcXV5fYGFiY2RlZmdo
-aWprbG1ub3BxcnN0dXZ3d3h5ent8fH1+f4CBgoKDhIWGh4iIiYqLjI2Oj5CRkpOUlJWWl5iZmpucnZ2e
-n6ChoqOkpaamp6ipqqusra6vsLCxsrO0tba3uLm5uru8vb6/wMHCw8TFx8jJysvMzc7P0NDR0tPU1dbX
-2Nna29ze3+Dh4uPk5ebn6err7O3u7/Hy8/T19vf5+vv8/f7/AAIDAwQFBgcICQoKCwwNDg8QERITFBUW
-FxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODg5Ojs8PT4+P0BBQkNDREVGR0hJSUpLTE1O
-Tk9QUVJSU1RVVVZXWFhZWltbXF1eXl9gYWFiY2RkZWZnZ2hpaWprbGxtbm5vcHFxcnNzdHV1dnd4eHl6
-ent8fH1+fn+AgYGCg4SEhYaHiImJiouMjY6Oj5CRkpOTlJWWl5iZmZqbnJ2en6ChoqOkpaanqKmqq6yt
-rq+xsrO0tba3uLq7vL2+wMHDxMbHycrMzs/R0tTW19nb3d7g4uTm6Ors7vDy9Pb4+vz+/wAAbmRpbgAA
-AAAAAAY2AACXGgAAVjoAAFPKAACJ3gAAJ8IAABaoAABQDQAAVDkAAiuFAAIZmQABeFEAAwEAAAIAAAAA
-AAEABgANABcAIwAxAEAAUgBlAHsAkwCrAMUA4gD/AR8BPwFhAYUBqgHQAfgCIAJLAncCpQLSAwIDMwNl
-A5gDzgQFBD0EdQSvBOsFKQVnBacF6AYqBm4GtQb8B0UHkgfkCDkIkAjnCT4JmAn0ClAKrQsLC2sLygwq
-DIwM8Q1XDcAOKA6SDv4PbA/bEE0QxBE7EbQSMRKwEzITuRREFNAVYBXxFocXHhfAGGIZBBmsGlQa+RuU
-HC4czh1yHhQeux9jIA0gvCFoIhkizyOJJEEk+SW6JnknOygFKMspkypiKzIsASzXLawuhy9gMD4xGzH8
-MtszvzSgNYY2cjdcOEw5OTorOxs8CD0EPfU+6z/nQOFB2ELUQ9VE00XcRttH5EjxSgBLCUwdTTFOUE9v
-UI9Rt1LdVAVVNlZsV6VY4FohW21ct135X09goGH0Y0tkqGYFZ19oxGova5ptCG54b/BxbnLsdG119Xd/
-eQh6knwqfcV/W4D4gpSEO4Xih4CJKorYjIqOOY/jkZuTWJUOlsyYiZpSnB6d4Z+soX+jWqUvpxOo+6rj
-rMuuwLC4sra0rra0uL+60LzfvwDBHcLdxLXGhchYyi7MCs3lz7rRmtOA1WPXR9kq2xPc/97s4M/iveSn
-5o3obupT7ELuLPAM8fLz0PW396H5f/tZ/T3//wAAAAEAAwALABYAJQA3AE0AZQCBAJ8AwQDlAQsBNQFh
-AZABwQH1AisCZAKfAtwDHANfA6MD6gQ0BH8EzQT1BR0FcAXEBhsGdAbPBy0HXAeMB+4IUgi4CSAJVAmK
-CfYKZArVC0cLgQu8DDIMqw0mDaIOIQ6hDyQPqRAvELgQ/RFDEc8SXRLuE4AUFRSrFUMV3RZ5FxcXthhY
-GPwZoRpIGvEbnBxJHPgdqB5bHw8fxSB9ITch8iKwJDAk8yW3Jn4nRigQKNwpqSp5K0osHCzxLccuoC95
-MFUxMzISMvMz1TS5NaA2hzdxOFw5STo4Oyg8Gj4DPvs/9EDuQepD6ETpRexG8Uf3SP9LFEwhTTBOQE9S
-UGZSklOrVMVV4Vb/WB5ZP1phW4Vcq13SXvthUmJ/Y69k4GYSZ0dofGm0au1tZG6ib+FxInJlc6l073Y2
-d396FXtjfLJ+A39VgKmB/4NWhK+GCYjCiiGLgYzjjkePrJESknuT5Ja8mCuZm5sMnH+d9J9qoOGiWqPV
-pVGmz6eOqE6pzqtRrNSuWq/gsWmy8rR+tgu5Kbq6vE294b93wQ7Cp8RBxd3He8kZyrrLisxbzf/Po9FK
-0vHUm9ZF1/HZn9tO3Cbc/96x4GTiGePQ5YjnQegf6Pzquex27jbv9/G583z0X/VC9wj40Pqa/GX+Mf//
-AAAAAQADAAsAJQA3AE0AZQCBAJ8AwQELATUBYQGQAcEB9QIrAmQCnwLcAxwDXwOjA+oENAR/BM0FHQVw
-BcQGGwZ0Bs8HLQeMB+4IUgi4CSAJign2CmQK1QtHC7wMMgyrDSYNog4hDqEPJA+pEC8QuBFDEl0S7hOA
-FBUUqxVDFnkXFxe2GFgY/BpIGvEbnBxJHPgdqB8PH8UgfSE3IfIjbyQwJPMltydGKBAo3Cp5K0osHC3H
-LqAveTEzMhIy8zS5NaA2hzhcOUk6ODwaPQ4+Az/0QO5C6EPoROlG8Uf3SglLFEwhTkBPUlF7UpJUxVXh
-Vv9ZP1phXKtd0mAlYVJjr2TgZhJofGm0au1tZG6ib+FxInJldO92Nnd/eMl6FXyyfgN/VYCpgf+Er4YJ
-h2WIwoohi4GOR4+skRKSe5PklVCWvJgrmZubDJx/nfSfaqDholqj1aVRps+oTqnOq1Gs1K2Xrlqv4LFp
-svK0frYLt5m5Kbnxurq8Tb3hv3fBDsHawqfEQcUPxd3He8hKyRnKusuKzFvN/87Rz6PQdtFK0vHTxtSb
-1kXXG9fx2MjZn9tO3Cbc/93Y3rHfiuBk4hni9ePQ5KzliOZk50HoH+j86drqueuX7HbtVu427xbv9/DX
-8bnymvN89F/1QvYl9wj37PjQ+bX6mvt//GX9S/4x//8AAGRlc2MAAAAAAAAACkNvbG9yIExDRAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAABIAAAAcAEMAbwBsAG8AcgAgAEwAQwBE
-AABtbW9kAAAAAAAABhAAAJxOAAAAAL5zkQAAAAAAAAAAAAAAAAAAAAAAdGV4dAAAAABDb3B5cmlnaHQg
-QXBwbGUgQ29tcHV0ZXIsIEluYy4sIDIwMDUAAAAAA</bytes>
-													</object>
-												</object>
-											</object>
-										</object>
-										<object class="NSColor" key="NSColor" id="421219411">
-											<int key="NSColorSpace">3</int>
-											<bytes key="NSWhite">MCAwAA</bytes>
-										</object>
-									</object>
+									<reference key="NSNormalImage" ref="510241974"/>
 									<reference key="NSAlternateImage" ref="6470588"/>
+									<string key="NSAlternateContents"/>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
 								</object>
@@ -467,48 +338,9 @@ QXBwbGUgQ29tcHV0ZXIsIEluYy4sIDIwMDUAAAAAA</bytes>
 								<reference key="NSSupport" ref="433704967"/>
 								<int key="NSButtonFlags">1211912703</int>
 								<int key="NSButtonFlags2">0</int>
-								<object class="NSImage" key="NSNormalImage">
-									<int key="NSImageFlags">549453824</int>
-									<string key="NSSize">{18, 18}</string>
-									<object class="NSMutableArray" key="NSReps">
-										<bool key="EncodedWithXMLCoder">YES</bool>
-										<object class="NSArray">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<integer value="0"/>
-											<object class="NSBitmapImageRep">
-												<object class="NSData" key="NSTIFFRepresentation">
-													<bytes key="NS.bytes">TU0AKgAABRgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAMAAAADAAAAAwAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAADwRERGLJycnySsrK/A1NTXw
-IyMjyRwcHIsJCQk8AAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFFRUVdVBQUOCoqKj/
-29vb//n5+f/6+vr/2tra/6qqqv9UVFTgHx8fdQAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUZGRl5
-dXV198PDw//8/Pz////////////////////////////U1NT/fHx89yUlJXkAAAAFAAAAAAAAAAAAAAAA
-AAAAAxEREUZqamrmtbW1/+3t7f/+/v7//v7+//7+/v/9/f3//f39//39/f/39/f/xMTE/3d3d+YZGRlG
-AAAAAwAAAAAAAAAAAAAACkJCQqGtra3/xsbG/+vr6//y8vL/9fX1//X19f/z8/P/9fX1//Ly8v/u7u7/
-0tLS/6+vr/9KSkqhAAAACgAAAAAAAAAAAAAAF3h4eN2/v7//z8/P/93d3f/q6ur/7+/v/+/v7//w8PD/
-7e3t/+3t7f/i4uL/zs7O/8XFxf98fHzdAAAAFwAAAAAAAAADAAAAJKSkpPjOzs7/2dnZ/+Dg4P/i4uL/
-5eXl/+bm5v/n5+f/5eXl/+Li4v/e3t7/2tra/9DQ0P+srKz4AAAAJAAAAAMAAAADAAAALrCwsPrW1tb/
-3t7e/+Tk5P/p6en/6+vr/+zs7P/p6en/6+vr/+fn5//k5OT/4ODg/9nZ2f+zs7P6AAAALgAAAAMAAAAD
-AAAALp2dnezg4OD/5eXl/+rq6v/u7u7/8PDw//Dw8P/x8fH/8PDw/+7u7v/q6ur/5ubm/+Hh4f+ZmZns
-AAAALgAAAAMAAAADAAAAJG5ubs/l5eX/6enp/+/v7//y8vL/9vb2//r6+v/5+fn/9/f3//b29v/x8fH/
-6+vr/+Tk5P9ra2vPAAAAJAAAAAMAAAAAAAAAFy4uLpPCwsL67Ozs//Pz8//5+fn//v7+//7+/v/+/v7/
-/v7+//v7+//19fX/8PDw/8LCwvosLCyTAAAAFwAAAAAAAAAAAAAACgAAAENfX1/S5OTk/vn5+f/+/v7/
-///////////////////////////8/Pz/5ubm/l9fX9IAAABDAAAACgAAAAAAAAAAAAAAAwAAABcAAABl
-YmJi3NLS0v3////////////////////////////////V1dX9ZGRk3AAAAGUAAAAXAAAAAwAAAAAAAAAA
-AAAAAAAAAAUAAAAfAAAAZTMzM8KAgIDwv7+//O3t7f/t7e3/v7+//ICAgPAzMzPCAAAAZQAAAB8AAAAF
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAFwAAAEMAAAB3AAAAnwAAALMAAACzAAAAnwAAAHcAAABD
-AAAAFwAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAoAAAAXAAAAJAAAAC4AAAAu
-AAAAJAAAABcAAAAKAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAwAAAAMAAAADAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQEAAAMAAAABABIAAAEB
-AAMAAAABABIAAAECAAMAAAAEAAAFugEDAAMAAAABAAEAAAEGAAMAAAABAAIAAAERAAQAAAABAAAACAES
-AAMAAAABAAEAAAEVAAMAAAABAAQAAAEWAAMAAAABABIAAAEXAAQAAAABAAAFEAEcAAMAAAABAAEAAAFS
-AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
-												</object>
-											</object>
-										</object>
-									</object>
-									<reference key="NSColor" ref="421219411"/>
-								</object>
+								<reference key="NSNormalImage" ref="510241974"/>
 								<reference key="NSAlternateImage" ref="6470588"/>
+								<string key="NSAlternateContents"/>
 								<int key="NSPeriodicDelay">400</int>
 								<int key="NSPeriodicInterval">75</int>
 							</object>
@@ -626,7 +458,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSButton" id="878360092">
 							<reference key="NSNextResponder" ref="230539147"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{332, 72}, {142, 18}}</string>
+							<string key="NSFrame">{{318, 72}, {122, 18}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="337865282">
@@ -782,7 +614,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSButton" id="645014475">
 							<reference key="NSNextResponder" ref="230539147"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{493, 72}, {142, 18}}</string>
+							<string key="NSFrame">{{450, 72}, {89, 18}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="637850667">
@@ -971,7 +803,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSButton" id="867174016">
 							<reference key="NSNextResponder" ref="230539147"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{182, 52}, {269, 18}}</string>
+							<string key="NSFrame">{{182, 52}, {264, 18}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="162557212">
@@ -1006,13 +838,57 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<reference key="NSTextColor" ref="673209950"/>
 							</object>
 						</object>
+						<object class="NSButton" id="115090446">
+							<reference key="NSNextResponder" ref="230539147"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{557, 72}, {78, 18}}</string>
+							<reference key="NSSuperview" ref="230539147"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="283903845">
+								<int key="NSCellFlags">-2080244224</int>
+								<int key="NSCellFlags2">0</int>
+								<string key="NSContents">Contacts</string>
+								<reference key="NSSupport" ref="433704967"/>
+								<reference key="NSControlView" ref="115090446"/>
+								<int key="NSButtonFlags">1211912703</int>
+								<int key="NSButtonFlags2">2</int>
+								<reference key="NSNormalImage" ref="578210751"/>
+								<reference key="NSAlternateImage" ref="347295688"/>
+								<string key="NSAlternateContents"/>
+								<string key="NSKeyEquivalent"/>
+								<int key="NSPeriodicDelay">200</int>
+								<int key="NSPeriodicInterval">25</int>
+							</object>
+						</object>
+						<object class="NSButton" id="389059963">
+							<reference key="NSNextResponder" ref="230539147"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{450, 52}, {78, 18}}</string>
+							<reference key="NSSuperview" ref="230539147"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="129005132">
+								<int key="NSCellFlags">-2080244224</int>
+								<int key="NSCellFlags2">0</int>
+								<string key="NSContents">Notes</string>
+								<reference key="NSSupport" ref="433704967"/>
+								<reference key="NSControlView" ref="389059963"/>
+								<int key="NSButtonFlags">1211912703</int>
+								<int key="NSButtonFlags2">2</int>
+								<reference key="NSNormalImage" ref="578210751"/>
+								<reference key="NSAlternateImage" ref="347295688"/>
+								<string key="NSAlternateContents"/>
+								<string key="NSKeyEquivalent"/>
+								<int key="NSPeriodicDelay">200</int>
+								<int key="NSPeriodicInterval">25</int>
+							</object>
+						</object>
 					</object>
 					<string key="NSFrameSize">{653, 496}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{653, 516}</string>
-				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSMaxSize">{653, 516}</string>
 				<string key="NSFrameAutosaveName">main window</string>
 			</object>
 			<object class="NSMenu" id="389214019">
@@ -1025,8 +901,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="373332278"/>
-						<reference key="NSMixedImage" ref="703765307"/>
+						<object class="NSCustomResource" key="NSOnImage" id="559230954">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">NSMenuCheckmark</string>
+						</object>
+						<object class="NSCustomResource" key="NSMixedImage" id="472696385">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">NSMenuMixedState</string>
+						</object>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="782845981">
 							<string key="NSTitle">Earth Addresser</string>
@@ -1037,8 +919,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSTitle">About Earth Addresser</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="609286564">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1048,8 +930,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="1071363511">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1057,16 +939,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="239946450">
 									<reference key="NSMenu" ref="782845981"/>
 									<string key="NSTitle">Automatically check for Updates</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="475588855">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1076,8 +958,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="44265276">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1085,8 +967,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="740146526">
 										<string key="NSTitle">Services</string>
@@ -1104,8 +986,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="856959702">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1113,8 +995,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="11994172">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1122,8 +1004,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="399630731">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1131,8 +1013,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="948507574">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1142,8 +1024,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="899287832">
 									<reference key="NSMenu" ref="782845981"/>
@@ -1151,8 +1033,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">q</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 							</object>
 							<string key="NSName">_NSAppleMenu</string>
@@ -1164,8 +1046,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="373332278"/>
-						<reference key="NSMixedImage" ref="703765307"/>
+						<reference key="NSOnImage" ref="559230954"/>
+						<reference key="NSMixedImage" ref="472696385"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="81739401">
 							<string key="NSTitle">Edit</string>
@@ -1177,8 +1059,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">z</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="72782129">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1186,8 +1068,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">Z</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="252090353">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1197,8 +1079,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="548666343">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1206,8 +1088,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">x</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="97433437">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1215,8 +1097,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">c</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="691667772">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1224,8 +1106,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">v</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="683354606">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1233,8 +1115,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="715361996">
 									<reference key="NSMenu" ref="81739401"/>
@@ -1242,8 +1124,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">a</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 							</object>
 						</object>
@@ -1253,8 +1135,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="NSTitle">Tools</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="373332278"/>
-						<reference key="NSMixedImage" ref="703765307"/>
+						<reference key="NSOnImage" ref="559230954"/>
+						<reference key="NSMixedImage" ref="472696385"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="1006479982">
 							<string key="NSTitle">Tools</string>
@@ -1265,16 +1147,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSTitle">Group Placemarks by Label</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="802355858">
 									<reference key="NSMenu" ref="1006479982"/>
 									<string key="NSTitle">Hide Group for Label “old”</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="1026212143">
 									<reference key="NSMenu" ref="1006479982"/>
@@ -1283,24 +1165,24 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSTitle"/>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="184556349">
 									<reference key="NSMenu" ref="1006479982"/>
 									<string key="NSTitle">List All Non-Locatable Addresses</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="504344685">
 									<reference key="NSMenu" ref="1006479982"/>
 									<string key="NSTitle">Repeat Look-Up of Non-Locatable Addresses</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 							</object>
 						</object>
@@ -1311,8 +1193,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="373332278"/>
-						<reference key="NSMixedImage" ref="703765307"/>
+						<reference key="NSOnImage" ref="559230954"/>
+						<reference key="NSMixedImage" ref="472696385"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="90520004">
 							<string key="NSTitle">Window</string>
@@ -1324,8 +1206,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">m</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="1043629917">
 									<reference key="NSMenu" ref="90520004"/>
@@ -1335,8 +1217,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="470799721">
 									<reference key="NSMenu" ref="90520004"/>
@@ -1344,8 +1226,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 							</object>
 							<string key="NSName">_NSWindowsMenu</string>
@@ -1357,8 +1239,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="373332278"/>
-						<reference key="NSMixedImage" ref="703765307"/>
+						<reference key="NSOnImage" ref="559230954"/>
+						<reference key="NSMixedImage" ref="472696385"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="1056092334">
 							<string key="NSTitle">Help</string>
@@ -1370,8 +1252,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv">?</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">5</int>
 								</object>
 								<object class="NSMenuItem" id="511188950">
@@ -1382,8 +1264,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="546825129">
 									<reference key="NSMenu" ref="1056092334"/>
@@ -1391,8 +1273,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">2</int>
 								</object>
 								<object class="NSMenuItem" id="841950498">
@@ -1401,8 +1283,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">1</int>
 								</object>
 								<object class="NSMenuItem" id="361718759">
@@ -1411,8 +1293,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">3</int>
 								</object>
 								<object class="NSMenuItem" id="344414901">
@@ -1421,8 +1303,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">4</int>
 								</object>
 								<object class="NSMenuItem" id="166288688">
@@ -1432,16 +1314,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSTitle"/>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 								</object>
 								<object class="NSMenuItem" id="249054483">
 									<reference key="NSMenu" ref="1056092334"/>
 									<string key="NSTitle">Google Earth Website</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">6</int>
 								</object>
 								<object class="NSMenuItem" id="995915625">
@@ -1449,8 +1331,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<string key="NSTitle">Google Maps Geocoding FAQ</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="373332278"/>
-									<reference key="NSMixedImage" ref="703765307"/>
+									<reference key="NSOnImage" ref="559230954"/>
+									<reference key="NSMixedImage" ref="472696385"/>
 									<int key="NSTag">7</int>
 								</object>
 							</object>
@@ -1633,6 +1515,11 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="565851004">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>placemarkWithContacts</string>
+					<string>placemarkWithNotes</string>
+				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -3454,6 +3341,94 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					</object>
 					<int key="connectionID">959</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: KMLRunning</string>
+						<reference key="source" ref="115090446"/>
+						<reference key="destination" ref="1000509216"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="115090446"/>
+							<reference key="NSDestination" ref="1000509216"/>
+							<string key="NSLabel">enabled: KMLRunning</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">KMLRunning</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">NSNegateBoolean</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">962</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="115090446"/>
+						<reference key="destination" ref="1029541767"/>
+					</object>
+					<int key="connectionID">964</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.placemarkWithContacts</string>
+						<reference key="source" ref="115090446"/>
+						<reference key="destination" ref="565851004"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="115090446"/>
+							<reference key="NSDestination" ref="565851004"/>
+							<string key="NSLabel">value: values.placemarkWithContacts</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.placemarkWithContacts</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">965</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="389059963"/>
+						<reference key="destination" ref="1029541767"/>
+					</object>
+					<int key="connectionID">968</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: KMLRunning</string>
+						<reference key="source" ref="389059963"/>
+						<reference key="destination" ref="1000509216"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="389059963"/>
+							<reference key="NSDestination" ref="1000509216"/>
+							<string key="NSLabel">enabled: KMLRunning</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">KMLRunning</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">NSNegateBoolean</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">970</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.placemarkWithNotes</string>
+						<reference key="source" ref="389059963"/>
+						<reference key="destination" ref="565851004"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="389059963"/>
+							<reference key="NSDestination" ref="565851004"/>
+							<string key="NSLabel">value: values.placemarkWithNotes</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.placemarkWithNotes</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">971</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -3508,7 +3483,6 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 							<reference ref="438343208"/>
 							<reference ref="385991191"/>
 							<reference ref="992742275"/>
-							<reference ref="878360092"/>
 							<reference ref="231699138"/>
 							<reference ref="890359469"/>
 							<reference ref="1054515183"/>
@@ -3516,7 +3490,6 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 							<reference ref="211310508"/>
 							<reference ref="690992795"/>
 							<reference ref="629009892"/>
-							<reference ref="645014475"/>
 							<reference ref="1031413694"/>
 							<reference ref="867174016"/>
 							<reference ref="264597672"/>
@@ -3527,6 +3500,10 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 							<reference ref="373565940"/>
 							<reference ref="31121896"/>
 							<reference ref="875042777"/>
+							<reference ref="878360092"/>
+							<reference ref="645014475"/>
+							<reference ref="115090446"/>
+							<reference ref="389059963"/>
 						</object>
 						<reference key="parent" ref="1029617068"/>
 					</object>
@@ -4320,26 +4297,8 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 						<reference key="object" ref="818299871"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="950780024"/>
-							<reference ref="594036232"/>
-							<reference ref="463032147"/>
 						</object>
 						<reference key="parent" ref="965404517"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">224</int>
-						<reference key="object" ref="950780024"/>
-						<reference key="parent" ref="818299871"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">223</int>
-						<reference key="object" ref="594036232"/>
-						<reference key="parent" ref="818299871"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">222</int>
-						<reference key="object" ref="463032147"/>
-						<reference key="parent" ref="818299871"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">877</int>
@@ -4415,6 +4374,34 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 						<int key="objectID">911</int>
 						<reference key="object" ref="802355858"/>
 						<reference key="parent" ref="1006479982"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">960</int>
+						<reference key="object" ref="115090446"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="283903845"/>
+						</object>
+						<reference key="parent" ref="230539147"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">961</int>
+						<reference key="object" ref="283903845"/>
+						<reference key="parent" ref="115090446"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">966</int>
+						<reference key="object" ref="389059963"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="129005132"/>
+						</object>
+						<reference key="parent" ref="230539147"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">967</int>
+						<reference key="object" ref="129005132"/>
+						<reference key="parent" ref="389059963"/>
 					</object>
 				</object>
 			</object>
@@ -4495,14 +4482,9 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					<string>220.IBAttributePlaceholdersKey</string>
 					<string>220.IBPluginDependency</string>
 					<string>220.ImportedFromIB2</string>
+					<string>221.IBEditorWindowLastContentRect</string>
 					<string>221.IBPluginDependency</string>
 					<string>221.ImportedFromIB2</string>
-					<string>222.IBPluginDependency</string>
-					<string>222.ImportedFromIB2</string>
-					<string>223.IBPluginDependency</string>
-					<string>223.ImportedFromIB2</string>
-					<string>224.IBPluginDependency</string>
-					<string>224.ImportedFromIB2</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.ImportedFromIB2</string>
 					<string>24.IBEditorWindowLastContentRect</string>
@@ -4517,6 +4499,7 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					<string>283.IBWindowTemplateEditedContentRect</string>
 					<string>283.ImportedFromIB2</string>
 					<string>283.windowTemplate.hasMinSize</string>
+					<string>283.windowTemplate.maxSize</string>
 					<string>283.windowTemplate.minSize</string>
 					<string>284.IBPluginDependency</string>
 					<string>284.ImportedFromIB2</string>
@@ -4671,6 +4654,12 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					<string>911.IBPluginDependency</string>
 					<string>92.IBPluginDependency</string>
 					<string>92.ImportedFromIB2</string>
+					<string>960.IBPluginDependency</string>
+					<string>960.ImportedFromIB2</string>
+					<string>961.IBPluginDependency</string>
+					<string>966.IBPluginDependency</string>
+					<string>966.ImportedFromIB2</string>
+					<string>967.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4748,14 +4737,14 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{81, 127}, {653, 496}}</string>
+					<string>{{751, 563}, {653, 496}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
-					<string>{{81, 127}, {653, 496}}</string>
+					<string>{{751, 563}, {653, 496}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
-					<boolean value="NO"/>
+					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{653, 494}</string>
 					<string>{653, 494}</string>
@@ -4765,17 +4754,12 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 						<object class="IBAccessibilityAttribute" key="NS.object.0">
 							<string key="name">AccessibilityHelp</string>
 							<reference key="object" ref="340421899"/>
-							<string key="accessibilityValue">Wählen Sie die Kontakte für die Ortsmarken erstellt werden sollen in diesem Menü aus, indem Sie ,Alle Kontakte‘ oder den Namen einer Gruppe aus dem Adressbuch auswählen.</string>
+							<string key="accessibilityValue">Please select the contacts for which you want to create Google Earth placemarks by choosing the “All addresses” option or selecting the name of a group in your Address Book from the popup menu.</string>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
+					<string>{{423, 557}, {283, 4}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4792,6 +4776,7 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					<string>{{467, 11}, {778, 407}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
+					<string>{1.79769e+308, 1.79769e+308}</string>
 					<string>{213, 107}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -4973,6 +4958,12 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -4991,7 +4982,7 @@ cnVucyBvZiB0aGUgYXBwbGljYXRpb24uA</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">959</int>
+			<int key="maxID">971</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

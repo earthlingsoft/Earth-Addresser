@@ -77,6 +77,8 @@
 									   [NSNumber numberWithBool:NO], @"placemarkWithPhone",
 									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
 									   [NSNumber numberWithBool:YES], @"placemarkWithAddressBookLink",
+									   [NSNumber numberWithBool:NO], @"placemarkWithContacts",
+									   [NSNumber numberWithBool:NO], @"placemarkWithNotes",
 									   [NSNumber numberWithBool:NO], @"noHomeWorkIcons",
 									   [NSNumber numberWithBool:NO], @"hasReadInfo",
 									   [NSNumber numberWithBool:NO], @"groupByAddressLabel",
@@ -889,13 +891,33 @@
 				
 					[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;' />"];
 						
+					
+#pragma mark -do2: Related People
+					if ([[UDC valueForKeyPath:@"values.placemarkWithContacts"] boolValue]) {
+						ABMultiValue * people = [person valueForProperty:kABRelatedNamesProperty];
+						NSUInteger peopleCount = [people count];
+						if (peopleCount != 0) {
+							[descriptionHTMLString appendString:@"<br />"];
+							NSInteger personIndex = 0;
+							while (personIndex < peopleCount ) {
+								NSString * personName = [people valueAtIndex: personIndex];
+								NSString * personLabel = [self localisedLabelName:[people labelAtIndex: personIndex]];
+								if (personName != nil && personLabel != nil) {
+									[descriptionHTMLString appendFormat:@"<br /><strong>%@:</strong> %@", personLabel, personName];
+								}
+								personIndex++;
+							}
+						}
+					}
+					
+					
 #pragma mark -do2: EMail, Phone, Web extras			
 					if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
 						// include e-mail addresses in placemark
 						ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
 						NSUInteger eMailCount = [eMails count];
 						if (eMailCount != 0) {
-							int index = 0;
+							NSInteger index = 0;
 							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)")];
 							NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
 							NSString * allEMails = nil;
@@ -979,6 +1001,16 @@
 							if (allPhoneNumbers) {
 								[descriptionHTMLString appendFormat:@"%@.", allPhoneNumbers];
 							}
+						}
+					}
+					
+					if ([[UDC valueForKeyPath:@"values.placemarkWithNotes"] boolValue]) {
+						NSString * noteString = [person valueForProperty: kABNoteProperty];
+						if ( [noteString length] > 0 ) {
+							NSMutableString * noteStringWithNewlines = [[noteString mutableCopy] autorelease];
+							[noteStringWithNewlines replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
+							[noteStringWithNewlines replaceOccurrencesOfString:@"\r" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
+							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> %@", NSLocalizedString(@"Note", @"Note (appears in Google Earth Info Balloon)"), noteStringWithNewlines];
 						}
 					}
 	

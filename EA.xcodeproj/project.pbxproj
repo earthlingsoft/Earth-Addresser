@@ -205,6 +205,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EA" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
@@ -219,7 +222,6 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* EA */;
 			projectDirPath = "";
-			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* EA */,
 				6C15690C0F0ED50C009C7B5F /* Release */,
@@ -299,8 +301,8 @@
 		6C29284E0F1A45C000B5059B /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6C29284F0F1A45C000B5059B /* de */,
 				6C2928530F1A45DD00B5059B /* en */,
+				6C29284F0F1A45C000B5059B /* de */,
 				6C2928540F1A463300B5059B /* fr */,
 			);
 			name = MainMenu.xib;
@@ -309,9 +311,9 @@
 		6C54D7DE0BBAFD0A00D4B7F2 /* VersionChecker.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
+				6C1569E70F0F02A1009C7B5F /* en */,
 				6C1569E50F0F029D009C7B5F /* de */,
 				6C1569E60F0F029E009C7B5F /* fr */,
-				6C1569E70F0F02A1009C7B5F /* en */,
 			);
 			name = VersionChecker.strings;
 			sourceTree = "<group>";
@@ -319,8 +321,8 @@
 		6CEAC2720BB4B3290059641A /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6C1569E80F0F02A9009C7B5F /* de */,
 				6C1569E90F0F02AB009C7B5F /* en */,
+				6C1569E80F0F02A9009C7B5F /* de */,
 				6C1569EA0F0F02AD009C7B5F /* fr */,
 			);
 			name = Localizable.strings;
@@ -329,8 +331,8 @@
 		6CFB92650BBC498100191CDD /* readme.html */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6C1569E40F0F0295009C7B5F /* de */,
 				6C1569E30F0F0293009C7B5F /* en */,
+				6C1569E40F0F0295009C7B5F /* de */,
 			);
 			name = readme.html;
 			sourceTree = "<group>";
@@ -372,7 +374,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 23;
+				Build_Number = 25;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -383,7 +385,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.4b3;
+				Version_Number = 2.4b5;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -391,11 +393,11 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 23;
+				Build_Number = 25;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.4b3;
+				Version_Number = 2.4b5;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

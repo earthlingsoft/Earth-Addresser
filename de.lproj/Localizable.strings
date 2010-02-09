@@ -1,10 +1,12 @@
-﻿/*
-	STATUS STRINGS
-*/
+﻿
+
+
 
 /* 
 singular and plural form of contact and address for use in count displayed in the top section of the window
 */
+
+
 "address" = "Adresse";
 "addresses" = "Adressen";
 "contact" = "Visitenkarte";
@@ -13,56 +15,78 @@ singular and plural form of contact and address for use in count displayed in th
 /* 
 Info text in top section of the window 
 */
+
+
 "%i %@ with %i %@" = "%i %@ mit %i %@";
 
 /*
 Text appearing in group selection menu when no groups are available
 */
+
+
 "Select Group" = "Gruppe auswählen";
+
 
 /* 
 Info text in middle section of window – variant used when exactly one of the selected addresses have been looked up yet.
 */
+
+
 "The selected contacts contain 1 address whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Die Auswahl enthält eine Adresse, deren Koordinaten noch nicht ermittelt wurden.";
 
 /* 
 Info text in middle section of window – variant used when more than one of the selected addresses have been looked up yet.
 */
+
+
 "The selected contacts contain %i addresses whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Die Auswahl enthält %i Adressen, deren Koordinaten noch nicht ermittelt wurden.";
 
 /*
 Info text in middle section of window – variant used when everything has been looked up already and more than one was addresses not found.
 */
+
+
 "All the addresses you selected have been looked up already. Unfortunately %i of them could not be located." = "Es wurden bereits alle Adressen nachgeschlagen.
 Für %i der Adressen konnten die zugehörigen Koordinaten nicht ermittelt werden.";
+
 
 /*
 Info text in middle section of window – variant used when everything has been looked up already and exactly one address was not found.
 */
+
+
 "All the addresses you selected have been looked up already. Unfortunately one of them could not be located." = "Es wurden bereits alle Adressen nachgeschlagen.
 Für eine der Adressen konnten die zugehörigen Koordinaten nicht ermittelt werden.";
-
 
 
 /*
 Info text in middle section of window – variant used when everything has been looked up already successfully.
 */
+
+
 "All the addresses you selected have been looked up already." = "Die Koordinaten aller ausgewählten Adressen sind bereits ermittelt.";
 
 /*
 Info text in middle section of window – variant used when the AddressBook selection contains no addresses.
 */
+
+
 "The contacts you selected do not contain any addresses. Try a different selection for things to be more useful." = "Die Auswahl enthält keine Adressen.";
+
 
 
 /*
 Displayed in bottom section after Placemarks have been created.
 */
+
+
 "File '%@' on your Desktop" = "Die Ortsmarkendatei „%@“ liegt auf dem Schreibtisch.";
 
 /*
  Status message after cancelled KML file creation.
 */
+
+
 "Placemark generation was cancelled." = "Das Erzeugen der Ortsmarkendatei wurde abgebrochen.";
 
 
@@ -70,29 +94,33 @@ Displayed in bottom section after Placemarks have been created.
 /*
  Standard Title of geocoding button while geocoding is not running.
 */
-"Look up coordinates" = "Koordinaten ermitteln";
 
+
+"Look up coordinates" = "Koordinaten ermitteln";
 
 /*
  Title of geocoding button while geocoding is running and can be cancelled.
 */
+
+
 "Cancel Lookup" = "Abbrechen";
 
 
 /*
- Text displayed in KML Creation button when KML Creation is not running.
+ Text displayed in KML Creation button while KML Creation is running
 */
-"Create Placemarks" = "Ortsmarken erzeugen";
 
-/*
- Text displayed in KML Creation button while KML Creation is running and can be cancelled.
-*/
+
 "Cancel Placemark Creation" = "Abbrechen";
 
-
-/* 
-	ERROR MESSAGES
+/*
+ Text displayed in KML Creation button when KML Creation is not running.
 */
+
+
+"Create Placemarks" = "Ortsmarken erzeugen";
+
+
 
 /* Couldn't create Application Support/EarthAddresser folder */
 "Couldn't create Application Support/EarthAddresser folder" = "Der Ordner „~/Library/Application Support/Earth Addresser“ konnte nicht erstellt werden.";
@@ -108,12 +136,6 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
-
-
-/*
-	ODD ERROR MESSAGES
-*/
-
 /* Couldn't create temporary folder */
 "Couldn't create temporary folder" = "Temporärer Ordner konnte nicht erstellt werden.";
 
@@ -121,14 +143,6 @@ Displayed in bottom section after Placemarks have been created.
 "Selected group wasn't recognisable." = "Die ausgewählte Gruppe konnte nicht gefunden werden.";
 
 
-
-
-
-
-
-/*
-TEXT APPEARING IN THE KML FILE
-*/
 
 /* KML File Name */
 "Filename" = "Adressen";
@@ -143,20 +157,16 @@ TEXT APPEARING IN THE KML FILE
 /* Photo (alt tag for image) */
 "Photo" = "Photo";
 
-
 /* E-Mail (appears in Google Earth Info Balloon) */
 "E-Mail" = "E-Mail";
 
 /* Phone (appears in Google Earth Info Balloon) */
 "Phone" = "Telephon";
 
+/* Note (appears in Google Earth Info Balloon) */
+"Note" = "Notiz";
 
 
-
-/*
-TEXT IN LINKS
-*/
 
 /* PayPal Region Code - used in PayPal URL */
 "PayPal Region Code" = "DE";
-

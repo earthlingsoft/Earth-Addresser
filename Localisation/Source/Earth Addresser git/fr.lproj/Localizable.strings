@@ -1,0 +1,173 @@
+﻿
+
+
+
+/* 
+singular and plural form of contact and address for use in count displayed in the top section of the window
+*/
+
+
+"address" = "adresse";
+"addresses" = "adresses";
+"contact" = "contact";
+"contacts" = "contacts";
+
+/* 
+Info text in top section of the window 
+*/
+
+
+"%i %@ with %i %@" = "%i %@ avec %i %@";
+
+/*
+Text appearing in group selection menu when no groups are available
+*/
+
+
+"Select Group" = "Choisir le groupe";
+
+
+/* 
+Info text in middle section of window – variant used when exactly one of the selected addresses have been looked up yet.
+*/
+
+
+"The selected contacts contain 1 address whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Les contacts sélectionnés contiennent une adresse dont les coordonnées n’ont pas encore regardées.";
+
+/* 
+Info text in middle section of window – variant used when more than one of the selected addresses have been looked up yet.
+*/
+
+
+"The selected contacts contain %i addresses whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Les contacts sélectionnés contiennent %i adresses dont les coordonnées n’ont pas encore regardées.";
+
+/*
+Info text in middle section of window – variant used when everything has been looked up already and more than one was addresses not found.
+*/
+
+
+"All the addresses you selected have been looked up already. Unfortunately %i of them could not be located." = "Toutes les adresses sélectionnées ont déjà été regardées.
+Malheureusement, %i d’entre elles n’ont pas pu être localisées.";
+
+
+/*
+Info text in middle section of window – variant used when everything has been looked up already and exactly one address was not found.
+*/
+
+
+"All the addresses you selected have been looked up already. Unfortunately one of them could not be located." = "Toutes les adresses sélectionnées ont déjà été regardées.
+Malheureusement, l’une d’elles n’a pas pu être localisée.";
+
+
+/*
+Info text in middle section of window – variant used when everything has been looked up already successfully.
+*/
+
+
+"All the addresses you selected have been looked up already." = "Les adresses sélectionnées ont déjà été regardées.";
+
+/*
+Info text in middle section of window – variant used when the AddressBook selection contains no addresses.
+*/
+
+
+"The contacts you selected do not contain any addresses. Try a different selection for things to be more useful." = "Les contacts sélectionnés ne contiennent pas d’adresses.
+Veuillez essayer avec une autre sélection pour que cela soit plus utile.";
+
+
+
+/*
+Displayed in bottom section after Placemarks have been created.
+*/
+
+
+"File '%@' on your Desktop" = "Un fichier de repères « %@ » a été créé sur le Bureau.";
+
+/*
+ Status message after cancelled KML file creation.
+*/
+
+
+"Placemark generation was cancelled." = "Création du fichier de repères annulée.";
+
+
+
+/*
+ Standard Title of geocoding button while geocoding is not running.
+*/
+
+
+"Look up coordinates" = "Rechercher les coordonnées";
+
+/*
+ Title of geocoding button while geocoding is running and can be cancelled.
+*/
+
+
+"Cancel Lookup" = "Annuler la recherche";
+
+
+/*
+ Text displayed in KML Creation button while KML Creation is running
+*/
+
+
+"Cancel Placemark Creation" = "Annuler";
+
+/*
+ Text displayed in KML Creation button when KML Creation is not running.
+*/
+
+
+"Create Placemarks" = "Créer des repères";
+
+
+
+/* Couldn't create Application Support/EarthAddresser folder */
+"Couldn't create Application Support/EarthAddresser folder" = "Earth Addresser n'a pas réussi créer le dossier « ~/Library/Application Support/Earth Addresser ».";
+
+/* Couldn't create Application Support/EarthAddresser/Images folder */
+"Couldn't create Application Support/EarthAddresser/Images folder" = "Earth Addresser n'a pas réussi à créer le dossier « ~/Library/Application Support/Earth Addresser/Images ».";
+
+/* Address lookup failed. Introductory string in which %@ is the description coming from NSError */
+"Geocoding failed: %@" = "Recherche des coordonnées échouée : %@.";
+
+/* Error message for Google Geocoding 602 error. */
+"Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists." = "Coordonnées n’ont pu être regardées. Veuillez réessayer dans quelques minutes et faites-nous savoir si le problème persiste.";
+
+
+
+/* Couldn't create temporary folder */
+"Couldn't create temporary folder" = "Earth Addresser n’a pas réussi à créer un dossier temporaire.";
+
+/* Selected group couldn't be recognised. */
+"Selected group wasn't recognisable." = "Earth Addresser ne reconnaît pas le groupe d’adresse sélectionné.";
+
+
+
+/* KML File Name */
+"Filename" = "Contacts";
+
+/* Name of Placemark group in KML file */
+"Addresses" = "Adresses";
+
+/* open in AddressBook */
+"open in AddressBook" = "Voir dans Carnet d’adresses";
+
+
+/* Photo (alt tag for image) */
+"Photo" = "Photo";
+
+/* E-Mail (appears in Google Earth Info Balloon) */
+"E-Mail" = "Adresse électronique";
+
+/* Phone (appears in Google Earth Info Balloon) */
+"Phone" = "Téléphone";
+
+/* Note (appears in Google Earth Info Balloon) */
+"Note" = "Note";
+
+
+
+/* PayPal Region Code - used in PayPal URL */
+"PayPal Region Code" = "FR";

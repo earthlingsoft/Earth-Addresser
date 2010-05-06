@@ -222,6 +222,7 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* EA */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* EA */,
 				6C15690C0F0ED50C009C7B5F /* Release */,

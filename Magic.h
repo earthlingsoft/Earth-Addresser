@@ -118,9 +118,11 @@
 
 - (IBAction) readme:(id) sender;
 - (NSString*) myVersionString;
+- (void) beginBusy;
+- (void) endBusy;
+
 - (IBAction) autoCheckForUpdates: (id) sender;
 - (IBAction) menuCheckVersion:(id)sender;
-
 
 + (void) disableSuddenTermination;
 + (void) enableSuddenTermination;

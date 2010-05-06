@@ -119,6 +119,38 @@
 }
 
 
+
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+	NSApplicationTerminateReply result = NSTerminateNow;
+	
+	if ( KMLRunning || geocodingRunning ) {
+		result = NSTerminateLater;
+	}
+	
+	return result;
+}
+
+
+
+
+
+/*
+    don't just close then window while threads are running
+*/
+- (BOOL)windowShouldClose:(id)sender {
+	BOOL result = YES;
+	if ( KMLRunning || geocodingRunning ) {
+		result = NO;
+	}
+	return result;
+}
+
+
+
+
+
+
 /*
 	when Address Book changes, update everything that depends on it
 */
@@ -410,7 +442,7 @@
 */
 - (IBAction) convertAddresses: (id) sender {
 	if (!geocodingRunning) {
-		[Magic disableSuddenTermination];
+		[self beginBusy];
 		if (isX6OrHigher) {
 			[self setValue:[NSNumber numberWithDouble:.0] forKey:@"geocodingProgress"];			
 		}
@@ -566,7 +598,8 @@
 		[geocodingProgressBar setHidden:YES];			
 	}
 	[self saveLocations];
-	[Magic enableSuddenTermination];
+
+	[self endBusy];
 	[pool release];
 }
 
@@ -700,7 +733,7 @@
 */
 - (IBAction) do: (id) sender {
 	if (!KMLRunning) {
-		[Magic disableSuddenTermination];
+		[self beginBusy];
 		if (isX6OrHigher) {
 			[self setValue:[NSNumber numberWithDouble:.0] forKey:@"KMLProgress"];			
 		}
@@ -1135,7 +1168,7 @@
 		}
 	}
 	
-	[Magic enableSuddenTermination];
+	[self endBusy];
 	[myPool release];
 }
 
@@ -1466,6 +1499,27 @@
 
 
 
+/*
+ we start beign busy: disable sudden termination
+*/
+- (void) beginBusy {
+	[Magic disableSuddenTermination];
+	[[mainWindow standardWindowButton: NSWindowCloseButton] setEnabled: NO];
+}
+
+
+/*
+ we are finished being busy: re-enable sudden termination, quit if so desired
+*/
+- (void) endBusy {
+	[NSApp replyToApplicationShouldTerminate: YES];
+	[[mainWindow standardWindowButton: NSWindowCloseButton] setEnabled: YES];
+	[Magic enableSuddenTermination];
+}
+
+
+
+
 
 #pragma mark Updating
 
@@ -1484,9 +1538,10 @@
 
 
 #pragma mark METHODS FOR X.5 AND ABOVE
+
 /*
- uglyuglyugly but sudden termination seems worth the hassle
- */
+ Sneak support for sudden termination into the class.
+*/
 + (void) enableSuddenTermination {
 	NSProcessInfo * pI = [NSProcessInfo processInfo];
 	SEL enableSuddenTerminationSelector = @selector(enableSuddenTermination);

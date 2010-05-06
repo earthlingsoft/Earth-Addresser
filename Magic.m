@@ -1050,7 +1050,7 @@
 							addressGroup = [NSXMLElement elementWithName:@"Folder"];
 
 							[addressGroup addChild:[NSXMLNode elementWithName:@"name" stringValue:normalisedLabel]];
-							[addressLabelGroups setObject:addressGroup forKey:addressLabel];
+							[addressLabelGroups setObject:addressGroup forKey:normalisedLabel];
 							
 							if ([OLDLABELS containsObject:normalisedLabel]) {
 								// this is the group for old addresses

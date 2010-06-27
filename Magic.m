@@ -367,7 +367,7 @@
 	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
 	[self setValue:lookupPart forKey:@"lookupInfo"];
 	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
-	BOOL b = ([[locations allKeysForObject:FAILSTRING] count] > 1);
+	BOOL b = ([[locations allKeysForObject:FAILSTRING] count] > 0);
 	[self setValue:[NSNumber numberWithBool:b] forKey:@"nonLocatableAddressesExist"];
 	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
 	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];

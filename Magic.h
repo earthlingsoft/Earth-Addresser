@@ -1,10 +1,11 @@
-//
-//  Magic.h
-//  Earth Addresser / Mailboxer
-//
-//  Created by  Sven on 22.03.2007
-//  Copyright 2006-2010 earthlingsoft. All rights reserved.
-//
+/*
+  Magic.h
+  Earth Addresser / Mailboxer
+
+  Created by Sven on 22.03.2007
+  Copyright 2006-2010 earthlingsoft. All rights reserved.
+
+*/
 
 /*
 #if __LP64__

@@ -1,11 +1,11 @@
-//
-//  Magic.m
-//  Earth Addresser / Mailboxer
-//
-//  Created by Sven on 21.03.07.
-//  Copyright 2006-2010 earthlingsoft. All rights reserved.
-//
-//
+/*
+  Magic.m
+  Earth Addresser / Mailboxer
+
+  Created by Sven on 21.03.07.
+  Copyright 2006-2010 earthlingsoft. All rights reserved.
+
+*/
 
 #import "Magic.h"
 #import <AddressBook/ABAddressBookC.h>
@@ -71,7 +71,9 @@
 									   [NSNumber numberWithDouble:1.5], @"imageSize", 
 									   [NSNumber numberWithInt:0], @"addressBookScope",
 									   [NSNumber numberWithBool:YES], @"placemarkWithName",
+									   [NSNumber numberWithBool:YES], @"placemarkWithLabel",
 									   @"\342\235\200", @"placemarkNameReplacement",
+									   [NSNumber numberWithBool:YES], @"placemarkWithAddress",
 									   [NSNumber numberWithBool:YES], @"placemarkWithImage",
 									   [NSNumber numberWithBool:NO], @"placemarkWithEMail",
 									   [NSNumber numberWithBool:NO], @"placemarkWithPhone",
@@ -619,7 +621,7 @@
 
 /*
  Returns absolute path to our Images folder in Application Support
- */
+*/
 - (NSString *) imagesFolderPath {
 	NSFileManager * myFM = [NSFileManager defaultManager];
 	NSString * appSupportPath = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -891,7 +893,13 @@
 #pragma mark -do2: Address String
 					NSXMLElement * placemarkElement = [NSXMLElement elementWithName:@"Placemark"];
 					// [placemarkElement addAttribute: [NSXMLNode attributeWithName:@"id" stringValue:ID]];
-					NSXMLElement * nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];
+					NSXMLElement * nameElement;
+					if ([[UDC valueForKeyPath:@"values.placemarkWithLabel"] boolValue]) {
+						nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];						
+					}
+					else {
+						nameElement = [NSXMLNode elementWithName:@"name" stringValue: name];
+					}
 					[placemarkElement addChild: nameElement];
 										
 					NSString * visibilityString = ([OLDLABELS containsObject:normalisedLabel]) ? @"0" : @"1";
@@ -905,8 +913,6 @@
 					
 				
 					NSMutableString * descriptionHTMLString = [NSMutableString string];
-					NSMutableString * addressString = [self dictionaryKeyForAddressDictionary:theAddress];
-					[addressString replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
 					
 					if (fullImagePath) {
 						[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-1em;margin-left:1em;\">\n", 
@@ -914,7 +920,11 @@
 						 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
 					}
 					
-					[descriptionHTMLString appendFormat:@"%@", addressString];
+					if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
+						NSMutableString * addressString = [self dictionaryKeyForAddressDictionary:theAddress];
+						[addressString replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
+						[descriptionHTMLString appendFormat:@"%@", addressString];
+					}
 					
 					if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
 						[descriptionHTMLString appendFormat: @"<br /><a href=\"addressbook://%@\">%@</a>",

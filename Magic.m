@@ -956,7 +956,7 @@
 					
 #pragma mark -do2: EMail, Phone, Web extras			
 					if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
-						// include e-mail addresses in placemark
+						// include non-old e-mail addresses in placemark
 						ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
 						NSUInteger eMailCount = [eMails count];
 						if (eMailCount != 0) {
@@ -965,17 +965,19 @@
 							NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
 							NSString * allEMails = nil;
 							while (index < eMailCount) {
-								NSString * eMailAddress = [eMails valueAtIndex:index];
-								if (eMailAddress) {
-									NSString * localisedLabel = [self localisedLabelName:[eMails labelAtIndex:index]];
-									if (localisedLabel) {
-										localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+								if (![OLDLABELS containsObject:[[eMails labelAtIndex:index] capitalizedString]]) {
+									NSString * eMailAddress = [eMails valueAtIndex:index];
+									if (eMailAddress) {
+										NSString * localisedLabel = [self localisedLabelName:[eMails labelAtIndex:index]];
+										if (localisedLabel) {
+											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+										}
+										else {
+											localisedLabel = @"";
+										}
+										[eMailArray addObject:[NSString stringWithFormat:@"<a href='mailto:%@'>%@</a>%@", eMailAddress, eMailAddress, localisedLabel]];
+										allEMails = [eMailArray componentsJoinedByString:@", "];
 									}
-									else {
-										localisedLabel = @"";
-									}
-									[eMailArray addObject:[NSString stringWithFormat:@"<a href='mailto:%@'>%@</a>%@", eMailAddress, eMailAddress, localisedLabel]];
-									allEMails = [eMailArray componentsJoinedByString:@", "];
 								}
 								index++;
 							}
@@ -987,7 +989,7 @@
 						
 
 					if ([[UDC valueForKeyPath:@"values.placemarkWithWeblinks"] boolValue]) {
-						// include e-mail addresses in placemark
+						// include non-old web-addresses in placemark
 						ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
 						NSUInteger weblinkCount = [weblinks count];
 						if (weblinkCount != 0) {
@@ -996,17 +998,19 @@
 							NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
 							NSString * allWeblinks = nil;
 							while (index < weblinkCount) {
-								NSString * weblink = [weblinks valueAtIndex:index];
-								if (weblink) {
-									NSString * localisedLabel = [self localisedLabelName:[weblinks labelAtIndex:index]];
-									if (localisedLabel) {
-										localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+								if (![OLDLABELS containsObject:[[weblinks labelAtIndex:index] capitalizedString]]) {
+									NSString * weblink = [weblinks valueAtIndex:index];
+									if (weblink) {
+										NSString * localisedLabel = [self localisedLabelName:[weblinks labelAtIndex:index]];
+										if (localisedLabel) {
+											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+										}
+										else {
+											localisedLabel = @"";
+										}
+										[weblinkArray addObject:[NSString stringWithFormat:@"<a href='%@'>%@</a>%@", weblink, weblink, localisedLabel]];
+										allWeblinks = [weblinkArray componentsJoinedByString:@", "];
 									}
-									else {
-										localisedLabel = @"";
-									}
-									[weblinkArray addObject:[NSString stringWithFormat:@"<a href='%@'>%@</a>%@", weblink, weblink, localisedLabel]];
-									allWeblinks = [weblinkArray componentsJoinedByString:@", "];
 								}
 								index++;
 							}
@@ -1018,7 +1022,7 @@
 						
 						
 					if ([[UDC valueForKeyPath:@"values.placemarkWithPhone"] boolValue]) {
-						// include e-mail addresses in placemark
+						// include non-old phone numbers in placemark
 						ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
 						NSUInteger phoneCount = [phones count];
 						if (phoneCount != 0) {
@@ -1027,17 +1031,19 @@
 							NSMutableArray * phoneArray = [NSMutableArray arrayWithCapacity:phoneCount];
 							NSString * allPhoneNumbers = nil;
 							while (index < phoneCount) {
-								NSString * phoneNumber = [phones valueAtIndex:index];
-								if (phoneNumber) {
-									NSString * localisedLabel = [self localisedLabelName:[phones labelAtIndex:index]];
-									if (localisedLabel) {
-										localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+								if (![OLDLABELS containsObject:[[phones labelAtIndex:index] capitalizedString]]) {
+									NSString * phoneNumber = [phones valueAtIndex:index];
+									if (phoneNumber) {
+										NSString * localisedLabel = [self localisedLabelName:[phones labelAtIndex:index]];
+										if (localisedLabel) {
+											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+										}
+										else {
+											localisedLabel = @"";
+										}
+										[phoneArray addObject:[NSString stringWithFormat:@"%@%@", phoneNumber,  localisedLabel]];
+										allPhoneNumbers = [phoneArray componentsJoinedByString:@", "];
 									}
-									else {
-										localisedLabel = @"";
-									}
-									[phoneArray addObject:[NSString stringWithFormat:@"%@%@", phoneNumber,  localisedLabel]];
-									allPhoneNumbers = [phoneArray componentsJoinedByString:@", "];
 								}
 								index++;
 							}

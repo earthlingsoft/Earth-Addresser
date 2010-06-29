@@ -50,7 +50,11 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
 		[self showWarningInfo:nil];
-	}	
+	}
+	
+	// For sudden termination to work in our setup it seems that we need to toggle it once to begin with.
+	[Magic disableSuddenTermination];
+	[Magic enableSuddenTermination];
 }	
 
 

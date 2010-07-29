@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -52,7 +53,7 @@
 				<string key="NSWindowContentMaxSize">{653, 500}</string>
 				<string key="NSWindowContentMinSize">{653, 500}</string>
 				<object class="NSView" key="NSWindowView" id="230539147">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">268</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -906,7 +907,7 @@
 						<object class="NSButton" id="217106998">
 							<reference key="NSNextResponder" ref="230539147"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{259, 116}, {111, 18}}</string>
+							<string key="NSFrame">{{259, 116}, {143, 18}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="715488435">
@@ -927,6 +928,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{653, 500}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{653, 522}</string>
@@ -4919,11 +4921,11 @@ ZSBsJ2FwcGxpY2F0aW9uLg</string>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{269, 646}, {653, 500}}</string>
+					<string>{{269, 256}, {653, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
-					<string>{{269, 646}, {653, 500}}</string>
+					<string>{{269, 256}, {653, 500}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<boolean value="YES"/>

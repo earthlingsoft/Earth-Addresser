@@ -1,0 +1,4 @@
+<p>
+<strong>Donate</strong>  <?php paypallink($registertext); ?>
+</p>
+

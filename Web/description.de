@@ -1,0 +1,12 @@
+<p>
+Das Adressbuch im Computer randvoll mit Adressen und begeistert von Google Earth? Dann ist Earth Addresser die perfekte Ergänzung: Das Programm ordnet jeder Adresse im Adressbuch Koordinaten auf der Erde zu und schreibt diese in eine ,KML‘ Datei.
+</p><p>
+Google Earth kann diese Datei öffnen und zeigt die Adressen auf der Weltkarte an. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird anstelle der üblichen Stecknadel das Photo der Person auf der Weltkarte angezeigt.
+</p>
+<p>
+<strong>Vielen Dank</strong> an <a href="http://www.cortig.net/localisations/?cat=2" hreflang="fr">Ronald Leroux</a> für die französische Lokalisierung.
+</p>
+<p class="screenshots">
+<a href="EarthAddresserUI-de.png"><img class="screenshot" src="EarthAddresserUI-de-tiny.png" alt="Earth Addresser Fenster"></a>
+<a href="GoogleEarthScreenshot.jpeg"><img class="screenshot" src="GoogleEarthScreenshot-tiny.jpeg" alt="Geöffnete KML Datei in Google Earth"></a>
+</p>

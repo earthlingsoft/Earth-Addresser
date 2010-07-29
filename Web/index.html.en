@@ -1,0 +1,13 @@
+<?php 
+	$lang = "en";
+	$titlenote = "Your Address Book in Google Earth";
+	$buzzline = $titlenote;
+	$description = "Mac application that creates Google Earth placemarks for all addresses in your Address Book. Putting your friends on the globe!";
+	$registertext = "via PayPal";
+	$limitations = ", Mac OS X.4";
+
+	include "index.variables";
+		
+	$dr = $_SERVER[DOCUMENT_ROOT]; 
+	include($dr.'/includes/applicationpage.php');
+?>

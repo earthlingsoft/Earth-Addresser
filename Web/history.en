@@ -1,0 +1,141 @@
+<h2>
+Version History
+</h2>
+
+
+
+<dl class="versions" id="latestversion">
+
+<dt>v2.4  (2010-07-29)</dt>
+<dd>
+<ul>
+<li>Includes 64bit executable.</li>
+<li>More efficient memory usage.</li>
+<li>Address Lookup and Placemark file creation can be cancelled on Mac OS X.5 and above.</li>
+<li>Support for Sudden Termination in Mac OS X.6 and above.</li>
+<li>Removed duplicate documentation.</li>
+<li>Solves problem with images appearing too large when set to use the minimal size (Thanks to Steve Parker for pointing this out).</li>
+<li>Doesn’t create image files when they are not needed (Thanks to Steve Parker for pointing this out).</li>
+<li>Fixes failure of address grouping in some situations (Thanks to Steve Parker for his help).</li>
+<li>Prevents application from being quit while performing lookups.</li>
+<li>Placemarks can be created without the address and label.</li>
+<li>Phone numbers, e-mail addresses and web pages labelled “old” are not included in placemarks.</li>
+</ul>
+</dd>
+
+
+<dt>v2.3  (2009-04-01)</dt>
+<dd>
+<ul>
+<li>New option to group addresses by label.</li>
+<li>New option to hide addresses labelled “Old” or “Alt” or “Ancienne” by default.</li>
+<li>New command to repeat look-ups which failed previously.</li>
+<li>Improves address look-up progress display.</li>
+<li>Slight accessibility Improvements.</li>
+<li>Fixes tab order in the main window.</li>
+<li>Fixes capitalisation of strings in English interface.</li>
+</ul>
+</dd>
+
+
+</dl>
+
+
+
+
+<dl class="versions" id="oldversions">
+
+
+<dt>v2.2  (2009-03-03)</dt>
+<dd>
+<ul>
+<li>Uses own ‘home’ und ‘work’ icons for contacts without a photo.</li>
+<li>Adapted icon to match Google Earth 5’s.</li>
+<li>Improved handling of a lack of internet connection.</li>
+</ul>
+</dd>
+
+
+<dt>v2.1  (2009-01-30)</dt>
+<dd>
+<ul>
+<li>Resolves the excessive memory consumption when processing large address books. Thanks to Steve Parker for pointing out the problem.</li>
+<li>Improved localisation of PayPal Links.</li>
+</ul>
+</dd>
+
+
+
+<dt>v2 (2009-01-28)</dt>
+<dd>
+<ul>
+<li>User Interface completely redesigned.</li>
+<li>Addresses are now looked up – and cached – by Earth Addresser.</li>
+<li>More options for what is written in the KML file.</li>
+<li>Info bubbles appearing in Google Earth now contain photos.</li>
+<li>Improved clickability of links to Address Book records in Google Earth.</li>
+<li>A list of addresses which could not be located can be displayed.</li>
+<li>Added English localisation for new user interface.</li>
+</ul>
+</dd>
+
+
+<dt>v1 (2007-03-30)</dt>
+<dd>
+First public release.
+</dd>
+
+
+<dt>version 1b3 (2007-03-28)</dt>
+<dd>
+<ul>
+<li>added checking for updates</li>
+<li>added French localisation contributed by  <a href="http://www.cortig.net/localisations/?cat=2" hreflang="fr">Ronald Leroux</a></li>
+<li>added German licalisation</li>
+<li>minor UI improvements</li>
+</ul>
+</dd>
+
+
+<dt>version 1b2 (2007-03-27)</dt>
+<dd>
+hopefully fixed a problem that made the application stall
+</dd>
+
+
+<dt>version 1b (2007-03-26)</dt>
+<dd>
+<ul>
+<li>first testing release</li>	
+<li>more fixes and polish</li>
+</ul>
+</dd>
+<dt>version 0.4 (unreleased)</dt>
+<dd>
+<ul>
+<li>removed the 'smarts' again as they didn't work</li>
+<li>new strategy: write image files to Application Support folder and output a KML file only</li>
+<li>set size of images in Preferences</li>
+</ul>
+</dd>
+<dt>version 0.3 (unreleased)</dt>
+<dd>
+<ul>
+<li>introduced the 'smarts' to pack everything up in a nice KMZ file</li>
+<li>unfortunately GoogleEarth doesn't load Icon href elements from within the KMZ file</li>
+<li>also removed colons from id attributes and file names</li>
+</ul>
+</dd>
+<dt>version 0.2 (unreleased)</dt>
+<dd>
+	rewrote XML generation to use NSXML so we can have actual, properly-escaped XML
+</dd>
+<dt>version 0.1 (unreleased)<dt>
+<dd>
+	initial build
+</dd>
+
+
+</dl>
+
+<p id="morehistorylinks"><a href="#oldversions" id="showolder">Complete list</a></p>

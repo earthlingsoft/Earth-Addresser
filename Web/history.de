@@ -1,0 +1,135 @@
+<h2>
+Versionsgeschichte
+</h2>
+
+
+<dl class="versions" id="latestversion">
+<dt>v2.4 (2010-07-29)</dt>
+<dd>
+<ul>
+<li>Läuft als 64bit Programm.</li>
+<li>Geringerer Speicherbedarf.</li>
+<li>Koordinatenermittlung und Ortsmarkenerzeugung können unter Mac OS X.5 und höher abgebrochen werden.</li>
+<li>Unterstützt Plötzliche Beendigung unter Mac OS X.6 und höher.</li>
+<li>Doppelte Anleitung entfernt.</li>
+<li>Behebt Problem mit falschen Bildgrößen bei der kleinstmöglichen Größe (Dank an Steve Parker für den Hinweis).</li>
+<li>Erzeugt keine Bilddateien mehr, wenn diese nicht verwendet werden (Dank an Steve Parker für den Hinweis).</li>
+<li>Zuverlässigeres Gruppieren der Adressen nach Etiketten (Dank an Steve Parker für die Hilfe).</li>
+<li>Programm wird nicht beendet, während Adressen nachgeschaut oder Dateien geschrieben werden.</li>
+<li>Ortsmarken können ohne Adresse und Etikett erstellt werden.</li>
+<li>Als »Alt« markierte Telephonnumern, E-Mail Adressen und Webseiten werden nicht in Ortsmarken aufgeführt.</li>
+<li>
+</ul>
+</dd>
+
+
+
+<dt>v2.3  (2009-04-01)</dt>
+<dd>
+<ul>
+<li>Neue Einstellung, um Ortsmarken nach dem Etikett der Adresse zu gruppieren.</li>
+<li>Neue Einstellung, die Adressen mit den Etiketten “Old”, “Alt” oder “Ancienne” in Google Earth ausgeblendet läßt.</li>
+<li>Neuer Befehl zum Wiederholen der Koordinatenermittlung, wenn diese zuvor kein Ergebnis gab. So kann von Verbesserungen in Googles Datenbestand profitiert werden.</li>
+<li>Verbesserung der Fortschrittsanzeige für die Koordinatenermittlung.</li>
+<li>Verbesserte Tastaturnavigation und bessere Erklärungen für VoiceOver.</li>
+<li>Groß- und Kleinschreibungsfehler in der Englischen Version korrigiert.</li>
+</ul>
+</dd>
+
+
+</dl>
+
+
+
+<dl class="versions" id="oldversions">
+
+<dt>v2.2  (2009-03-03)</dt>
+<dd>
+<ul>
+<li>Verwendet eigene ‚Privat‘ und ‚Arbeit‘ Icons für Adressen ohne zugehöriges Bild im Adreßbuch.</li>
+<li>Programmicon an das Google Earth 5 Icon angepaßt.</li>
+<li>Bessere Fehlermeldung wenn keine Netzwerkverbindung vorhanden ist.</li>
+</ul>
+</dd>
+
+
+<dt>v2.1  (2009-01-30)</dt>
+<dd>
+<ul>
+<li>Behebung des übermäßigen Speicherbedarfs bei großen Adreßbüchern. Vielen Dank an Steve Parker für den Hinweis auf das Problem.</li>
+<li>Verbesserte Lokalisierung der PayPal Links.</li>
+</ul>
+</dd>
+
+
+
+<dt>v2  (2009-01-28)</dt>
+<dd>
+<ul>
+<li>Vollst&auml;ndig &uuml;berarbeitete Benutzeroberfl&auml;che.</li>
+<li>Die Umwandlung von Adressen wird nun von Earth Addresser und nicht von Google Earth vorgenommen. Ergebnisse werden hierbei gespeichert und wiederverwendet.</li>
+<li>Die Daten in der erzeugten KML Datei lassen sich feiner einstellen. Insbesondere k&ouml;nnen nun Dateien ohne Namen und mit Telephonnummern, E-Mail Adressen und Web-Links geschrieben werden.</li>
+<li>Die aufgeklappten Ortsmarken in Google Earth enthalten nun Bilder.</li>
+<li>Die Links zum Adressbuch sind nun zuverl&auml;ssig klickbar.</li>
+</ul>
+</dd>
+
+<dt>v1 (2007-03-30)</dt>
+<dd>
+Erste ver&ouml;ffentlichte Version
+</dd>
+
+
+
+<dt>version 1b3 (2007-03-28)</dt>
+<dd>
+<ul>
+<li>added checking for updates</li>
+<li>added French localisation contributed by  <a href="http://www.cortig.net/localisations/?cat=2" hreflang="fr">Ronald Leroux</a></li>
+<li>added German localisation</li>
+<li>minor UI improvements</li>
+</ul>
+</dd>
+
+
+<dt>version 1b2 (2007-03-27)</dt>
+<dd>
+hopefully fixed a problem that made the application stall
+</dd>
+
+
+<dt>version 1b (2007-03-26)</dt>
+<dd>
+<ul>
+<li>first testing release</li>	
+<li>more fixes and polish</li>
+</ul>
+</dd>
+<dt>version 0.4 (unreleased)</dt>
+<dd>
+<ul>
+<li>removed the 'smarts' again as they didn't work</li>
+<li>new strategy: write image files to Application Support folder and output a KML file only</li>
+<li>set size of images in Preferences</li>
+</ul>
+</dd>
+<dt>version 0.3 (unreleased)</dt>
+<dd>
+<ul>
+<li>introduced the 'smarts' to pack everything up in a nice KMZ file</li>
+<li>unfortunately GoogleEarth doesn't load Icon href elements from within the KMZ file</li>
+<li>also removed colons from id attributes and file names</li>
+</ul>
+</dd>
+<dt>version 0.2 (unreleased)</dt>
+<dd>
+	rewrote XML generation to use NSXML so we can have actual, properly-escaped XML
+</dd>
+<dt>version 0.1 (unreleased)</dt>
+<dd>
+	initial build
+</dd>
+</dl>
+
+
+<p id="morehistorylinks"><a href="#oldversions" id="showolder">Vollständige Liste</a></p>

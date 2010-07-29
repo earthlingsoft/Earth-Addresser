@@ -1,0 +1,17 @@
+<?php 
+	$lang = "de";
+	$titlenote = "Deine Adressen in Google Earth";
+	$buzzline = $titlenote;
+	$description = "Mac Programm, das Google Earth Ortsmarken für alle Adressen Deines Adressbuchs erstellt. Deine Freunde auf dem Globus!";
+	$registertext = "mit PayPal";
+	$limitations = ", Mac OS X.4";
+				
+	$dr = $_SERVER[DOCUMENT_ROOT]; 
+	include ("./index.variables");
+
+	include($dr.'/includes/applicationpage.php');
+?>
+
+
+
+

@@ -409,7 +409,7 @@
 - (NSMutableString *) dictionaryKeyForAddressDictionary : (NSDictionary*) address {
 	NSMutableString * addressString = [NSMutableString string];
 	NSString * addressPiece;
-	if (addressPiece = [address valueForKey:kABAddressStreetKey]) {
+	if ((addressPiece = [address valueForKey:kABAddressStreetKey])) {
 		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach ", nil];
 		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
 		NSString * evilWord;
@@ -418,16 +418,16 @@
 		}
 		[addressString appendFormat:@"%@\n", addressPiece];
 	}
-	if (addressPiece = [address valueForKey:kABAddressCityKey]) {
+	if ((addressPiece = [address valueForKey:kABAddressCityKey])) {
 		[addressString appendFormat:@"%@\n", addressPiece];
 	}
-	if (addressPiece = [address valueForKey:kABAddressZIPKey]) {
+	if ((addressPiece = [address valueForKey:kABAddressZIPKey])) {
 		[addressString appendFormat:@"%@\n", addressPiece];
 	}
-	if (addressPiece = [address valueForKey:kABAddressStateKey]) {
+	if ((addressPiece = [address valueForKey:kABAddressStateKey])) {
 		[addressString appendFormat:@"%@\n", addressPiece];
 	}
-	if (addressPiece = [address valueForKey:kABAddressCountryCodeKey]) {
+	if ((addressPiece = [address valueForKey:kABAddressCountryCodeKey])) {
 		[addressString appendFormat:@"%@", addressPiece];
 	}
 	
@@ -776,7 +776,7 @@
 
 	if (people) {
 		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLMaximum"];
+			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLMaximum"];
 		}
 		else {
 			[progressBar setHidden:NO];
@@ -1140,7 +1140,7 @@
 		}
 
 		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithInt:[people count]] forKey:@"KMLProgress"];			
+			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLProgress"];			
 		}
 		else {
 			[progressBar setDoubleValue:[people count]];
@@ -1482,7 +1482,7 @@
 - (IBAction) readme:(id) sender {
 	NSWorkspace * WORKSPACE = [NSWorkspace sharedWorkspace];
 
-	int tag = [sender tag];
+	NSInteger tag = [sender tag];
 	switch (tag) {
 		case 1: // earthlingsoft
 			[WORKSPACE openURL:[NSURL URLWithString:@"http://earthlingsoft.net/"]];

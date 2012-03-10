@@ -52,10 +52,6 @@
 	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
 		[self showWarningInfo:nil];
 	}
-	
-	// For sudden termination to work in our setup it seems that we need to toggle it once to begin with.
-	[Magic disableSuddenTermination];
-	[Magic enableSuddenTermination];
 }	
 
 
@@ -113,15 +109,11 @@
 
 
 - (void) dealloc {
-	// NSSThread -cancel is X.5 or higher only
-	if (isX5OrHigher) {
-		SEL cancelSelector = @selector(cancel);
-		if (geocodingRunning && [geocodingThread respondsToSelector:cancelSelector]) {
-			[geocodingThread performSelector:cancelSelector];
-		}
-		if (KMLRunning && [KMLThread respondsToSelector:cancelSelector]) {
-			[KMLThread performSelector:cancelSelector];
-		}
+	if (geocodingRunning && geocodingThread) {
+		[geocodingThread cancel];
+	}
+	if (KMLRunning && KMLThread) {
+		[KMLThread cancel];
 	}
 
 	[locations release];
@@ -273,12 +265,16 @@
 		}
 		else {
 			// the group doesn't exist anymore => switch to all
-			[self error: @"group doesn't exist anymore - this shouldn't happen"];
+			NSLog(@"Previously selecte group with ID %@ does not exist anymore. Setting selection to All.", selectedGroup);
+			[UDC setValue:[NSNumber numberWithInt: 0] forKeyPath:@"values.addressBookScope"];
+			people = [ab people];
 		}
 	}
 	else {
-		// eeek!
-		[self error:NSLocalizedString(@"Selected group wasn't recognisable.",@"Selected group couldn't be recognised.")];
+		// group ID does not look like a group ID
+		NSLog(@"Selected group wasn't recognisable.");
+		[UDC setValue:[NSNumber numberWithInt: 0] forKeyPath:@"values.addressBookScope"];
+		people = [ab people];
 	}
 
 	NSNumber * sortByFirstName = [NSNumber numberWithBool:NO];
@@ -425,7 +421,7 @@
 	NSMutableString * addressString = [NSMutableString string];
 	NSString * addressPiece;
 	if ((addressPiece = [address valueForKey:kABAddressStreetKey])) {
-		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"Apt ", @"#", @"P.O. Box", @"P.O.Box",  @"Postfach ", nil];
+		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Dept.", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"App.", @"Apt ", @"Apt.", @"#", @"P.O. Box", @"P.O.Box", @"Postfach ", @"B\303\274ro", @"Office", nil];
 		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
 		NSString * evilWord;
 		while (evilWord = [evilWordEnumerator nextObject]) {
@@ -464,21 +460,12 @@
 - (IBAction) convertAddresses: (id) sender {
 	if (!geocodingRunning) {
 		[self beginBusy];
-		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithDouble:.0] forKey:@"geocodingProgress"];			
-		}
-		else {
-			[geocodingProgressBar setDoubleValue:.0];
-		}
+		[self setValue:[NSNumber numberWithDouble:.0] forKey:@"geocodingProgress"];			
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
 		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
-	else if (geocodingRunning && isX5OrHigher) {
-		// NSSThread -cancel is in >= X.5 only
-		SEL cancelSelector = @selector(cancel);
-		if ([geocodingThread respondsToSelector:cancelSelector]) {
-			[geocodingThread performSelector:cancelSelector];
-		}
+	else if (geocodingRunning) {
+		[geocodingThread cancel];
 	}
 }
 
@@ -491,10 +478,7 @@
 - (void) convertAddresses2: (id) sender {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	geocodingThread = [NSThread currentThread];
-	BOOL threadIsCancelled = NO;
-	NSInvocation * isCancelledInvocation = [Magic isCancelledInvocation];
 	double geocodingCurrentPosition = .000001;
-
 
 	NSArray * people;
 	if (sender == self) {
@@ -513,15 +497,9 @@
 	
 	[self setValue:@"" forKey:@"geocodingError"];
 
-	if (isX6OrHigher) {
-		[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
-	}
-	else {
-		[geocodingProgressBar setHidden: NO];
-		[geocodingProgressBar setMaxValue: notSearchedCount];		
-	}
+	[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
 		
-	while ((myPerson = [myEnum nextObject]) && !error && !threadIsCancelled) {
+	while ((myPerson = [myEnum nextObject]) && !error && ![[NSThread currentThread] isCancelled]) {
 		NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
 		
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
@@ -533,12 +511,7 @@
 			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 			
 			if (! [locations objectForKey:addressString]) {
-				if (isX6OrHigher) {
-					[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
-				}
-				else {
-					[geocodingProgressBar setDoubleValue: geocodingCurrentPosition];
-				}
+				[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
 
 				geocodingCurrentPosition += 1.;
 				
@@ -605,19 +578,14 @@
 			index++;
 		}
 		
-		if (isX5OrHigher) { 
-			[isCancelledInvocation invoke];
-			[isCancelledInvocation getReturnValue:&threadIsCancelled];
-		}
 		[innerPool release];
 	}
 
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
 	geocodingThread = nil;
 	
-	if (!isX6OrHigher) {
-		[geocodingProgressBar setHidden:YES];			
-	}
+	[geocodingProgressBar setHidden:YES];			
+
 	[self saveLocations];
 
 	[self endBusy];
@@ -650,9 +618,11 @@
 	if (![myFM fileExistsAtPath: imagesFolderPath]) { // create folders if needed
 		NSError * error;
 		if (![myFM createDirectoryAtPath:imagesFolderPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			[self error: [NSLocalizedString(@"Couldn't create Application Support/EarthAddresser folder", @"Couldn't create Application Support/EarthAddresser folder") stringByAppendingFormat: (error ? @": %@" : @""), error, nil]];
+			[[NSThread currentThread] cancel];
+			NSAlert * alert = [NSAlert alertWithError:error];
+			[alert performSelectorOnMainThread:@selector(runModal) withObject:nil waitUntilDone:YES];
+			imagesFolderPath = nil;
 		}
-		imagesFolderPath = nil;
 	}
 	
 	return imagesFolderPath;
@@ -682,38 +652,41 @@
 - (NSXMLElement *) createStyleForImageData: (NSData *) imageData withID:(NSString *) ID {
 	NSXMLElement * styleElement = nil;
 	
-	// ensure folders to our image exist
-	NSString * fullImagePath = [self fullPNGImagePathForName: ID];
-	if (fullImagePath != nil && imageData != nil) {
-		// ensure we actually have an image to write
-		NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:imageData];
-		if (imageRep != nil) {
-			// create PNG data and write it
-			NSData * PNGData = [imageRep representationUsingType:NSPNGFileType properties:nil];
-			BOOL PNGWriteSuccess = [PNGData writeToFile:fullImagePath atomically:YES];
-			if (PNGWriteSuccess) {
-				// now that we have written the image, create the style for it
-				styleElement = [NSXMLElement elementWithName:@"Style"];
-				[styleElement addAttribute:[NSXMLNode attributeWithName:@"id" stringValue:ID]];
-				
-				NSXMLElement * iconStyleElement = [NSXMLElement elementWithName:@"IconStyle"];	
-				NSXMLElement * iconElement = [NSXMLElement elementWithName:@"Icon"];
-				NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:fullImagePath];
-				[iconElement addChild: hrefElement];
-				[iconStyleElement addChild:iconElement];
-				
-				NSXMLElement * sizeElement = [NSXMLNode elementWithName:@"scale" stringValue: [[UDC valueForKeyPath:@"values.imageSize"] stringValue]];
-				[iconStyleElement addChild:sizeElement];
-				NSXMLElement * hotSpotElement = [NSXMLNode elementWithName:@"hotSpot"];
-				[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"x" stringValue:@"0.5"]];
-				[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"y" stringValue:@"0"]];
-				[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"xunits" stringValue:@"fraction"]];
-				[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"yunits" stringValue:@"fraction"]];
-				[iconStyleElement addChild:hotSpotElement];
-				[styleElement addChild:iconStyleElement];
-			} // endif image written successfully
-		} // endif imageRep != nil
-	} // endif imagesFolderPath != nil
+	// only execute if we havenÕt been cancelled (mainly to avoid duplicate error messages)
+	if (![[NSThread currentThread] isCancelled]) {
+		// ensure folders to our image exist
+		NSString * fullImagePath = [self fullPNGImagePathForName: ID];
+		if (fullImagePath != nil && imageData != nil) {
+			// ensure we actually have an image to write
+			NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:imageData];
+			if (imageRep != nil) {
+				// create PNG data and write it
+				NSData * PNGData = [imageRep representationUsingType:NSPNGFileType properties:nil];
+				BOOL PNGWriteSuccess = [PNGData writeToFile:fullImagePath atomically:YES];
+				if (PNGWriteSuccess) {
+					// now that we have written the image, create the style for it
+					styleElement = [NSXMLElement elementWithName:@"Style"];
+					[styleElement addAttribute:[NSXMLNode attributeWithName:@"id" stringValue:ID]];
+					
+					NSXMLElement * iconStyleElement = [NSXMLElement elementWithName:@"IconStyle"];	
+					NSXMLElement * iconElement = [NSXMLElement elementWithName:@"Icon"];
+					NSXMLElement * hrefElement = [NSXMLNode elementWithName:@"href" stringValue:fullImagePath];
+					[iconElement addChild: hrefElement];
+					[iconStyleElement addChild:iconElement];
+					
+					NSXMLElement * sizeElement = [NSXMLNode elementWithName:@"scale" stringValue: [[UDC valueForKeyPath:@"values.imageSize"] stringValue]];
+					[iconStyleElement addChild:sizeElement];
+					NSXMLElement * hotSpotElement = [NSXMLNode elementWithName:@"hotSpot"];
+					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"x" stringValue:@"0.5"]];
+					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"y" stringValue:@"0"]];
+					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"xunits" stringValue:@"fraction"]];
+					[hotSpotElement addAttribute:[NSXMLNode attributeWithName:@"yunits" stringValue:@"fraction"]];
+					[iconStyleElement addChild:hotSpotElement];
+					[styleElement addChild:iconStyleElement];
+				} // endif image written successfully
+			} // endif imageRep != nil
+		} // endif fullImagePath != nil
+	} // endif ![currentThread isCancelled]
 	
 	return styleElement;
 }
@@ -747,21 +720,12 @@
 - (IBAction) do: (id) sender {
 	if (!KMLRunning) {
 		[self beginBusy];
-		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithDouble:.0] forKey:@"KMLProgress"];			
-		}
-		else {
-			[progressBar setDoubleValue:.0];
-		}
+		[self setValue:[NSNumber numberWithDouble:.0] forKey:@"KMLProgress"];			
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"KMLRunning"];	
 		[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];		
 	}
-	else if (KMLRunning && isX5OrHigher) {
-		// NSSThread -cancel is in >= X.5 only
-		SEL cancelSelector = @selector(cancel);
-		if ([KMLThread respondsToSelector:cancelSelector]) {
-			[KMLThread performSelector:cancelSelector];
-		}		
+	else if (KMLRunning) {
+		[KMLThread cancel];
 	}
 }
 
@@ -776,19 +740,10 @@
 	KMLThread = [NSThread currentThread];
 	double currentPosition = .000001;
 
-	BOOL threadIsCancelled = NO;
-	NSInvocation * isCancelledInvocation = [Magic isCancelledInvocation];	
-	
 	NSArray * people = [self relevantPeople];
 
 	if (people) {
-		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLMaximum"];
-		}
-		else {
-			[progressBar setHidden:NO];
-			[progressBar setMaxValue: [people count]];			
-		}
+		[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLMaximum"];
 
 		NSEnumerator * myEnum = [people objectEnumerator];
 		ABPerson * person;
@@ -814,20 +769,11 @@
 		// Run through all people in the list
 		//
 		
-		while ((person = [myEnum nextObject]) && !threadIsCancelled) {
+		while ((person = [myEnum nextObject]) && ![[NSThread currentThread] isCancelled]) {
 			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
 
-			if (isX5OrHigher) { 
-				[isCancelledInvocation invoke];
-				[isCancelledInvocation getReturnValue:&threadIsCancelled];
-			}
+			[self setValue:[NSNumber numberWithDouble:currentPosition] forKey:@"KMLProgress"];				
 
-			if (isX6OrHigher) {
-				[self setValue:[NSNumber numberWithDouble:currentPosition] forKey:@"KMLProgress"];				
-			}
-			else {
-				[progressBar setDoubleValue: currentPosition];
-			}
 			currentPosition += 1.;
 												
 			NSString * uniqueID = [person uniqueId];
@@ -1146,15 +1092,9 @@
 			}
 		}
 
-		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLProgress"];			
-		}
-		else {
-			[progressBar setDoubleValue:[people count]];
-			[progressBar display];	
-		}
+		[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLProgress"];			
 			
-		if (!threadIsCancelled) {
+		if (![[NSThread currentThread] isCancelled]) {
 #pragma mark -do2: Write KML
 			NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
 			[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
@@ -1186,13 +1126,7 @@
 #pragma mark -do2: Clean Up 	
 		
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
-		if (isX6OrHigher) {
-			[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];			
-		}
-		else {
-			[progressBar setDoubleValue: 0.0];
-			[progressBar setHidden:YES];		
-		}
+		[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];			
 	}
 	
 	[self endBusy];
@@ -1300,8 +1234,8 @@
 		[[NSWorkspace sharedWorkspace] openURL:saveURL];
 	}
 	else {
-		NSBeep();
-		NSLog(@"Couldn't write file with nonlocatable addresses: %@", [myError localizedDescription]);
+		NSAlert * alert = [NSAlert alertWithError:myError];
+		[alert performSelectorOnMainThread:@selector(runModal) withObject:nil waitUntilDone:YES];
 	}
 	
 }
@@ -1324,26 +1258,9 @@
 }
 
 
-- (BOOL) geocodingRunningAndCanBeCancelled {
-	BOOL result;
-	if (geocodingRunning) {
-		if (isX5OrHigher) {
-			result = YES;
-		}
-		else {
-			result = NO;
-		}
-	}
-	else {
-		result = YES;
-	}
-	return result;
-}
-
-
 - (NSString*) geocodingButtonLabel {
 	NSString * label;
-	if (geocodingRunning && [self geocodingRunningAndCanBeCancelled]) {
+	if (geocodingRunning) {
 		label = NSLocalizedString(@"Cancel Lookup", @"Title of geocoding button while geocoding is running and can be cancelled.");
 	}
 	else {
@@ -1353,28 +1270,9 @@
 }
 
 
-
-- (BOOL) KMLRunningAndCanBeCancelled {
-	BOOL result;
-	if (KMLRunning) {
-		if (isX5OrHigher) {
-			result = YES;
-		}
-		else {
-			result = NO;
-		}
-	}
-	else {
-		result = YES;
-	}
-	return result;
-}
-
-
-
 - (NSString*) KMLWritingButtonLabel {
 	NSString * label;
-	if (KMLRunning && [self KMLRunningAndCanBeCancelled]) {
+	if (KMLRunning) {
 		label = NSLocalizedString(@"Cancel Placemark Creation", @"Text displayed in KML Creation button while KML Creation is running.");
 	}
 	else {
@@ -1472,16 +1370,6 @@
 }
 
 
-/*
- quarter-assed error handling
-*/
-- (void) error: (NSString*) error {
-	NSLog(@"%@", error);
-	NSBeep();
-	[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
-}
-
-
 
 /* 
  for the various actions in the help menu
@@ -1530,7 +1418,7 @@
  we start beign busy: disable sudden termination
 */
 - (void) beginBusy {
-	[Magic disableSuddenTermination];
+	[[NSProcessInfo processInfo] disableSuddenTermination];
 	[[mainWindow standardWindowButton: NSWindowCloseButton] setEnabled: NO];
 }
 
@@ -1541,7 +1429,7 @@
 - (void) endBusy {
 	[NSApp replyToApplicationShouldTerminate: YES];
 	[[mainWindow standardWindowButton: NSWindowCloseButton] setEnabled: YES];
-	[Magic enableSuddenTermination];
+	[[NSProcessInfo processInfo] enableSuddenTermination];
 }
 
 
@@ -1561,49 +1449,6 @@
 	[VersionChecker checkVersionForURLString:UPDATEURL silent:NO];
 }
 
-
-
-
-#pragma mark METHODS FOR X.5 AND ABOVE
-
-/*
- Sneak support for sudden termination into the class.
-*/
-+ (void) enableSuddenTermination {
-	NSProcessInfo * pI = [NSProcessInfo processInfo];
-	SEL enableSuddenTerminationSelector = @selector(enableSuddenTermination);
-	if ([pI respondsToSelector:enableSuddenTerminationSelector]) { // we're running X.6 or higher
-		[pI performSelector:enableSuddenTerminationSelector];
-	}
-}
-
-
-+ (void) disableSuddenTermination {
-	NSProcessInfo * pI = [NSProcessInfo processInfo];
-	SEL enableSuddenTerminationSelector = @selector(disableSuddenTermination);
-	if ([pI respondsToSelector:enableSuddenTerminationSelector]) { // we're running X.6 or higher
-		[pI performSelector:enableSuddenTerminationSelector];
-	}
-}
-
-
-/*
- NSInvocation for cancelling threads, only available in X.5 and higher
-*/
-+ (NSInvocation*) isCancelledInvocation {
-	NSInvocation * invocation = nil;
-	
-	if (isX5OrHigher) {
-		SEL isCancelledSelector = @selector(isCancelled);
-		NSThread * thread = [NSThread currentThread];
-		NSMethodSignature * sig = [thread methodSignatureForSelector:isCancelledSelector];
-		invocation = [NSInvocation invocationWithMethodSignature:sig];
-		[invocation setSelector:isCancelledSelector];
-		[invocation setTarget:thread];
-	}
-	
-	return invocation;
-}
 
 @end
 

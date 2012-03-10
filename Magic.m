@@ -47,6 +47,7 @@
 }
 
 
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
 		[self showWarningInfo:nil];
@@ -59,17 +60,32 @@
 
 
 
++ (NSSet *) keyPathsForValuesAffectingValueForKey: (NSString *)key {
+	NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
+	
+	if ([key isEqualToString:@"needToSearchNoticeHidden"]) {
+		NSSet * affectingKeys = [NSSet setWithObjects:@"KMLRunning", @"notSearchedCount",nil];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKeys];
+	}
+	else if ([key isEqualToString:@"nothingToSearch"]) {
+		NSSet * affectingKeys = [NSSet setWithObjects:@"notSearchedCount", nil];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKeys];
+	}
+	else if ([key isEqualToString:@"geocodingButtonLabel"]) {
+		NSSet * affectingKeys = [NSSet setWithObjects:@"geocodingRunning", nil];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKeys];
+	}
+	else if ([key isEqualToString:@"KMLWritingButtonLabel"]) {
+		NSSet * affectingKeys = [NSSet setWithObjects:@"KMLRunning", nil];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKeys];
+	}
+
+	return keyPaths;
+}
+
 
 
 + (void)initialize {
-    [self setKeys:[NSArray arrayWithObjects:@"KMLRunning", @"notSearchedCount", nil]triggerChangeNotificationsForDependentKey:@"needToSearchNoticeHidden"];
-
-	[self setKeys:[NSArray arrayWithObject:@"notSearchedCount"] triggerChangeNotificationsForDependentKey:@"nothingToSearch"];
-
-	[self setKeys:[NSArray arrayWithObject:@"geocodingRunning"] triggerChangeNotificationsForDependentKey:@"geocodingButtonLabel"];
-
-	[self setKeys:[NSArray arrayWithObject:@"KMLRunning"] triggerChangeNotificationsForDependentKey:@"KMLWritingButtonLabel"];	
-	
 	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
 									   [NSNumber numberWithDouble:1.5], @"imageSize", 
@@ -93,7 +109,6 @@
 	[UDC setInitialValues:standardDefaults];
 	[UDC setAppliesImmediately:YES];
 }
-
 
 
 
@@ -160,7 +175,7 @@
 /*
 	when Address Book changes, update everything that depends on it
 */
-- (void)addressBookChanged:(NSNotification *)notification {
+- (void) addressBookChanged: (NSNotification *)notification {
 	[self buildGroupList];
 	[self relevantPeople];
 }
@@ -631,27 +646,19 @@
 	NSString * appSupportPath = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	
 	NSString * EAAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"EarthAddresser"];
-	if (! [myFM fileExistsAtPath: EAAppSupportPath]) { // created folder if needed
-		if (![myFM createDirectoryAtPath:EAAppSupportPath attributes:nil]) {
-			[self error: NSLocalizedString(@"Couldn't create Application Support/EarthAddresser folder", @"Couldn't create Application Support/EarthAddresser folder")];
-			EAAppSupportPath = nil;
+	NSString * imagesFolderPath = [EAAppSupportPath stringByAppendingPathComponent:@"Images"];
+	if (![myFM fileExistsAtPath: imagesFolderPath]) { // create folders if needed
+		NSError * error;
+		if (![myFM createDirectoryAtPath:imagesFolderPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			[self error: [NSLocalizedString(@"Couldn't create Application Support/EarthAddresser folder", @"Couldn't create Application Support/EarthAddresser folder") stringByAppendingFormat: (error ? @": %@" : @""), error, nil]];
 		}
-	}
-	
-	NSString * imagesFolderPath = nil;
-	if (EAAppSupportPath) {
-		imagesFolderPath = [EAAppSupportPath stringByAppendingPathComponent:@"Images"];
-		if (![myFM fileExistsAtPath: imagesFolderPath]) { // create folder if needed
-			if (![myFM createDirectoryAtPath:imagesFolderPath attributes:nil]) {
-				[self error: NSLocalizedString(@"Couldn't create Application Support/EarthAddresser/Images folder", @"Couldn't create Application Support/EarthAddresser/Images folder")];
-				imagesFolderPath = nil;
-			}
-		}
+		imagesFolderPath = nil;
 	}
 	
 	return imagesFolderPath;
 }
 
+	
 
 /*
  Returns full path to PNG image in Application Support with the name passed to it.

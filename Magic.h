@@ -107,7 +107,6 @@
 - (NSString *) localisedLabelName: (NSString*) label;
 
 - (NSString*) uuid;
-- (void) error: (NSString*) error;
 
 - (IBAction) dismissSheet:(id) sender;
 - (IBAction) showWarningInfo: (id) sender;
@@ -125,9 +124,6 @@
 - (IBAction) autoCheckForUpdates: (id) sender;
 - (IBAction) menuCheckVersion:(id)sender;
 
-+ (void) disableSuddenTermination;
-+ (void) enableSuddenTermination;
-+ (NSInvocation*) isCancelledInvocation;
 @end
 
 @interface ABGroup (ESSortExtension)

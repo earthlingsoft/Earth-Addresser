@@ -1285,38 +1285,28 @@
 
 
 
-- (NSData*) AddressBookIcon {
-	NSData * result = nil;
+- (NSImage*) AddressBookIcon {
+	NSImage * image = nil;
 	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"];
 	if (appPath) {
-		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
-		[im setSize:NSMakeSize(128, 128)];
-		result = [im TIFFRepresentation];
+		image = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
 	}
-	return result;
+	return image;
 }
 
 
-- (NSData*) GoogleEarthIcon {
-	NSData * result = nil;
+- (NSImage*) GoogleEarthIcon {
+	NSImage * image = nil;
 	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.Google.GoogleEarthPlus"];
 	if (appPath) {
-		NSImage * im = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
-		[im setSize:NSMakeSize(128, 128)];
-		result = [im TIFFRepresentation];
+		image = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
 	}
-	return result;
+	return image;
 }
 
 
-- (NSData*) KMLIcon {
-	NSData * result = nil;
-	NSImage * im = [[NSWorkspace sharedWorkspace] iconForFileType:@"kml"];
-	if (im) {
-		[im setSize:NSMakeSize(128, 128)];
-		result = [im TIFFRepresentation];
-	}
-	return result;
+- (NSImage*) KMLIcon {
+	return [[NSWorkspace sharedWorkspace] iconForFileType:@"kml"];
 }
 
 

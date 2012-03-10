@@ -182,9 +182,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* EA */ = {
+		8D1107260486CEB800E47090 /* Earth Addresser */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "EA" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Earth Addresser" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -194,7 +194,7 @@
 			);
 			dependencies = (
 			);
-			name = EA;
+			name = "Earth Addresser";
 			productInstallPath = "$(HOME)/Applications";
 			productName = EA;
 			productReference = 8D1107320486CEB800E47090 /* Earth Addresser.app */;
@@ -207,9 +207,11 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				CLASSPREFIX = ES;
 				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = earthlingsoft;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EA" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Earth Addresser" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -226,7 +228,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* EA */,
+				8D1107260486CEB800E47090 /* Earth Addresser */,
 				6C15690C0F0ED50C009C7B5F /* Release */,
 			);
 		};
@@ -285,7 +287,7 @@
 /* Begin PBXTargetDependency section */
 		6C1569100F0ED513009C7B5F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8D1107260486CEB800E47090 /* EA */;
+			target = 8D1107260486CEB800E47090 /* Earth Addresser */;
 			targetProxy = 6C15690F0F0ED513009C7B5F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -431,7 +433,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "EA" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Earth Addresser" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -440,7 +442,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EA" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Earth Addresser" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

@@ -96,7 +96,6 @@
 - (NSArray*) relevantPeople;
 - (void) updateRelevantPeopleInfo:(NSArray*) people;
 
-- (NSString*) googleStringForAddressDictionary : (NSDictionary*) address;
 - (NSMutableString*) dictionaryKeyForAddressDictionary : (NSDictionary*) address;
 - (NSString*) cleanString:(NSString*) s from:(NSString*) evil ;
 

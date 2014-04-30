@@ -405,19 +405,6 @@
 
 #pragma mark Convert Addresses to Relevant Formats
 
-
-- (NSString *) googleStringForAddressDictionary : (NSDictionary*) address {
-	NSMutableString * addressString = [self dictionaryKeyForAddressDictionary: address];
-	
-	[addressString replaceOccurrencesOfString:@"\n" withString:@", " options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
-	[addressString replaceOccurrencesOfString:@" " withString:@"+" options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
-	
-	return addressString;
-}
-
-
-
-
 - (NSMutableString *) dictionaryKeyForAddressDictionary : (NSDictionary*) address {
 	NSMutableString * addressString = [NSMutableString string];
 	NSString * addressPiece;

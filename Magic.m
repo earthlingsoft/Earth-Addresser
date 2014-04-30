@@ -9,6 +9,7 @@
 
 #import "Magic.h"
 #import <AddressBook/ABAddressBookC.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 
@@ -441,7 +442,7 @@
 	if ((addressPiece = [address valueForKey:kABAddressCountryCodeKey])) {
 		[addressString appendFormat:@"%@", addressPiece];
 	}
-	
+
 	// NSLog(addressString);
 	NSMutableString * result = [[[addressString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy] autorelease];
 	
@@ -491,7 +492,6 @@
 	}
 	NSEnumerator * myEnum = [people objectEnumerator];
 	ABPerson * myPerson;
-	NSString * baseURL = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?output=csv&oe=utf8&sensor=false&key=%@", GOOGLEAPIKEY];
 	NSTimeInterval previousLookup = 0;
 	BOOL error = NO;
 	
@@ -510,70 +510,44 @@
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 			
-			if (! [locations objectForKey:addressString]) {
-				[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
-
-				geocodingCurrentPosition += 1.;
-				
+			if (![locations objectForKey:addressString]) {
 				// Look up address if we don't know its coordinates already
-				NSString * theAddress = [self googleStringForAddressDictionary:addressDict];
-				NSString * URLString = [NSString stringWithFormat:@"%@&q=%@", baseURL, addressString];
-				NSURL * geocodeURL = [NSURL URLWithString:[URLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
-				];
-			
-				// throttle Google queries
+
+				[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
+				geocodingCurrentPosition += 1.;
+							
+				// throttle queries
 				if (previousLookup != 0) {
 					NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:previousLookup + SECONDSBETWEENCOORDINATELOOKUPS];
 					[NSThread sleepUntilDate:wakeUpTime];
 				}
-				
 				previousLookup = [NSDate timeIntervalSinceReferenceDate];
 
 				
-				NSURLRequest * geocodeRequest = [NSURLRequest requestWithURL:geocodeURL];
-				NSURLResponse * geocodeResponse = nil;
-				NSError * geocodeError = nil;
-				NSData * requestAnswer = [NSURLConnection sendSynchronousRequest:geocodeRequest returningResponse:&geocodeResponse error:&geocodeError];
-				
-				if (geocodeError == nil) {
-					NSString * resultString = [[[NSString alloc] initWithData:requestAnswer encoding:NSUTF8StringEncoding] autorelease];
-					NSArray * resultArray = [resultString componentsSeparatedByString:@","];
-				
-					int result = [[resultArray objectAtIndex:0] intValue];
-					if (result == 200) {
-						NSNumber * accuracy = [NSNumber numberWithInt:[[resultArray objectAtIndex:1] intValue]];
-						NSNumber * latitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:2] doubleValue]];
-						NSNumber * longitude = [NSNumber numberWithDouble:[[resultArray objectAtIndex:3] doubleValue]];
-				
-						[locations setObject:[NSArray arrayWithObjects:accuracy, latitude, longitude, nil]  forKey:addressString];
+				[[[CLGeocoder alloc] init] geocodeAddressDictionary:addressDict completionHandler:^(NSArray * placemarks, NSError * lookupError) {
+					if ([placemarks count] == 1) {
+						CLPlacemark * placemark = placemarks[0];
+						CLLocation * location = placemark.location;
+						[locations setObject:[NSArray arrayWithObjects:
+											  [NSNumber numberWithDouble:location.horizontalAccuracy],
+											  [NSNumber numberWithDouble:location.coordinate.latitude],
+											  [NSNumber numberWithDouble:location.coordinate.longitude],
+											  nil]
+									  forKey:addressString];
 					}
-					else if (result == 602) {
-						// Failed to locate to the address
-						[locations setObject:FAILSTRING forKey: addressString];
-					}
-					else if (result == 620) {
-						// Too many queries sent, possibly handle this
-						NSString * errorString =  NSLocalizedString(@"Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists.", @"Error message for Google Geocoding 602 error.");
-						[self setValue: errorString forKey:@"geocodingError"];
-						
-						NSLog(@"Earth Addresser exceeded Google's query limit for determining addresses. Only waiting and trying again could help");
-						
-						error = YES;
+					else if ([placemarks count] > 1) {
+						NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
+						[locations setObject:MULTIPLESTRING forKey: addressString];
 					}
 					else {
-						// no idea what this could be
-						NSLog(@"Geocoding query for '%@' failed with result %@", theAddress, [resultArray objectAtIndex:0]);
+						if (lookupError) {
+							NSLog(@"Could not locate address: %@", addressString);
+							NSLog(@"error: %@", lookupError);
+							[locations setObject:FAILSTRING forKey: addressString];
+						}
 					}
-					[self relevantPeople];
-				}
-				else { // geocodeError != nil
-					NSString * errorString = [NSString stringWithFormat:NSLocalizedString(@"Geocoding failed: %@", @""), [geocodeError localizedDescription]];
-					[self setValue:errorString forKey:@"geocodingError"];
-					
-					NSLog(@"%@ - %@ - %@", errorString, [geocodeError localizedFailureReason], [geocodeError localizedRecoverySuggestion]);
-				
-					error = YES; // gets us out of the loop 
-				}
+				}];
+				[self relevantPeople];
 			}
 			index++;
 		}
@@ -1180,6 +1154,7 @@
 */
 - (IBAction) lookupNonLocatableAddresses: (id) sender {
 	NSArray * FAILAddresses = [locations allKeysForObject:FAILSTRING];
+	FAILAddresses = [FAILAddresses arrayByAddingObjectsFromArray:[locations allKeysForObject:MULTIPLESTRING]];
 	[locations removeObjectsForKeys:FAILAddresses];
 	[self updateRelevantPeopleInfo:[[ABAddressBook sharedAddressBook] people]];
 
@@ -1405,7 +1380,7 @@
 
 
 /*
- we start beign busy: disable sudden termination
+ we start being busy: disable sudden termination
 */
 - (void) beginBusy {
 	[[NSProcessInfo processInfo] disableSuddenTermination];

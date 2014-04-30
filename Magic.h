@@ -25,11 +25,11 @@
 #include <uuid/uuid.h>
 #include "VersionChecker.h"
 
-#define GOOGLEAPIKEY @"ABQIAAAAlHKFjYnAwG075OeYhnD30xRxdMQYmQaEcayIZUdLHbQwQRmWDRQAobR9d1SmZ4paTmBsalsw0pvc4w"
 #define MENUNAME @"NAME"
 #define MENUOBJECT @"OBJECT"
 #define MENUITEMALL @"ALL"
 #define FAILSTRING @"FAIL"
+#define MULTIPLESTRING @"MULTIPLE"
 #define OMITNAMESDEFAULT @"Omit Names"
 #define EAGENERICSTYLEPREFIX @"EarthAddresser-generic-"
 #define GENERICHOMEICONNAME @"home"

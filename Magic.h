@@ -106,8 +106,6 @@
 
 - (NSString *) localisedLabelName: (NSString*) label;
 
-- (NSString*) uuid;
-
 - (IBAction) dismissSheet:(id) sender;
 - (IBAction) showWarningInfo: (id) sender;
 - (IBAction) toggleGroupByLabel: (id) sender;

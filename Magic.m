@@ -724,11 +724,8 @@
 			
 		// Basic XML setup for KML file
 		NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
-		NSString * uuidString = [self uuid];
-		if (uuidString) {
-			NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:uuidString];
-			[myXML addAttribute:documentID];
-		}
+		NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:[[NSUUID UUID] UUIDString]];
+		[myXML addAttribute:documentID];
 		[myXML addChild:[NSXMLNode elementWithName:@"name" stringValue:NSLocalizedString(@"Addresses", @"Addresses")]];
 			
 		// Add generic home and work place styles
@@ -1202,7 +1199,7 @@
 	}
 	
 	
-	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [self uuid]];
+	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [[NSUUID UUID] UUIDString]];
 	NSURL * saveURL = [NSURL fileURLWithPath:savePath];
 	NSError * myError = nil;
 	if ([s writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
@@ -1301,19 +1298,6 @@
 	return localisedLabelName;
 }
 
-
-
-
-/*
- Creates a UUID
-*/
-- (NSString*) uuid {
-	unsigned char _uuid[16];
-	char _out[40];
-	uuid_generate(_uuid);
-	uuid_unparse(_uuid, _out);
-	return [NSString stringWithUTF8String:_out];
-}
 
 
 

@@ -27,12 +27,20 @@
 													 name:kABDatabaseChangedExternallyNotification
 												   object:nil];	
 				
-		NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locations"];
+		NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locationsSuccess"];
 		if (myLocations) {
 			locations = [myLocations mutableCopy];
 		}
 		else {
 			locations = [[NSMutableDictionary alloc] init];
+		}
+		
+		NSDictionary * myFailLocations = [UDC valueForKeyPath:@"values.locationsFail"];
+		if (myFailLocations) {
+			failLocations = [myFailLocations mutableCopy];
+		}
+		else {
+			failLocations = [[NSMutableDictionary alloc] init];
 		}
 		
 	}	
@@ -120,6 +128,7 @@
 	}
 
 	[locations release];
+	[failLocations release];
 	[groups release];
 	
 	[super dealloc];
@@ -310,16 +319,14 @@
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = [locations objectForKey: addressKey];
-			if (addressObject != nil) {
-				if ([addressObject isKindOfClass:[NSArray class]]) {
-					// it's an array of coordinates => successfully located
-					locatedAddressCount++;
-				}
-				else {
-					// looked up but not located
-					nonLocatedAddressCount++;
-				}
+			NSObject * addressObject = [locations objectForKey:addressKey];
+			if ([[locations objectForKey:addressKey] isKindOfClass:[NSArray class]]) {
+				// it's an array of coordinates => successfully located
+				locatedAddressCount++;
+			}
+			else if ([failLocations objectForKey:addressKey]) {
+				// looked up but not located
+				nonLocatedAddressCount++;
 			}
 			else {
 				// not looked up yet
@@ -385,7 +392,7 @@
 	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
 	[self setValue:lookupPart forKey:@"lookupInfo"];
 	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
-	BOOL b = ([[locations allKeysForObject:FAILSTRING] count] > 0);
+	BOOL b = ([failLocations count] > 0);
 	[self setValue:[NSNumber numberWithBool:b] forKey:@"nonLocatableAddressesExist"];
 	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
 	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
@@ -499,7 +506,7 @@
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 			
-			if (![locations objectForKey:addressString]) {
+			if (![locations objectForKey:addressString] && ![failLocations objectForKey:addressString]) {
 				// Look up address if we don't know its coordinates already
 
 				[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
@@ -526,13 +533,27 @@
 					}
 					else if ([placemarks count] > 1) {
 						NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
-						[locations setObject:MULTIPLESTRING forKey: addressString];
+						NSMutableArray * locationStrings = [NSMutableArray array];
+						[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
+							[locationStrings addObject:[placemark.location description]];
+						}];
+						NSDictionary * failInfo = @{
+													@"type": @"multiple",
+													@"locations": locationStrings
+												   };
+						[failLocations setObject:failInfo forKey: addressString];
 					}
 					else {
 						if (lookupError) {
 							NSLog(@"Could not locate address: %@", addressString);
 							NSLog(@"error: %@", lookupError);
-							[locations setObject:FAILSTRING forKey: addressString];
+							NSDictionary * errorInfo = @{
+														 @"type": @"error",
+														 @"domain": [lookupError domain],
+														 @"code": [NSNumber numberWithInt:[lookupError code]],
+														 @"userInfo": [lookupError userInfo]
+														};
+							[failLocations setObject:errorInfo forKey: addressString];
 						}
 					}
 				}];
@@ -1139,9 +1160,7 @@
 	2. initiates a look-up for addresses
 */
 - (IBAction) lookupNonLocatableAddresses: (id) sender {
-	NSArray * FAILAddresses = [locations allKeysForObject:FAILSTRING];
-	FAILAddresses = [FAILAddresses arrayByAddingObjectsFromArray:[locations allKeysForObject:MULTIPLESTRING]];
-	[locations removeObjectsForKeys:FAILAddresses];
+	[failLocations removeAllObjects];
 	[self updateRelevantPeopleInfo:[[ABAddressBook sharedAddressBook] people]];
 
 	[self convertAddresses:self];
@@ -1172,16 +1191,14 @@
 	while (myPerson = [myEnum nextObject]) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		NSUInteger totalAddresses = [addresses count];
-		NSUInteger index = 0;
 		
+		NSUInteger index = 0;
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = [locations objectForKey: addressKey];
+			NSObject * addressObject = [failLocations objectForKey:addressKey];
 			if (addressObject != nil) {
-				if (![addressObject isKindOfClass:[NSArray class]] && [addressObject isEqual:FAILSTRING]) {
-					[s appendFormat:@"%@\n***\n", addressKey];
-				}
+				[s appendFormat:@"%@\n***\n", addressKey];
 			}
 			index++;
 		}

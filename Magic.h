@@ -28,8 +28,6 @@
 #define MENUNAME @"NAME"
 #define MENUOBJECT @"OBJECT"
 #define MENUITEMALL @"ALL"
-#define FAILSTRING @"FAIL"
-#define MULTIPLESTRING @"MULTIPLE"
 #define OMITNAMESDEFAULT @"Omit Names"
 #define EAGENERICSTYLEPREFIX @"EarthAddresser-generic-"
 #define GENERICHOMEICONNAME @"home"
@@ -72,6 +70,7 @@
 	BOOL noGroups;
 
 	NSMutableDictionary * locations;
+	NSMutableDictionary * failLocations;
 }
 
 @property BOOL geocodingRunning;

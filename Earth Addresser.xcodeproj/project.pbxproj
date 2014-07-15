@@ -11,6 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 6C1569150F0ED54E009C7B5F /* Build configuration list for PBXAggregateTarget "Release" */;
 			buildPhases = (
+				6C4FBD431975AF3D0010DC7F /* Remove superfluous files */,
 				6C15691F0F0ED577009C7B5F /* Create zip */,
 			);
 			dependencies = (
@@ -109,7 +110,8 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* EA_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EA_Prefix.pch; sourceTree = "<group>"; };
-		6C1055981911AB6100FA13B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = ../../../../System/Library/Frameworks/CoreLocation.framework; sourceTree = "<group>"; };
+		6C1055981911AB6100FA13B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = /System/Library/Frameworks/CoreLocation.framework; sourceTree = "<absolute>"; };
+		6C10559A1911C49100FA13B7 /* net.earthlingsoft.earthaddresser.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = net.earthlingsoft.earthaddresser.plist; path = ../../Library/Preferences/net.earthlingsoft.earthaddresser.plist; sourceTree = SOURCE_ROOT; };
 		6C1569DB0F0F025F009C7B5F /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = en; path = en.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DC0F0F026C009C7B5F /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = de; path = de.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DD0F0F026E009C7B5F /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = fr; path = fr.lproj/Credits.html; sourceTree = "<group>"; };
@@ -121,7 +123,7 @@
 		6C1569EB0F0F02BC009C7B5F /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C1569EC0F0F02BD009C7B5F /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C1569ED0F0F02BF009C7B5F /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6C26C4220BB711AC0001C5D3 /* plans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plans; sourceTree = "<group>"; };
+		6C26C4220BB711AC0001C5D3 /* plans.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = plans.text; sourceTree = "<group>"; };
 		6C29284F0F1A45C000B5059B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -143,9 +145,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C1055991911AB6100FA13B7 /* CoreLocation.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				6CEABD780BB322BC0059641A /* AddressBook.framework in Frameworks */,
+				6C1055991911AB6100FA13B7 /* CoreLocation.framework in Frameworks */,
 				6C4FBD39197574000010DC7F /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,7 +177,8 @@
 		29B97314FDCFA39411CA2CEA /* EA */ = {
 			isa = PBXGroup;
 			children = (
-				6C26C4220BB711AC0001C5D3 /* plans */,
+				6C26C4220BB711AC0001C5D3 /* plans.text */,
+				6C10559A1911C49100FA13B7 /* net.earthlingsoft.earthaddresser.plist */,
 				6C4FBD4119758A850010DC7F /* appcast.xml */,
 				6C4FBD24197573CB0010DC7F /* Sparkle.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -189,9 +192,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8D1107310486CEB800E47090 /* Info.plist */,
 				6CEAC2720BB4B3290059641A /* Localizable.strings */,
 				6CFB92650BBC498100191CDD /* readme.html */,
-				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				6C29284E0F1A45C000B5059B /* MainMenu.xib */,
 				6CFB92670BBC499100191CDD /* Credits.html */,
@@ -235,6 +238,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				6C4FBD3D1975782B0010DC7F /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -331,11 +335,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				6CFB92660BBC498100191CDD /* readme.html in Resources */,
-				6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */,
-				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
 				6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */,
+				6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */,
+				6CFB92660BBC498100191CDD /* readme.html in Resources */,
 				6C292AA00F1D15CD00B5059B /* Help.css in Resources */,
+				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
 				6C916E650F58C384003EA1EB /* work.png in Resources */,
 				6C916E660F58C384003EA1EB /* home.png in Resources */,
 				6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */,
@@ -358,6 +362,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# compress the distribution folder\nrm -f \"$BUILT_PRODUCTS_DIR/Earth Addresser.zip\"\ncd \"$BUILT_PRODUCTS_DIR\"\nzip -y -r \"Earth Addresser.zip\" \"Earth Addresser.app\"";
+		};
+		6C4FBD431975AF3D0010DC7F /* Remove superfluous files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove superfluous files";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$BUILT_PRODUCTS_DIR/Earth Addresser.app\"\ncd \"Contents/Frameworks/Sparkle.framework\"\nrm \"Headers\"\ncd \"Versions/Current/\"\nrm -R \"Headers\"\nfind Resources | grep \"lproj$\" | grep -v \"\\(de\\|en\\|fr\\).lproj$\" | xargs rm -R";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -442,30 +460,28 @@
 		6C15690D0F0ED50C009C7B5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = Release;
+				PRODUCT_NAME = zip;
 			};
 			name = Debug;
 		};
 		6C15690E0F0ED50C009C7B5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = Release;
+				PRODUCT_NAME = zip;
 			};
 			name = Release;
 		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 28;
+				Build_Number = 29;
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				IBC_FLATTEN_NIBS = NO;
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.4;
+				Version_Number = 3b1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -473,9 +489,10 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 28;
+				Build_Number = 29;
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 2.4;
+				Version_Number = 3b1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -483,25 +500,24 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "earthlingsoft Software";
+				CODE_SIGN_IDENTITY = "earthlingsoft Code Signing";
 				IBC_FLATTEN_NIBS = NO;
 				INFOPLIST_FILE = Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "earthlingsoft Software";
+				CODE_SIGN_IDENTITY = "earthlingsoft Code Signing";
 				INFOPLIST_FILE = Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};

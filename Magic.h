@@ -54,13 +54,11 @@
 	double geocodingProgress;
 	double geocodingMaximum;
 	NSString * geocodingError;
-	BOOL geocodingRunning;
 	
 	NSString * relevantPeopleInfo;
 	NSString * lookupInfo;
 	NSString * doneMessage;
 	
-	NSInteger addressesAreAvailable;
 	NSInteger notSearchedCount;
 	BOOL nonLocatableAddressesExist;
 	BOOL nonLocatableAddressesButtonHidden;
@@ -75,6 +73,10 @@
 
 	NSMutableDictionary * locations;
 }
+
+@property BOOL geocodingRunning;
+@property NSInteger addressesAreAvailable;
+
 
 - (void) saveLocations;
 - (void) buildGroupList;

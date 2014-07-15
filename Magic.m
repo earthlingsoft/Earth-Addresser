@@ -14,6 +14,8 @@
 
 
 @implementation Magic
+@synthesize geocodingRunning;
+@synthesize addressesAreAvailable;
 
 - (id) init {
 	self = [super init];
@@ -110,7 +112,7 @@
 
 
 - (void) dealloc {
-	if (geocodingRunning && geocodingThread) {
+	if (self.geocodingRunning && geocodingThread) {
 		[geocodingThread cancel];
 	}
 	if (KMLRunning && KMLThread) {
@@ -138,7 +140,7 @@
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
 	NSApplicationTerminateReply result = NSTerminateNow;
 	
-	if ( KMLRunning || geocodingRunning ) {
+	if ( KMLRunning || self.geocodingRunning ) {
 		result = NSTerminateLater;
 	}
 	
@@ -154,7 +156,7 @@
 */
 - (BOOL)windowShouldClose:(id)sender {
 	BOOL result = YES;
-	if ( KMLRunning || geocodingRunning ) {
+	if ( KMLRunning || self.geocodingRunning ) {
 		result = NO;
 	}
 	return result;
@@ -446,13 +448,13 @@
  action for looking up addresses
 */
 - (IBAction) convertAddresses: (id) sender {
-	if (!geocodingRunning) {
+	if (!self.geocodingRunning) {
 		[self beginBusy];
 		[self setValue:[NSNumber numberWithDouble:.0] forKey:@"geocodingProgress"];			
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
 		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
-	else if (geocodingRunning) {
+	else if (self.geocodingRunning) {
 		[geocodingThread cancel];
 	}
 }
@@ -1219,7 +1221,7 @@
 
 - (NSString*) geocodingButtonLabel {
 	NSString * label;
-	if (geocodingRunning) {
+	if (self.geocodingRunning) {
 		label = NSLocalizedString(@"Cancel Lookup", @"Title of geocoding button while geocoding is running and can be cancelled.");
 	}
 	else {

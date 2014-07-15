@@ -1345,12 +1345,6 @@
 		case 5: // Readme
 			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"readme" ofType:@"html"]];
 			break;
-		case 6: // Google Earth Homepage
-			[WORKSPACE openURL:[NSURL URLWithString:@"http://earth.google.com"]];
-			break;
-		case 7: // Google Maps Geocoding FAQ
-			[WORKSPACE openURL:[NSURL URLWithString:@"http://code.google.com/support/bin/answer.py?answer=55180&topic=12266"]];
-			break;
 	}
 }
 

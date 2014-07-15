@@ -119,10 +119,6 @@
 - (NSString*) myVersionString;
 - (void) beginBusy;
 - (void) endBusy;
-
-- (IBAction) autoCheckForUpdates: (id) sender;
-- (IBAction) menuCheckVersion:(id)sender;
-
 @end
 
 @interface ABGroup (ESSortExtension)

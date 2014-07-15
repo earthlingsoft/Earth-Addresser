@@ -51,10 +51,6 @@
 
 - (void)awakeFromNib {
 	[self relevantPeople];
-		
-	if ( [[UDC valueForKeyPath:@"values.lookForUpdate"] boolValue] ) {
-		[VersionChecker checkVersionForURLString:UPDATEURL silent:YES];
-	}
 }
 
 
@@ -1393,17 +1389,8 @@
 
 #pragma mark Updating
 
-/*
- update Checking
-*/
-- (IBAction) autoCheckForUpdates: (id) sender {
-	
+- (IBAction) toggleAutoCheckForUpdates: (id) sender {
 }
-
-- (IBAction) menuCheckVersion: (id) sender {
-	[VersionChecker checkVersionForURLString:UPDATEURL silent:NO];
-}
-
 
 @end
 

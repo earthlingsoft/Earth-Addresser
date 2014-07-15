@@ -3,8 +3,7 @@
   Earth Addresser / Mailboxer
 
   Created by Sven on 21.03.07.
-  Copyright 2006-2010 earthlingsoft. All rights reserved.
-
+  Copyright 2006-2014 earthlingsoft. All rights reserved.
 */
 
 #import "Magic.h"
@@ -516,7 +515,8 @@
 				previousLookup = [NSDate timeIntervalSinceReferenceDate];
 
 				
-				[[[CLGeocoder alloc] init] geocodeAddressDictionary:addressDict completionHandler:^(NSArray * placemarks, NSError * lookupError) {
+				[[[CLGeocoder alloc] init] geocodeAddressDictionary:addressDict
+												  completionHandler:^(NSArray * placemarks, NSError * lookupError) {
 					if ([placemarks count] == 1) {
 						CLPlacemark * placemark = placemarks[0];
 						CLLocation * location = placemark.location;
@@ -579,7 +579,8 @@
  saves variable with looked up locations to preferences
 */
 - (void) saveLocations {
-	[UDC setValue:locations forKeyPath:@"values.locations"];
+	[UDC setValue:locations forKeyPath:@"values.locationsSuccess"];
+	[UDC setValue:failLocations forKeyPath:@"values.locationsFail"];
 }
 
 
@@ -1176,7 +1177,7 @@
 		people = [self relevantPeople];
 	}
 	else {
-		// the menu item was used => us _all_ non-found addresses
+		// the menu item was used => use _all_ non-found addresses
 		people = [[ABAddressBook sharedAddressBook] people];		
 	}
 	
@@ -1407,8 +1408,7 @@
 /*
  Helper function for sorting the people array by name. 
  */
-NSInteger nameSort(id person1, id person2, void *context)
-{
+NSInteger nameSort(id person1, id person2, void *context) {
 	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];
 	if (!lastName1) {
 		lastName1 = [person1 valueForProperty:kABLastNameProperty];
@@ -1448,7 +1448,3 @@ NSInteger nameSort(id person1, id person2, void *context)
 	
 	return result;
 }
-
-
-
-

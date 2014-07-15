@@ -3,27 +3,11 @@
   Earth Addresser / Mailboxer
 
   Created by Sven on 22.03.2007
-  Copyright 2006-2010 earthlingsoft. All rights reserved.
-
+  Copyright 2006-2014 earthlingsoft. All rights reserved.
 */
-
-/*
-#if __LP64__
-#else
-#define NSInteger long
-#define NSUInteger unsigned long
-#define CGFloat float
-#define integerValue intValue
-#endif
-*/
-
-#define isX5OrHigher (NSAppKitVersionNumber >= 949.0)
-#define isX6OrHigher (NSAppKitVersionNumber >= 1038.0)
 
 #import <Cocoa/Cocoa.h>
 #import <AddressBook/AddressBook.h>
-#include <uuid/uuid.h>
-#include "VersionChecker.h"
 
 #define MENUNAME @"NAME"
 #define MENUOBJECT @"OBJECT"
@@ -33,7 +17,7 @@
 #define GENERICHOMEICONNAME @"home"
 #define GENERICWORKICONNAME @"work"
 #define ALLDICTIONARY [NSDictionary dictionaryWithObjectsAndKeys:MENUITEMALL, MENUOBJECT, NSLocalizedString(@"All Contacts", @"All Contacts"), MENUNAME, nil]
-#define SECONDSBETWEENCOORDINATELOOKUPS 0.2
+#define SECONDSBETWEENCOORDINATELOOKUPS 1.0
 #define UDC [NSUserDefaultsController sharedUserDefaultsController]
 #define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
 // Text in 'Old' labels whose groups are automatically hidden -> Localised
@@ -113,7 +97,6 @@
 - (IBAction) toggleHideOldByDefault: (id) sender;
 - (IBAction) createListOfNonLocatableAddresses:(id) sender;
 - (IBAction) lookupNonLocatableAddresses: (id) sender;
-
 
 - (IBAction) readme:(id) sender;
 - (NSString*) myVersionString;

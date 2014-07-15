@@ -92,31 +92,10 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
-/*
-	ERROR MESSAGES
-*/
-
-/* Couldn't create Application Support/EarthAddresser folder */
-"Couldn't create Application Support/EarthAddresser folder" = "Earth Addresser was unable to create the  “~/Library/Application Support/Earth Addresser” folder.";
-
-/* Couldn't create Application Support/EarthAddresser/Images folder */
-"Couldn't create Application Support/EarthAddresser/Images folder" = "Earth Addresser was unable to create the “~/Library/Application Support/Earth Addresser/Images” folder.";
-
-/* Address lookup failed. Introductory string in which %@ is the description coming from NSError */
-"Geocoding failed: %@" = "Looking up coordinates failed: %@.";
-
-/* Error message for Google Geocoding 602 error. */
-"Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists."= "Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists.";
-
-
-
 
 /*
 	ODD ERROR MESSAGES
 */
-
-/* Couldn't create temporary folder */
-"Couldn't create temporary folder" = "Earth Addresser failed to create a temporary folder.";
 
 /* Selected group couldn't be recognised. */
 "Selected group wasn't recognisable." = "Earth Addresser could not recognise the selected address group.";
@@ -135,10 +114,6 @@ TEXT APPEARING IN THE KML FILE
 
 /* Name of Placemark group in KML file */
 "Addresses" = "Addresses";
-
-/* open in AddressBook */
-"open in AddressBook" = "View in Address Book";
-
 
 /* Photo (alt tag for image) */
 "Photo" = "Photo";

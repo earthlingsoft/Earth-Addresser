@@ -1,4 +1,6 @@
-﻿
+/*
+	STATUS STRINGS
+*/
 
 
 
@@ -9,8 +11,8 @@ singular and plural form of contact and address for use in count displayed in th
 
 "address" = "Adresse";
 "addresses" = "Adressen";
-"contact" = "Visitenkarte";
-"contacts" = "Visitenkarten";
+"contact" = "Kontakt";
+"contacts" = "Kontakte";
 
 /* 
 Info text in top section of the window 
@@ -122,25 +124,26 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
-/* Couldn't create Application Support/EarthAddresser folder */
-"Couldn't create Application Support/EarthAddresser folder" = "Der Ordner „~/Library/Application Support/Earth Addresser“ konnte nicht erstellt werden.";
-
-/* Couldn't create Application Support/EarthAddresser/Images folder */
-"Couldn't create Application Support/EarthAddresser/Images folder" = "Der Ordner „~/Library/Application Support/Earth Addresser/Images“ konnte nicht erstellt werden.";
-
-/* Address lookup failed. Introductory string in which %@ is the description coming from NSError */
-"Geocoding failed: %@" = "Ermitteln der Koordinaten fehlgeschlagen: %@.";
-
-/* Error message for Google Geocoding 602 error. */
-"Coordinates could not be looked up. Please try again in a few minutes and let us know if the problem persists." = "Koordinatenermittlung fehlgeschlagen. Bitte versuchen Sie es in ein paar Minuten noch einmal und senden Sie uns eine E-Mail falls das Problem bestehen bleibt.";
 
 
 
-/* Couldn't create temporary folder */
-"Couldn't create temporary folder" = "Temporärer Ordner konnte nicht erstellt werden.";
+/*
+	ODD ERROR MESSAGES
+*/
+
+
 
 /* Selected group couldn't be recognised. */
 "Selected group wasn't recognisable." = "Die ausgewählte Gruppe konnte nicht gefunden werden.";
+
+
+
+
+
+
+/*
+TEXT APPEARING IN THE KML FILE
+*/
 
 
 
@@ -149,10 +152,6 @@ Displayed in bottom section after Placemarks have been created.
 
 /* Name of Placemark group in KML file */
 "Addresses" = "Adressen";
-
-/* open in AddressBook */
-"open in AddressBook" = "Im Adressbuch anzeigen";
-
 
 /* Photo (alt tag for image) */
 "Photo" = "Photo";
@@ -165,6 +164,12 @@ Displayed in bottom section after Placemarks have been created.
 
 /* Note (appears in Google Earth Info Balloon) */
 "Note" = "Notiz";
+
+
+
+/*
+TEXT IN LINKS
+*/
 
 
 

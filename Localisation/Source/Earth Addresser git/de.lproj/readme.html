@@ -1,193 +1,212 @@
- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-	<title>Earth Addresser</title>
-	<meta content="text/html;charset=utf-8">
-	<link rel="stylesheet" type="text/css" href="../Help.css">
+	<meta charset="utf-8">
+		<title>Earth Addresser</title>
+		<link rel="stylesheet" type="text/css" href="../Help.css">
 </head>
 
 <body>
-<div id="main">
-<h1>Earth Addresser</h1>
+	<div id="main">
+		<h1>Earth Addresser</h1>
+		
+		<p>
+			Deine Adressen in Google Earth.
+		</p>
+		<p>
+			Das Adressbuch im Computer randvoll mit Adressen und begeistert von <a href="http://earth.google.com/">Google Earth</a>? Dann wird Earth Addresser die perfekte Ergänzung sein. Das Programm schreibt die Adressen von Kontakten auf dem Mac in eine <a href="http://code.google.com/apis/kml/documentation/">KML Ortsmarkendatei</a>, die Google Earth lesen kann, um dann die Adressen auf dem Globus anzuzeigen. Wenn die Visitenkarten Photos enthalten, wird auf dem eigenen Computer anstelle der üblichen Stecknadel das Photo der Person auf der Weltkarte angezeigt.
+		</p>
+		<p>
+			Damit eine Adresse an der korrekten Stelle anzeigt werden kann, muß sie zunächst in Koordinaten auf der Erdkugel umgewandelt werden. Diese Umwandlung nimmt der Kartendienst von Mac OS X vor. Das heißt: jede von Earth Addresser verarbeitete Adresse wird an Apples Server geschickt. <strong>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser <em>nicht</em> verwenden.</strong> Bei dieser Umwandlung wird ausschließlich der Inhalt der Adressfelder Deiner Kontakte an Apple gesandt. Der Name der Person und andere Kontaktinformationen werden von Earth Addresser nicht verschickt sondern nur in die KML Datei auf Deinem Mac geschrieben.
+		</p>
+		<p>
+			Auch Apple kann nicht jede Adresse korrekt in Koordinaten umwandeln. Die nicht auffindbaren Adressen können über den Befehl „Alle nicht aufgefundenen Adressen zeigen“ im Hilfe-Menü angezeigt werden. Häufige Gründe für das Nichtauffinden einer Adresse sind:
+		</p>
+		<dl>
+			<dt>Landesinformationen:</dt>
+			<dd>Um Probleme mit Tippfehlern und verschiedenen Sprachen zu vermeiden nutzt Earth Addresser <em>nicht</em> das eingetippte Land im Adressbuch. Stattdessen wird das  Land genutzt, für das das <em>Adressformat</em> der Adresse eingestellt wurde. Das Adressformat kannst Du einstellen, indem Du im Bearbeiten Modus auf das Etikett einer Adresse klickst und das gewünschte Land im Untermenü „Adressformat ändern” auswählst.
+			</dd>
+			<dt>Unbekannte Abkürzungen in der Adresse:</dt>
+			<dd>Apples Kartendienst hat Schwierigkeiten mit Adresszusätzen wie „Zimmer“ oder „Postfach“. Earth Addresser erkennt einige von diesen und entfernt die sie enthaltene Zeile. Es kann aber gut sein, dass andere Zusätze unerkannt bleiben.
+			</dd>
+			<dt>Datenbestand von Apple:</dt>
+			<dd>In manchen Ländern kennt Apple nicht alle Straßennamen. Adressen in diesen Ländern können nicht korrekt in Koordinaten umgewandelt werden und Earth Addresser entfernt diese aus den Ergebnissen.
+			</dd>
+		</dl>
+		<p>
+			Vielen Dank an Nat Bletter, der die Idee für Earth Addresser angestoßen hat, an Dan Wood für seine Cocoa-Ratschläge und an Ronald Leroux für die französische Lokalisierung.
+		</p>
+		<p>
+			Viel Spaß.
+		</p>
+		<ul class="links">
+			<li class="i1"><a href="http://earthlingsoft.net/Earth%20Addresser">Earth Addresser Webseite</a></li>
+			<li><a href="http://earthlingsoft.net/">earthlingsoft Website</a></li>
+			<li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=earthlingsoft%40earthlingsoft.net&item_name=Earth%20Addresser&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&lc=DE">Spenden</a></li>
+			<li><a href="mailto:earthlingsoft@earthlingsoft.net?subject=Earth%20Addresser">E-Mail senden</a></li>
+			<li><a href="http://earthlingsoft.net/ssp/blog/2009/01/earth_addresser_2#comments">Kommentar hinterlassen</a></li>
+		</ul>
+		
+		
+		<h3>Versionsgeschichte</h3>
+		
+		<dl class="versions" id="latestversion">
+			
+			<dt>v3b1 (2014-07-15)</dt>
+			<dd>
+				<ul>
+					<li>Benötigt Mac OS X.9.</li>
+					<li>Nutzt Apples CoreLocation zum Nachschlagen der Adressen an Stelle von Google Maps.</li>
+					<li>Nutzt Apple Maps icon.</li>
+					<li>Apple Maps im Readme erwähnen.</li>
+					<li>Sparkle für automatische Updates nutzen.</li>
+					<li>Veraltete Methoden durch aktuelle Varianten ersetzen.</li>
+				</ul>
+			</dd>
 
-<p>
-Deine Adressen in Google Earth.
-</p>
-<p>
-Das Adressbuch im Computer randvoll mit Adressen und begeistert von <a href="http://earth.google.com/">Google Earth</a>? Dann wird Earth Addresser die perfekte Erg&auml;nzung sein. Das Programm schreibt die Adressen aus dem Adressbuch in eine <a href="http://code.google.com/apis/kml/documentation/">KML Ortsmarkendatei</a>, die Google Earth lesen kann, um dann die Adressen auf dem Globus anzuzeigen. Wenn die Visitenkarten im Adressbuch Photos enthalten, wird auf dem eigenen Computer anstelle der &uuml;blichen Stecknadel das Photo der Person auf der Weltkarte angezeigt.
-</p>
-<p>
-Damit Google Earth eine Adresse an der korrekten Stelle anzeigt, mu&szlig; sie zunächst in Koordinaten auf der Erdkugel umgewandelt werden. Diese Umwandlung nimmt <a href="http://code.google.com/support/bin/answer.py?answer=55180&amp;topic=12266">ein Teil des Google Maps Dienstes</a> vor. Das hei&szlig;t: jede von Earth Addresser verarbeitete Adresse wird zu Google geschickt. <em>Falls Du Bedenken hast, Deine Adressen Google preiszugeben, solltest Du Earth Addresser <em>nicht</em> verwenden.</em> Bei dieser Umwandlung wird ausschließlich der Inhalt der Adressfelder im Adressbuch an Google gesandt. Der Name der Person und andere Kontaktinformationen werden von Earth Addresser nicht verschickt sondern nur in die KML Datei geschrieben.
-</p>
-<p>
-Auch Google kann nicht jede Adresse korrekt in Koordinaten umwandeln. Die nicht auffindbaren Adressen k&ouml;nnen &uuml;ber den Befehl &bdquo;Alle nicht aufgefundenen Adressen zeigen&ldquo; im Hilfe-Men&uuml; angezeigt werden. H&auml;ufige Gründe für das Nichtauffinden einer Adresse sind:
-</p>
-<dl>
-<dt>Landesinformationen:</dt>
-<dd>Um Probleme mit Tippfehlern und verschiedenen Sprachen zu vermeiden nutzt Earth Addresser <em>nicht</em> das eingetippte Land im Adressbuch. Stattdessen wird das  Land genutzt, f&uuml;r das das <em>Adressformat</em> der Adresse eingestellt wurde.  Das Adressformat kann eingestellt werden, indem im Bearbeiten Modus auf das Etikett einer Adresse geklickt  und  das gew&uuml;nschte Land im Untermen&uuml; &sbquo;Adressformat &auml;ndern&lsquo; ausgew&auml;hlt wird.
-</dd>
-<dt>Unbekannte Abk&uuml;rzungen in der Adresse:</dt>
-<dd> Google hat Schwierigkeiten mit Adre&szlig;zus&auml;tzen wie &sbquo;Zimmer&lsquo; oder &sbquo;Postfach&lsquo;. Earth Addresser erkennt einige von diesen und entfernt die sie enthaltene Zeile. Es kann aber gut sein, da&szlig; andere Zus&auml;tze unerkannt bleiben. 
-</dd>
-<dt>Datenbestand von Google:</dt>
-<dd>In manchen L&auml;ndern kennt Google nicht alle Stra&szlig;ennamen. Adressen in diesen Ländern k&ouml;nnen nicht korrekt in Koordinaten umgewandelt werden und Earth Addresser entfernt diese aus den Ergebnissen.
-</dd>
-</dl>
-<p>
-Vielen Dank an Nat Bletter, der die Idee f&uuml;r Earth Addresser angesto&szlig;en hat, an Dan Wood f&uuml;r seine Cocoa-Ratschl&auml;ge und an Ronald Leroux f&uuml;r die Franz&ouml;sische Lokalisierung.
-</p>
-<p>
-Viel Spa&szlig;.
-</p>
-<ul class="links">
-<li class="i1"><a href="http://earthlingsoft.net/Earth%20Addresser">Earth Addresser Webseite</a></li>
-<li><a href="http://earthlingsoft.net/">earthlingsoft Website</a></li>
-<li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=earthlingsoft%40earthlingsoft.net&item_name=Earth%20Addresser&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&lc=DE">Spenden</a></li>
-<li><a href="mailto:earthlingsoft@earthlingsoft.net?subject=Earth%20Addresser">E-Mail senden</a></li>
-<li><a href="http://earthlingsoft.net/ssp/blog/2009/01/earth_addresser_2#comments">Kommentar hinterlassen</a></li>
-</ul>
-
-
-<h3>Versionsgeschichte</h3>
-
-<dl class="versions" id="latestversion">
-
-<dt>v2.4 (2009-09-??)</dt>
-<dd>
-<ul>
-<li>Läuft als 64bit Programm.</li>
-<li>Geringerer Speicherbedarfs.</li>
-<li>Koordinatenermittlung und Ortsmarkenerzeugung können unter Mac OS X.5 und höher abgebrochen werden.</li>
-<li>Unterstützt Plötzliche Beendigung unter Mac OS X.6 und höher.</li>
-<li>Doppelte Anleitung entfernt.</li>
-<li>Behebt Problem mit falschen Bildgrößen bei der kleinstmöglichen Größe (Dank an Steve Parker für den Hinweis).</li>
-<li>Erzeugt keine Bilddateien mehr, wenn diese nicht verwendet werden (Dank an Steve Parker für den Hinweis).</li>
-</ul>
-</dd>
-
-
-<dt>v2.3 (2009-04-01)</dt>
-<dd>
-<ul>
-<li>Neue Einstellung, um Ortsmarken nach dem Etikett der Adresse zu gruppieren.</li>
-<li>Neue Einstellung, die Adressen mit den Etiketten “Old”, “Alt” oder “Ancienne” in Google Earth ausgeblendet läßt.</li>
-<li>Neuer Befehl zum Wiederholen der Koordinatenermittlung, wenn diese zuvor kein Ergebnis gab. So kann von Verbesserungen in Googles Datenbestand profitiert werden.</li>
-<li>Verbesserung der Fortschrittsanzeige für die Koordinatenermittlung.</li>
-<li>Verbesserte Tastaturnavigation und bessere Erklärungen für VoiceOver.</li>
-<li>Groß- und Kleinschreibungsfehler in der Englischen Version korrigiert.</li>
-</ul>
-</dd>
-
-
-
-
-<dt>v2.2  (2009-03-03)</dt>
-<dd>
-<ul>
-<li>Verwendet eigene ‚Privat‘ und ‚Arbeit‘ Icons für Adressen ohne zugehöriges Bild im Adreßbuch.</li>
-<li>Programmicon an das Google Earth 5 Icon angepaßt.</li>
-<li>Bessere Fehlermeldung wenn keine Netzwerkverbindung vorhanden ist.</li>
-</ul>
-</dd>
-
-
-
-
-<dt>v2.1  (2009-01-30)</dt>
-<dd>
-<ul>
-<li>Behebung des übermäßigen Speicherbedarfs bei großen Adreßbüchern. Vielen Dank an Steve Parker für den Hinweis auf das Problem.</li>
-<li>Verbesserte Lokalisierung der PayPal Links.</li>
-</ul>
-</dd>
-
-
-
-<dt>v2  (2009-01-28)</dt>
-<dd>
-<ul>
-<li>Vollst&auml;ndig &uuml;berarbeitete Benutzeroberfl&auml;che.</li>
-<li>Die Umwandlung von Adressen wird nun von Earth Addresser und nicht von Google Earth vorgenommen. Ergebnisse werden hierbei gespeichert und wiederverwendet.</li>
-<li>Die Daten in der erzeugten KML Datei lassen sich feiner einstellen. Insbesondere k&ouml;nnen nun Dateien ohne Namen und mit Telephonnummern, E-Mail Adressen und Web-Links geschrieben werden.</li>
-<li>Die aufgeklappten Ortsmarken in Google Earth enthalten nun Bilder.</li>
-<li>Die Links zum Adressbuch sind nun zuverl&auml;ssig klickbar.</li>
-</ul>
-</dd>
-
-
-</dl>
-
-
-
-<dl class="versions" id="oldversions">
-
-<dt>v1r2 (2007-04-26)</dt>
-<dd>
-Updatesuche korrigiert, so da&szlig; sie nach den richtigen Updates sucht.
-</dd>
-
-<dt>v1 (2007-03-30)</dt>
-<dd>
-Erste ver&ouml;ffentlichte Version
-</dd>
-
-
-<dt>version 1b3 (2007-03-28)</dt>
-<dd>
-<ul>
-<li>added checking for updates</li>
-<li>added French localisation contributed by Ronald Leroux</li>
-<li>added German localisation</li>
-<li>minor UI improvements</li>
-</ul>
-</dd>
+		</dl>
+		
+		
+		
+		<dl class="versions" id="oldversions">
+			
+			<dt>v2.4 (2010-07-29)</dt>
+			<dd>
+				<ul>
+					<li>Läuft als 64bit Programm.</li>
+					<li>Geringerer Speicherbedarf.</li>
+					<li>Koordinatenermittlung und Ortsmarkenerzeugung können unter Mac OS X.5 und höher abgebrochen werden.</li>
+					<li>Unterstützt Plötzliche Beendigung unter Mac OS X.6 und höher.</li>
+					<li>Doppelte Anleitung entfernt.</li>
+					<li>Behebt Problem mit falschen Bildgrößen bei der kleinstmöglichen Größe (Dank an Steve Parker für den Hinweis).</li>
+					<li>Erzeugt keine Bilddateien mehr, wenn diese nicht verwendet werden (Dank an Steve Parker für den Hinweis).</li>
+					<li>Zuverlässigeres Gruppieren der Adressen nach Etiketten (Dank an Steve Parker für die Hilfe).</li>
+					<li>Programm wird nicht beendet, während Adressen nachgeschaut oder Dateien geschrieben werden.</li>
+					<li>Ortsmarken können ohne Adresse und Etikett erstellt werden.</li>
+					<li>Als »Alt« markierte Telephonnumern, E-Mail Adressen und Webseiten werden nicht in Ortsmarken aufgeführt.</li>
+					<li>
+				</ul>
+			</dd>
+			
+			
+			<dt>v2.3 (2009-04-01)</dt>
+			<dd>
+				<ul>
+					<li>Neue Einstellung, um Ortsmarken nach dem Etikett der Adresse zu gruppieren.</li>
+					<li>Neue Einstellung, die Adressen mit den Etiketten “Old”, “Alt” oder “Ancienne” in Google Earth ausgeblendet läßt.</li>
+					<li>Neuer Befehl zum Wiederholen der Koordinatenermittlung, wenn diese zuvor kein Ergebnis gab. So kann von Verbesserungen in Googles Datenbestand profitiert werden.</li>
+					<li>Verbesserung der Fortschrittsanzeige für die Koordinatenermittlung.</li>
+					<li>Verbesserte Tastaturnavigation und bessere Erklärungen für VoiceOver.</li>
+					<li>Groß- und Kleinschreibungsfehler in der Englischen Version korrigiert.</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>v2.2 (2009-03-03)</dt>
+			<dd>
+				<ul>
+					<li>Verwendet eigene ‚Privat‘ und ‚Arbeit‘ Icons für Adressen ohne zugehöriges Bild im Adreßbuch.</li>
+					<li>Programmicon an das Google Earth 5 Icon angepaßt.</li>
+					<li>Bessere Fehlermeldung wenn keine Netzwerkverbindung vorhanden ist.</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>v2.1  (2009-01-30)</dt>
+			<dd>
+				<ul>
+					<li>Behebung des übermäßigen Speicherbedarfs bei großen Adreßbüchern. Vielen Dank an Steve Parker für den Hinweis auf das Problem.</li>
+					<li>Verbesserte Lokalisierung der PayPal Links.</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>v2  (2009-01-28)</dt>
+			<dd>
+				<ul>
+					<li>Vollständig überarbeitete Benutzeroberfläche.</li>
+					<li>Die Umwandlung von Adressen wird nun von Earth Addresser und nicht von Google Earth vorgenommen. Ergebnisse werden hierbei gespeichert und wiederverwendet.</li>
+					<li>Die Daten in der erzeugten KML Datei lassen sich feiner einstellen. Insbesondere können nun Dateien ohne Namen und mit Telephonnummern, E-Mail Adressen und Web-Links geschrieben werden.</li>
+					<li>Die aufgeklappten Ortsmarken in Google Earth enthalten nun Bilder.</li>
+					<li>Die Links zum Adressbuch sind nun zuverlässig klickbar.</li>
+				</ul>
+			</dd>
+			
+			
+			
+			<dt>v1r2 (2007-04-26)</dt>
+			<dd>
+				Updatesuche korrigiert, so daß sie nach den richtigen Updates sucht.
+			</dd>
 
 
-<dt>version 1b2 (2007-03-27)</dt>
-<dd>
-hopefully fixed a problem that made the application stall
-</dd>
-
-
-<dt>version 1b (2007-03-26)</dt>
-<dd>
-<ul>
-<li>first testing release</li>	
-<li>more fixes and polish</li>
-</ul>
-</dd>
-<dt>version 0.4 (unreleased)</dt>
-<dd>
-<ul>
-<li>removed the 'smarts' again as they didn't work</li>
-<li>new strategy: write image files to Application Support folder and output a KML file only</li>
-<li>set size of images in Preferences</li>
-</ul>
-</dd>
-<dt>version 0.3 (unreleased)</dt>
-<dd>
-<ul>
-<li>introduced the 'smarts' to pack everything up in a nice KMZ file</li>
-<li>unfortunately GoogleEarth doesn't load Icon href elements from within the KMZ file</li>
-<li>also removed colons from id attributes and file names</li>
-</ul>
-</dd>
-<dt>version 0.2 (unreleased)</dt>
-<dd>
-	rewrote XML generation to use NSXML so we can have actual, properly-escaped XML
-</dd>
-<dt>version 0.1 (unreleased)</dt>
-<dd>
-	initial build
-</dd>
-</dl>
-
-
-
-
-<p id="morehistorylinks"><a href="#oldversions" id="showolder">Vollständige Liste</a></p>
-
-</div>
+			<dt>v1 (2007-03-30)</dt>
+			<dd>
+				Erste veröffentlichte Version
+			</dd>
+			
+			
+			<dt>version 1b3 (2007-03-28)</dt>
+			<dd>
+				<ul>
+					<li>added checking for updates</li>
+					<li>added French localisation contributed by Ronald Leroux</li>
+					<li>added German localisation</li>
+					<li>minor UI improvements</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>version 1b2 (2007-03-27)</dt>
+			<dd>
+				hopefully fixed a problem that made the application stall
+			</dd>
+			
+			
+			<dt>version 1b (2007-03-26)</dt>
+			<dd>
+				<ul>
+					<li>first testing release</li>
+					<li>more fixes and polish</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>version 0.4 (unreleased)</dt>
+			<dd>
+				<ul>
+					<li>removed the 'smarts' again as they didn't work</li>
+					<li>new strategy: write image files to Application Support folder and output a KML file only</li>
+					<li>set size of images in Preferences</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>version 0.3 (unreleased)</dt>
+			<dd>
+				<ul>
+					<li>introduced the 'smarts' to pack everything up in a nice KMZ file</li>
+					<li>unfortunately GoogleEarth doesn't load Icon href elements from within the KMZ file</li>
+					<li>also removed colons from id attributes and file names</li>
+				</ul>
+			</dd>
+			
+			
+			<dt>version 0.2 (unreleased)</dt>
+			<dd>
+				rewrote XML generation to use NSXML so we can have actual, properly-escaped XML
+			</dd>
+			
+			
+			<dt>version 0.1 (unreleased)</dt>
+			<dd>
+				initial build
+			</dd>
+			
+		</dl>
+				
+		<p id="morehistorylinks"><a href="#oldversions" id="showolder">Vollständige Liste</a></p>
+		
+	</div>
 </body>
 </html>

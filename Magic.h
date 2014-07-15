@@ -101,8 +101,9 @@
 - (NSString*) cleanString:(NSString*) s from:(NSString*) evil ;
 
 - (BOOL) needToSearchNoticeHidden;
-- (NSData*) AddressBookIcon;
-- (NSData*) GoogleEarthIcon;
+- (NSImage*) AddressBookIcon;
+- (NSImage*) MapsIcon;
+- (NSImage*) KMLIcon;
 
 - (NSString *) localisedLabelName: (NSString*) label;
 

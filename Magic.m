@@ -1273,9 +1273,9 @@
 }
 
 
-- (NSImage*) GoogleEarthIcon {
+- (NSImage*) MapsIcon {
 	NSImage * image = nil;
-	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.Google.GoogleEarthPlus"];
+	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.Maps"];
 	if (appPath) {
 		image = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
 	}

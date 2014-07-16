@@ -4,7 +4,7 @@
 
 
 
-/* 
+/*
 singular and plural form of contact and address for use in count displayed in the top section of the window
 */
 
@@ -14,8 +14,8 @@ singular and plural form of contact and address for use in count displayed in th
 "contact" = "contact";
 "contacts" = "contacts";
 
-/* 
-Info text in top section of the window 
+/*
+Info text in top section of the window
 */
 
 
@@ -29,14 +29,14 @@ Text appearing in group selection menu when no groups are available
 "Select Group" = "Choisir le groupe";
 
 
-/* 
+/*
 Info text in middle section of window – variant used when exactly one of the selected addresses have been looked up yet.
 */
 
 
 "The selected contacts contain 1 address whose coordinates have not been looked up yet. Use the 'Look Up Addresses' command to do that." = "Les contacts sélectionnés contiennent une adresse dont les coordonnées n’ont pas encore regardées.";
 
-/* 
+/*
 Info text in middle section of window – variant used when more than one of the selected addresses have been looked up yet.
 */
 

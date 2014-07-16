@@ -89,8 +89,8 @@
 
 + (void)initialize {
 	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithBool:NO], @"dontShowWarning", 
-									   [NSNumber numberWithDouble:1.5], @"imageSize", 
+									   [NSNumber numberWithBool:NO], @"dontShowWarning",
+									   [NSNumber numberWithDouble:1.5], @"imageSize",
 									   [NSNumber numberWithInt:0], @"addressBookScope",
 									   [NSNumber numberWithBool:YES], @"placemarkWithName",
 									   [NSNumber numberWithBool:YES], @"placemarkWithLabel",
@@ -189,7 +189,7 @@
 - (void) buildGroupList {
 	// rebuild the group list
 	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
-	NSMutableArray * a = [NSMutableArray arrayWithCapacity:[groups count] +1 ]; 
+	NSMutableArray * a = [NSMutableArray arrayWithCapacity:[groups count] +1 ];
 
 	NSArray * ABGroups = [ab groups];
 	ABGroups = [ABGroups sortedArrayUsingSelector:@selector(groupByNameCompare:)];
@@ -206,8 +206,8 @@
 		// look whether the selected item still exists. If it doesn't reset to ALL group
 		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup2"] objectForKey:MENUOBJECT];
 		
-		if (selectedGroup 
-				&& ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) 
+		if (selectedGroup
+				&& ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"])
 				&&  [ab recordForUniqueId:selectedGroup] ) {
 		}
 		else {				
@@ -256,7 +256,7 @@
 /*
  returns array with the people selected in the UI
  the array is sorted
-*/ 
+*/
 - (NSArray*) relevantPeople {
 	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
 	
@@ -384,7 +384,7 @@
 	}
 			
 	NSString * infoString = firstPart; // = [firstPart stringByAppendingString:secondPart];
-	[self setValue:infoString forKey:@"relevantPeopleInfo"]; 
+	[self setValue:infoString forKey:@"relevantPeopleInfo"];
 	[self setValue:lookupPart forKey:@"lookupInfo"];
 	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
 	BOOL b = ([failLocations count] > 0);
@@ -575,7 +575,7 @@
 
 
 
-/* 
+/*
  saves variable with looked up locations to preferences
 */
 - (void) saveLocations {
@@ -790,14 +790,14 @@
 			if ([[UDC valueForKeyPath:@"values.placemarkWithImage"] boolValue]) {
 				imageData = [person imageData];
 				NSXMLElement * styleXML = [self createStyleForImageData:imageData withID:ID];
-				if (styleXML) { 
-					[myXML addChild:styleXML]; 
+				if (styleXML) {
+					[myXML addChild:styleXML];
 					fullImagePath = [self fullPNGImagePathForName:ID];
 				}
 			}
 			
 
-			// 
+			//
 			// now cycle through the various addresses and create placemarks
 			ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
 			NSUInteger addressCount = [addresses count];
@@ -850,8 +850,8 @@
 					NSMutableString * descriptionHTMLString = [NSMutableString string];
 					
 					if (fullImagePath) {
-						[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-1em;margin-left:1em;\">\n", 
-						 [fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], 
+						[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-1em;margin-left:1em;\">\n",
+						 [fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
 						 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
 					}
 					
@@ -863,7 +863,7 @@
 					
 					if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
 						[descriptionHTMLString appendFormat: @"<br /><a href=\"addressbook://%@\">%@</a>",
-						 uniqueID, 
+						 uniqueID,
 						 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
 					}
 				
@@ -1137,14 +1137,14 @@
 
 /*
 	toggles groupByAddressLabel user default
-*/ 
+*/
 - (IBAction) toggleGroupByLabel: (id) sender {
 	
 }
 
 /*
  toggles hideOldByDefault user default
- */ 
+ */
 - (IBAction) toggleHideOldByDefault: (id) sender {
 	
 }
@@ -1306,7 +1306,7 @@
 
 /*
  Removes lines from string which contain evil.
-*/ 
+*/
 - (NSString*) cleanString:(NSString*) s from:(NSString*) evil {
 	NSArray * lineArray = [s componentsSeparatedByString:@"\n"];
 	NSEnumerator * myEnum = [lineArray objectEnumerator];
@@ -1323,7 +1323,7 @@
 
 
 
-/* 
+/*
  for the various actions in the help menu
 */
 - (IBAction) readme:(id) sender {
@@ -1351,7 +1351,7 @@
 
 
 
-/* 
+/*
  returns version string
 */
 - (NSString*) myVersionString {
@@ -1392,7 +1392,7 @@
 
 
 
-@implementation ABGroup (ESSortExtension) 
+@implementation ABGroup (ESSortExtension)
 
 - (NSComparisonResult) groupByNameCompare:(ABGroup *)aGroup {
 	NSString * myName = [self valueForProperty:kABGroupNameProperty];
@@ -1406,7 +1406,7 @@
 
 
 /*
- Helper function for sorting the people array by name. 
+ Helper function for sorting the people array by name.
  */
 NSInteger nameSort(id person1, id person2, void *context) {
 	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];

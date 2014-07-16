@@ -1295,7 +1295,7 @@
 								</object>
 								<object class="NSMenuItem" id="504344685">
 									<reference key="NSMenu" ref="1006479982"/>
-									<string key="NSTitle">Koordinatenermittlung für nicht aufgefundene Adressen wiederholen </string>
+									<string key="NSTitle">Koordinatenermittlung für nicht aufgefundene Adressen wiederholen</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="559230954"/>
@@ -1556,10 +1556,10 @@ aHQgYWt6ZXB0YWJlbCBpc3QsIHNvbGx0ZW4gU2llIGRhcyBIw6RrY2hlbiB1bnRlbiBpbSBGZW5zdGVy
 IG5pY2h0IHNldHplbiB1bmQgRWFydGggQWRkcmVzc2VyIG5pY2h0IHZlcndlbmRlbi4KCkVzIHdlcmRl
 biBsZWRpZ2xpY2ggZGllIEFkcmVzc2VuLCBuaWNodCBhYmVyIGRpZSB6dWdlaMO2cmlnZW4gTmFtZW4s
 IEUtTWFpbCBBZHJlc3NlbiBvZGVyIHdlaXRlcmUgSW5mb3JtYXRpb25lbiBhbiBBcHBsZSBnZXNhbmR0
-LiAKCkVhcnRoIEFkZHJlc3NlciBzcGVpY2hlcnQgZGllIHZvbiBBcHBsZSBlcmhhbHRlbmVuIEtvb3Jk
-aW5hdGVuIHp3aXNjaGVuLiBIaWVyZHVyY2gga8O2bm5lbiBzaWUgYmVpIHp1a8O8bmZ0aWdlbiBOdXR6
-dW5nZW4gZGVzIFByb2dyYW1tcyBlcm5ldXQgdmVyd2FuZHQgd2VyZGVuLCBvaG5lIHNpZSBlcm5ldXQg
-YW4gQXBwbGUgenUgc2VuZGVuLg</string>
+LgoKRWFydGggQWRkcmVzc2VyIHNwZWljaGVydCBkaWUgdm9uIEFwcGxlIGVyaGFsdGVuZW4gS29vcmRp
+bmF0ZW4gendpc2NoZW4uIEhpZXJkdXJjaCBrw7ZubmVuIHNpZSBiZWkgenVrw7xuZnRpZ2VuIE51dHp1
+bmdlbiBkZXMgUHJvZ3JhbW1zIGVybmV1dCB2ZXJ3YW5kdCB3ZXJkZW4sIG9obmUgc2llIGVybmV1dCBh
+biBBcHBsZSB6dSBzZW5kZW4uA</string>
 								<reference key="NSSupport" ref="433704967"/>
 								<reference key="NSControlView" ref="1054717948"/>
 								<reference key="NSBackgroundColor" ref="248642652"/>

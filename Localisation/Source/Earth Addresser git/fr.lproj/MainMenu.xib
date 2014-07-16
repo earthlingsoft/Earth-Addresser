@@ -1295,7 +1295,7 @@
 								</object>
 								<object class="NSMenuItem" id="504344685">
 									<reference key="NSMenu" ref="1006479982"/>
-									<string key="NSTitle">Répéter Rechercher les adresses non localisables </string>
+									<string key="NSTitle">Répéter Rechercher les adresses non localisables</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="559230954"/>
@@ -4645,7 +4645,7 @@ ZSBsJ2FwcGxpY2F0aW9uLg</string>
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="504344685"/>
-						<string key="toolTip">Makes Earth Addresser re-look-up the addresses it previously failed to look up. Useful if you suspect that Google improved their database in regions where look-ups failed before.</string>
+						<string key="toolTip">Makes Earth Addresser re-look-up the addresses it previously failed to look up. Useful if you suspect that Apple improved their address database in regions where look-ups failed before.</string>
 					</object>
 				</object>
 				<string key="899.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>

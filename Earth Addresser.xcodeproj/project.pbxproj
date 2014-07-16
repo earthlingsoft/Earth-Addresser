@@ -28,6 +28,8 @@
 		6C292AA00F1D15CD00B5059B /* Help.css in Resources */ = {isa = PBXBuildFile; fileRef = 6C292A9F0F1D15CD00B5059B /* Help.css */; };
 		6C4FBD39197574000010DC7F /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; };
 		6C4FBD3E197578390010DC7F /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6C4FBD4619766C4E0010DC7F /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 6C4FBD4519766C4E0010DC7F /* Readme.md */; };
+		6C4FBD4F197670B10010DC7F /* License.text in Sources */ = {isa = PBXBuildFile; fileRef = 6C4FBD4E197670B10010DC7F /* License.text */; };
 		6C916E650F58C384003EA1EB /* work.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E630F58C384003EA1EB /* work.png */; };
 		6C916E660F58C384003EA1EB /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E640F58C384003EA1EB /* home.png */; };
 		6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C916EBD0F5963A4003EA1EB /* Icon Large.icns */; };
@@ -123,13 +125,15 @@
 		6C1569EB0F0F02BC009C7B5F /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C1569EC0F0F02BD009C7B5F /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C1569ED0F0F02BF009C7B5F /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6C26C4220BB711AC0001C5D3 /* plans.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = plans.text; sourceTree = "<group>"; };
+		6C26C4220BB711AC0001C5D3 /* Ideas.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Ideas.md; sourceTree = "<group>"; };
 		6C29284F0F1A45C000B5059B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C292A9F0F1D15CD00B5059B /* Help.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = Help.css; sourceTree = "<group>"; };
 		6C4FBD24197573CB0010DC7F /* Sparkle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sparkle.xcodeproj; path = Sparkle/Sparkle.xcodeproj; sourceTree = "<group>"; };
 		6C4FBD4119758A850010DC7F /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
+		6C4FBD4519766C4E0010DC7F /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		6C4FBD4E197670B10010DC7F /* License.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = License.text; sourceTree = "<group>"; };
 		6C916E630F58C384003EA1EB /* work.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = work.png; path = Graphics/work.png; sourceTree = "<group>"; };
 		6C916E640F58C384003EA1EB /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home.png; path = Graphics/home.png; sourceTree = "<group>"; };
 		6C916EBD0F5963A4003EA1EB /* Icon Large.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Icon Large.icns"; path = "Icon/Icon Large.icns"; sourceTree = "<group>"; };
@@ -177,7 +181,9 @@
 		29B97314FDCFA39411CA2CEA /* EA */ = {
 			isa = PBXGroup;
 			children = (
-				6C26C4220BB711AC0001C5D3 /* plans.text */,
+				6C4FBD4519766C4E0010DC7F /* Readme.md */,
+				6C26C4220BB711AC0001C5D3 /* Ideas.md */,
+				6C4FBD4E197670B10010DC7F /* License.text */,
 				6C10559A1911C49100FA13B7 /* net.earthlingsoft.earthaddresser.plist */,
 				6C4FBD4119758A850010DC7F /* appcast.xml */,
 				6C4FBD24197573CB0010DC7F /* Sparkle.xcodeproj */,
@@ -386,6 +392,8 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				6CEABD5C0BB322240059641A /* Magic.m in Sources */,
+				6C4FBD4F197670B10010DC7F /* License.text in Sources */,
+				6C4FBD4619766C4E0010DC7F /* Readme.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

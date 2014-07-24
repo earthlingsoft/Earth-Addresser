@@ -17,7 +17,7 @@
 @synthesize addressesAreAvailable;
 @synthesize currentLookupAddress;
 
-- (id) init {
+- (instancetype) init {
 	self = [super init];
 	if (self != nil) {
 		[self buildGroupList];
@@ -70,25 +70,25 @@
 
 
 + (void)initialize {
-	NSDictionary * standardDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithBool:NO], @"dontShowWarning",
-									   [NSNumber numberWithDouble:1.5], @"imageSize",
-									   [NSNumber numberWithInt:0], @"addressBookScope",
-									   [NSNumber numberWithBool:YES], @"placemarkWithName",
-									   [NSNumber numberWithBool:YES], @"placemarkWithLabel",
-									   @"\342\235\200", @"placemarkNameReplacement",
-									   [NSNumber numberWithBool:YES], @"placemarkWithAddress",
-									   [NSNumber numberWithBool:YES], @"placemarkWithImage",
-									   [NSNumber numberWithBool:NO], @"placemarkWithEMail",
-									   [NSNumber numberWithBool:NO], @"placemarkWithPhone",
-									   [NSNumber numberWithBool:YES], @"placemarkWithWeblinks",
-									   [NSNumber numberWithBool:YES], @"placemarkWithAddressBookLink",
-									   [NSNumber numberWithBool:NO], @"placemarkWithContacts",
-									   [NSNumber numberWithBool:NO], @"placemarkWithNotes",
-									   [NSNumber numberWithBool:NO], @"noHomeWorkIcons",
-									   [NSNumber numberWithBool:NO], @"hasReadInfo",
-									   [NSNumber numberWithBool:NO], @"groupByAddressLabel",
-									   nil];
+	NSDictionary * standardDefaults = @{
+		@"dontShowWarning": @NO,
+		@"imageSize": @1.5,
+		@"addressBookScope": @0,
+		@"placemarkWithName": @YES,
+		@"placemarkWithLabel": @YES,
+		@"placemarkNameReplacement": @"\342\235\200",
+		@"placemarkWithAddress": @YES,
+		@"placemarkWithImage": @YES,
+		@"placemarkWithEMail": @NO,
+		@"placemarkWithPhone": @NO,
+		@"placemarkWithWeblinks": @YES,
+		@"placemarkWithAddressBookLink": @YES,
+		@"placemarkWithContacts": @NO,
+		@"placemarkWithNotes": @NO,
+		@"noHomeWorkIcons": @NO,
+		@"hasReadInfo": @NO,
+		@"groupByAddressLabel": @NO,
+	};
 	
 	[UDC setInitialValues:standardDefaults];
 	[UDC setAppliesImmediately:YES];
@@ -249,34 +249,34 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	NSEnumerator * myEnum = [ABGroups objectEnumerator];
 	ABGroup * group;
 	while (group = [myEnum nextObject]) {
-		[a addObject:[NSDictionary dictionaryWithObjectsAndKeys:[group uniqueId], MENUOBJECT, [group valueForProperty:kABGroupNameProperty], MENUNAME, nil]];
+		[a addObject:@{MENUOBJECT: [group uniqueId], MENUNAME: [group valueForProperty:kABGroupNameProperty]}];
 	}
 	[self setValue:a forKey:@"groups"];
 	
 	
 	if ([a count] > 0 ) {
 		// look whether the selected item still exists. If it doesn't reset to ALL group
-		NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup2"] objectForKey:MENUOBJECT];
+		NSString * selectedGroup = (NSString*) [UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
 		
 		if (selectedGroup
 				&& ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"])
 				&&  [ab recordForUniqueId:selectedGroup] ) {
 		}
 		else {				
-			group = [groups objectAtIndex:0];
+			group = groups[0];
 			[UDC setValue:group forKeyPath:@"values.selectedGroup2"];
 		}
 
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"noGroups"];
+		[self setValue:@NO forKey:@"noGroups"];
 	}
 	else {
 		// there are NO groups => deactivate the GUI
 		NSString * selectGroupName = NSLocalizedString(@"Select Group", @"");
-		NSDictionary * selectGroupDictionary = [NSDictionary dictionaryWithObjectsAndKeys:selectGroupName, MENUOBJECT, selectGroupName , MENUNAME, nil];
+		NSDictionary * selectGroupDictionary = @{MENUOBJECT: selectGroupName, MENUNAME: selectGroupName};
 		[a addObject: selectGroupDictionary];
-		[UDC setValue:[NSNumber numberWithInt:0] forKeyPath:@"values.addressBookScope"];
+		[UDC setValue:@0 forKeyPath:@"values.addressBookScope"];
 		[UDC setValue:selectGroupDictionary forKeyPath:@"values.selectedGroup2"];
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"noGroups"];
+		[self setValue:@YES forKey:@"noGroups"];
 		// ... and put 'Select Group' string in the popup menu
 	}
 
@@ -297,7 +297,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	Switch to group instead of whole address book when a group is selected.
 */
 - (IBAction) groupListSelectionChanged: (id) sender {
-	[UDC setValue:[NSNumber numberWithInt:1] forKeyPath:@"values.addressBookScope"];
+	[UDC setValue:@1 forKeyPath:@"values.addressBookScope"];
 	[self relevantPeople];
 }
 
@@ -311,7 +311,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
 	
 	NSArray * people = nil ;
-	NSString * selectedGroup = (NSString*) [[UDC valueForKeyPath:@"values.selectedGroup2"] objectForKey:MENUOBJECT];
+	NSString * selectedGroup = (NSString*) [UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
 	if ([[UDC valueForKeyPath:@"values.addressBookScope"] intValue] == 0) {
 		people = [ab people];
 	}
@@ -323,18 +323,18 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		else {
 			// the group doesn't exist anymore => switch to all
 			NSLog(@"Previously selected group with ID %@ does not exist anymore. Setting selection to All.", selectedGroup);
-			[UDC setValue:[NSNumber numberWithInt: 0] forKeyPath:@"values.addressBookScope"];
+			[UDC setValue:@0 forKeyPath:@"values.addressBookScope"];
 			people = [ab people];
 		}
 	}
 	else {
 		// group ID does not look like a group ID
 		NSLog(@"Selected group was not recognisable. Setting selection to All.");
-		[UDC setValue:[NSNumber numberWithInt: 0] forKeyPath:@"values.addressBookScope"];
+		[UDC setValue:@0 forKeyPath:@"values.addressBookScope"];
 		people = [ab people];
 	}
 
-	NSNumber * sortByFirstName = [NSNumber numberWithBool:NO];
+	NSNumber * sortByFirstName = @NO;
 	people =  [people sortedArrayUsingFunction:nameSort context:(__bridge void *)(sortByFirstName)];
 
 	[self updateRelevantPeopleInfo:people];
@@ -363,12 +363,12 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = [locations objectForKey:addressKey];
+			NSObject * addressObject = locations[addressKey];
 			if (addressObject) {
 				// object with coordinates exists => successfully located
 				locatedAddressCount++;
 			}
-			else if ([failLocations objectForKey:addressKey]) {
+			else if (failLocations[addressKey]) {
 				// looked up but not located
 				nonLocatedAddressCount++;
 			}
@@ -437,8 +437,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	[self setValue:lookupPart forKey:@"lookupInfo"];
 	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
 	BOOL b = ([failLocations count] > 0);
-	[self setValue:[NSNumber numberWithBool:b] forKey:@"nonLocatableAddressesExist"];
-	[self setValue:[NSNumber numberWithInt:notYetLocatedAddressCount] forKey:@"notSearchedCount"];
+	[self setValue:@(b) forKey:@"nonLocatableAddressesExist"];
+	[self setValue:@(notYetLocatedAddressCount) forKey:@"notSearchedCount"];
 	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
 	[self setValue:@"" forKey:@"doneMessage"];
 
@@ -468,7 +468,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	
 	NSString * addressComponent;
 	if ((addressComponent = [address valueForKey:kABAddressStreetKey])) {
-		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Dept.", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"App.", @"Apt ", @"Apt.", @"#", @"P.O. Box", @"P.O.Box", @"Postfach ", @"B\303\274ro", @"Office", nil];
+		NSArray * evilWords = @[@"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Dept.", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"App.", @"Apt ", @"Apt.", @"#", @"P.O. Box", @"P.O.Box", @"Postfach ", @"B\303\274ro", @"Office"];
 		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
 		NSString * evilWord;
 		while (evilWord = [evilWordEnumerator nextObject]) {
@@ -514,8 +514,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 - (IBAction) convertAddresses: (id) sender {
 	if (!self.geocodingRunning) {
 		[self beginBusy];
-		[self setValue:[NSNumber numberWithDouble:.0] forKey:@"geocodingProgress"];			
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"geocodingRunning"];
+		[self setValue:@.0 forKey:@"geocodingProgress"];			
+		[self setValue:@YES forKey:@"geocodingRunning"];
 		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
 	else if (self.geocodingRunning) {
@@ -560,11 +560,11 @@ NSString * const failFileName = @"Failed Lookups.plist";
 					NSDictionary * addressDict = [addresses valueAtIndex:index];
 					NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
 					
-					if (![locations objectForKey:addressString] && ![failLocations objectForKey:addressString]) {
+					if (!locations[addressString] && !failLocations[addressString]) {
 						// Look up address if we don't know its coordinates already
 
 						self.currentLookupAddress = addressString;
-						[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
+						[self setValue:@(geocodingCurrentPosition) forKey:@"geocodingProgress"];
 						geocodingCurrentPosition += 1.;
 						
 						// throttle queries
@@ -579,14 +579,13 @@ NSString * const failFileName = @"Failed Lookups.plist";
 							if ([placemarks count] == 1) {
 								CLPlacemark * placemark = placemarks[0];
 								CLLocation * location = placemark.location;
-								[locations setObject:@{
-													   @"lat":[NSNumber numberWithDouble:location.coordinate.latitude],
-													   @"lon":[NSNumber numberWithDouble:location.coordinate.longitude],
-													   @"accuracy":[NSNumber numberWithDouble:location.horizontalAccuracy],
-													   @"timestamp":[NSNumber numberWithDouble:location.timestamp.timeIntervalSince1970],
-													   @"resultType":@"unique"
-													 }
-											  forKey:addressString];
+								locations[addressString] = @{
+									@"lat": @(location.coordinate.latitude),
+									@"lon": @(location.coordinate.longitude),
+									@"accuracy": @(location.horizontalAccuracy),
+									@"timestamp": @(location.timestamp.timeIntervalSince1970),
+									@"resultType": @"unique"
+								};
 							}
 							else if ([placemarks count] > 1) {
 								NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
@@ -595,22 +594,22 @@ NSString * const failFileName = @"Failed Lookups.plist";
 									[locationStrings addObject:[placemark.location description]];
 								}];
 								NSDictionary * failInfo = @{
-															@"type": @"multiple",
-															@"locations": locationStrings
-														   };
-								[failLocations setObject:failInfo forKey: addressString];
+									@"type": @"multiple",
+									@"locations": locationStrings
+								};
+								failLocations[addressString] = failInfo;
 							}
 							else {
 								if (lookupError) {
 									NSLog(@"Could not locate address: %@", addressString);
 									NSLog(@"error: %@", lookupError);
 									NSDictionary * errorInfo = @{
-																 @"type": @"error",
-																 @"domain": [lookupError domain],
-																 @"code": [NSNumber numberWithInt:[lookupError code]],
-																 @"userInfo": [lookupError userInfo]
-																};
-									[failLocations setObject:errorInfo forKey: addressString];
+										@"type": @"error",
+										@"domain": [lookupError domain],
+										@"code": [NSNumber numberWithInt:[lookupError code]],
+										@"userInfo": [lookupError userInfo]
+									};
+									failLocations[addressString] = errorInfo;
 								}
 							}
 						}];
@@ -622,7 +621,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		}
 
 		self.currentLookupAddress = @"";
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
+		[self setValue:@NO forKey:@"geocodingRunning"];
 		geocodingThread = nil;
 		
 		[geocodingProgressBar setHidden:YES];
@@ -641,7 +640,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 */
 - (NSString *) imagesFolderPath {
 	NSFileManager * myFM = [NSFileManager defaultManager];
-	NSString * appSupportPath = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString * appSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES)[0];
 	
 	NSString * EAAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"EarthAddresser"];
 	NSString * imagesFolderPath = [EAAppSupportPath stringByAppendingPathComponent:@"Images"];
@@ -750,8 +749,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 - (IBAction) do: (id) sender {
 	if (!KMLRunning) {
 		[self beginBusy];
-		[self setValue:[NSNumber numberWithDouble:.0] forKey:@"KMLProgress"];			
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"KMLRunning"];	
+		[self setValue:@.0 forKey:@"KMLProgress"];
+		[self setValue:@YES forKey:@"KMLRunning"];
 		[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];		
 	}
 	else if (KMLRunning) {
@@ -773,7 +772,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		NSArray * people = [self relevantPeople];
 
 		if (people) {
-			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLMaximum"];
+			[self setValue:@([people count]) forKey:@"KMLMaximum"];
 
 			NSEnumerator * myEnum = [people objectEnumerator];
 			ABPerson * person;
@@ -798,7 +797,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 			
 			while ((person = [myEnum nextObject]) && ![[NSThread currentThread] isCancelled]) {
 				@autoreleasepool {
-					[self setValue:[NSNumber numberWithDouble:currentPosition] forKey:@"KMLProgress"];				
+					[self setValue:@(currentPosition) forKey:@"KMLProgress"];
 
 					currentPosition += 1.;
 														
@@ -856,7 +855,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 #pragma mark -do2: Address Label			
 						NSDictionary * theAddress = [addresses valueAtIndex:index];
 						NSString * addressLocationKey = [self dictionaryKeyForAddressDictionary:theAddress];
-						NSArray * addressCoordinates = [locations objectForKey:addressLocationKey];
+						NSArray * addressCoordinates = locations[addressLocationKey];
 
 						if ([addressCoordinates isKindOfClass:[NSArray class]]) {
 							// only include addresses we resolved before
@@ -890,7 +889,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 							[placemarkElement addChild: visibilityElement];
 													
 							NSXMLElement * pointElement = [NSXMLElement elementWithName:@"Point"];
-							NSXMLElement * coordinatesElement = [NSXMLNode elementWithName:@"coordinates" stringValue:[NSString stringWithFormat:@"%@,%@", [addressCoordinates objectAtIndex:2], [addressCoordinates objectAtIndex:1]]];
+							NSXMLElement * coordinatesElement = [NSXMLNode elementWithName:@"coordinates" stringValue:[NSString stringWithFormat:@"%@,%@", addressCoordinates[2], addressCoordinates[1]]];
 							[pointElement addChild:coordinatesElement];
 							[placemarkElement addChild:pointElement];
 							
@@ -1075,14 +1074,14 @@ NSString * const failFileName = @"Failed Lookups.plist";
 							}
 							if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
 								// create a group for each address label and add the addresses accordingly
-								NSXMLElement * addressGroup = [addressLabelGroups objectForKey:normalisedLabel];
+								NSXMLElement * addressGroup = addressLabelGroups[normalisedLabel];
 							
 								if (addressGroup == nil) {
 									// group doesn't exist yet => create it
 									addressGroup = [NSXMLElement elementWithName:@"Folder"];
 
 									[addressGroup addChild:[NSXMLNode elementWithName:@"name" stringValue:normalisedLabel]];
-									[addressLabelGroups setObject:addressGroup forKey:normalisedLabel];
+									addressLabelGroups[normalisedLabel] = addressGroup;
 									
 									if ([OLDLABELS containsObject:normalisedLabel]) {
 										// this is the group for old addresses
@@ -1114,11 +1113,11 @@ NSString * const failFileName = @"Failed Lookups.plist";
 				id label;
 				
 				while (label = [labelEnumerator nextObject]) {
-					[myXML addChild: [addressLabelGroups objectForKey:label]];
+					[myXML addChild: addressLabelGroups[label]];
 				}
 			}
 
-			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLProgress"];
+			[self setValue:@([people count]) forKey:@"KMLProgress"];
 				
 			if (![[NSThread currentThread] isCancelled]) {
 #pragma mark -do2: Write KML
@@ -1151,8 +1150,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 					
 #pragma mark -do2: Clean Up 	
 			
-			[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
-			[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];
+			[self setValue:@NO forKey:@"KMLRunning"];
+			[self setValue:@0.0 forKey:@"KMLProgress"];
 		}
 		
 		[self endBusy];
@@ -1241,7 +1240,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = [failLocations objectForKey:addressKey];
+			NSObject * addressObject = failLocations[addressKey];
 			if (addressObject != nil) {
 				[s appendFormat:@"%@\n***\n", addressKey];
 			}

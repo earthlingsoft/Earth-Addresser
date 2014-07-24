@@ -27,22 +27,10 @@
 @interface Magic : NSObject {
 	NSThread * KMLThread;
 	IBOutlet NSProgressIndicator * progressBar;
-	double KMLProgress;
-	double KMLMaximum;
-	BOOL KMLRunning;
 	
 	NSThread * geocodingThread;
 	IBOutlet NSProgressIndicator * geocodingProgressBar;
-	double geocodingProgress;
-	double geocodingMaximum;
 	
-	NSString * relevantPeopleInfo;
-	NSString * lookupInfo;
-	NSString * doneMessage;
-	
-	NSInteger notSearchedCount;
-	BOOL nonLocatableAddressesExist;
-	BOOL nonLocatableAddressesButtonHidden;
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
 	
@@ -57,8 +45,35 @@
 }
 
 @property BOOL geocodingRunning;
+@property double geocodingProgress;
+@property double geocodingMaximum;
+@property (readonly) NSString * geocodingButtonLabel;
+
+@property BOOL KMLRunning;
+@property double KMLProgress;
+@property double KMLMaximum;
+@property (readonly) NSString * KMLWritingButtonLabel;
+
+@property NSInteger notSearchedCount;
+@property BOOL nonLocatableAddressesExist;
+@property BOOL nonLocatableAddressesButtonHidden;
+
+@property NSString * relevantPeopleInfo;
+@property NSString * lookupInfo;
+@property NSString * doneMessage;
+
 @property NSInteger addressesAreAvailable;
-@property (strong) NSString * currentLookupAddress;
+@property NSString * currentLookupAddress;
+@property (readonly) BOOL needToSearchNoticeHidden;
+@property (readonly) BOOL nothingToSearch;
+
+@property (readonly) NSImage * AddressBookIcon;
+@property (readonly) NSImage * MapsIcon;
+@property (readonly) NSImage * KMLIcon;
+
+@property (readonly) NSURL * EAApplicationSupportURL;
+@property (readonly) NSString * myVersionString;
+
 
 - (void) buildGroupList;
 
@@ -68,24 +83,18 @@
 - (IBAction) convertAddresses: (id) sender;
 - (void) convertAddresses2: (id) sender;
 
-- (NSString *) imagesFolderPath;
-- (NSString *) fullPNGImagePathForName: (NSString *) name;
-- (NSXMLElement *) createStyleForImageData: (NSData *) image withID:(NSString *) ID;
-- (NSXMLElement *) genericStyleNamed:(NSString *) name;
+- (NSString *) fullPNGImagePathForName:(NSString *)name;
+- (NSXMLElement *) createStyleForImageData:(NSData *)image withID:(NSString *)ID;
+- (NSXMLElement *) genericStyleNamed:(NSString *)name;
 
 - (IBAction) do:(id) sender;
 - (void) do2:(id) sender;
 
-- (NSArray*) relevantPeople;
-- (void) updateRelevantPeopleInfo:(NSArray*) people;
+- (NSArray *) relevantPeople;
+- (void) updateRelevantPeopleInfo:(NSArray*)people;
 
-- (NSString*) dictionaryKeyForAddressDictionary:(NSDictionary *)address;
-- (NSString*) cleanString:(NSString*) s from:(NSString*) evil ;
-
-- (BOOL) needToSearchNoticeHidden;
-- (NSImage*) AddressBookIcon;
-- (NSImage*) MapsIcon;
-- (NSImage*) KMLIcon;
+- (NSString *) dictionaryKeyForAddressDictionary:(NSDictionary *)address;
+- (NSString *) cleanString:(NSString*)s from:(NSString*)evil ;
 
 - (NSString *) localisedLabelName: (NSString*) label;
 
@@ -97,7 +106,6 @@
 - (IBAction) lookupNonLocatableAddresses: (id) sender;
 
 - (IBAction) readme:(id) sender;
-- (NSString*) myVersionString;
 - (void) beginBusy;
 - (void) endBusy;
 @end

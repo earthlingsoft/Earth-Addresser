@@ -13,10 +13,6 @@
 
 @implementation Magic
 
-@synthesize geocodingRunning;
-@synthesize addressesAreAvailable;
-@synthesize currentLookupAddress;
-
 - (instancetype) init {
 	self = [super init];
 	if (self != nil) {
@@ -100,7 +96,7 @@
 	if (self.geocodingRunning && geocodingThread) {
 		[geocodingThread cancel];
 	}
-	if (KMLRunning && KMLThread) {
+	if (self.KMLRunning && KMLThread) {
 		[KMLThread cancel];
 	}
 }
@@ -120,7 +116,7 @@
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
 	NSApplicationTerminateReply result = NSTerminateNow;
 	
-	if ( KMLRunning || self.geocodingRunning ) {
+	if (self.KMLRunning || self.geocodingRunning) {
 		result = NSTerminateLater;
 	}
 	
@@ -136,7 +132,7 @@
 */
 - (BOOL)windowShouldClose:(id)sender {
 	BOOL result = YES;
-	if ( KMLRunning || self.geocodingRunning ) {
+	if (self.KMLRunning || self.geocodingRunning) {
 		result = NO;
 	}
 	return result;
@@ -146,28 +142,8 @@
 
 #pragma mark Caches
 
-NSString * const applicationSupportFolderName = @"EarthAddresser";
 NSString * const successFileName = @"Successful Lookups.plist";
 NSString * const failFileName = @"Failed Lookups.plist";
-
-- (NSURL *) EAApplicationSupportFolder {
-	NSError * error;
-	NSURL * applicationSupportURL = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
-	NSURL * myApplicationSupportURL;
-	
-	if (applicationSupportURL) {
-		myApplicationSupportURL = [applicationSupportURL URLByAppendingPathComponent:applicationSupportFolderName isDirectory:YES];
-	}
-	else {
-		NSLog(@"Could not find/create Application Support folder");
-		if (error) {
-			NSLog(@"%@", [error localizedDescription]);
-		}
-	}
-	
-	return myApplicationSupportURL;
-}
-
 
 - (void) readCaches {
 	locations = [self mutableDictionaryFromApplicationSupportFileName:successFileName];
@@ -189,8 +165,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 - (NSMutableDictionary *) mutableDictionaryFromApplicationSupportFileName:(NSString *)fileName {
-	NSURL * EAApplicationSupportURL = [self EAApplicationSupportFolder];
-	NSURL * fileURL = [EAApplicationSupportURL URLByAppendingPathComponent:fileName];
+	NSURL * fileURL = [self.EAApplicationSupportURL URLByAppendingPathComponent:fileName];
 	NSMutableDictionary * dictionary = [NSMutableDictionary dictionaryWithContentsOfURL:fileURL];
 	return dictionary;
 }
@@ -200,11 +175,9 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	BOOL success = NO;
 	NSError * error;
 	
-	NSURL * EAApplicationSupportURL = [self EAApplicationSupportFolder];
-	
-	if([[NSFileManager defaultManager] createDirectoryAtURL:EAApplicationSupportURL withIntermediateDirectories:YES attributes:nil error:&error]) {
-		if (EAApplicationSupportURL) {
-			NSURL * fileURL = [EAApplicationSupportURL URLByAppendingPathComponent:fileName];
+	if([[NSFileManager defaultManager] createDirectoryAtURL:self.EAApplicationSupportURL withIntermediateDirectories:YES attributes:nil error:&error]) {
+		if (self.EAApplicationSupportURL) {
+			NSURL * fileURL = [self.EAApplicationSupportURL URLByAppendingPathComponent:fileName];
 			success = [dictionary writeToURL:fileURL atomically:YES];
 			if (!success) {
 				NSLog(@"Could not write file ”%@“", [fileURL path]);
@@ -212,7 +185,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		}
 	}
 	else {
-		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [EAApplicationSupportURL path]);
+		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [self.EAApplicationSupportURL path]);
 		if (error) {
 			NSLog(@"%@", [error localizedDescription]);
 		}
@@ -433,14 +406,13 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	}
 			
 	NSString * infoString = firstPart; // = [firstPart stringByAppendingString:secondPart];
-	[self setValue:infoString forKey:@"relevantPeopleInfo"];
-	[self setValue:lookupPart forKey:@"lookupInfo"];
-	[self setValue:[NSNumber numberWithBool:!showNonLocatableAddressesButton] forKey:@"nonLocatableAddressesButtonHidden"];
-	BOOL b = ([failLocations count] > 0);
-	[self setValue:@(b) forKey:@"nonLocatableAddressesExist"];
-	[self setValue:@(notYetLocatedAddressCount) forKey:@"notSearchedCount"];
-	[self setValue:[NSNumber numberWithBool:(locatedAddressCount != 0)] forKey:@"addressesAreAvailable"];
-	[self setValue:@"" forKey:@"doneMessage"];
+	self.relevantPeopleInfo = infoString;
+	self.lookupInfo = lookupPart;
+	self.nonLocatableAddressesButtonHidden = !showNonLocatableAddressesButton;
+	self.nonLocatableAddressesExist = ([failLocations count] > 0);
+	self.notSearchedCount = notYetLocatedAddressCount;
+	self.addressesAreAvailable = (locatedAddressCount != 0);
+	self.doneMessage = @"";
 
 	if (notYetLocatedAddressCount != 0 ) {
 		[createKMLButton setKeyEquivalent:@""];
@@ -514,8 +486,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 - (IBAction) convertAddresses: (id) sender {
 	if (!self.geocodingRunning) {
 		[self beginBusy];
-		[self setValue:@.0 forKey:@"geocodingProgress"];			
-		[self setValue:@YES forKey:@"geocodingRunning"];
+		self.geocodingProgress = 0;
+		self.geocodingRunning = @YES;
 		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
 	}
 	else if (self.geocodingRunning) {
@@ -548,8 +520,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		NSTimeInterval previousLookup = 0;
 		BOOL error = NO;
 		
-		[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
-			
+		self.geocodingMaximum = self.notSearchedCount;
+		
 		while ((myPerson = [myEnum nextObject]) && !error && ![[NSThread currentThread] isCancelled]) {
 			@autoreleasepool {
 				ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
@@ -564,7 +536,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 						// Look up address if we don't know its coordinates already
 
 						self.currentLookupAddress = addressString;
-						[self setValue:@(geocodingCurrentPosition) forKey:@"geocodingProgress"];
+						self.geocodingProgress = geocodingCurrentPosition;
 						geocodingCurrentPosition += 1.;
 						
 						// throttle queries
@@ -621,7 +593,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		}
 
 		self.currentLookupAddress = @"";
-		[self setValue:@NO forKey:@"geocodingRunning"];
+		self.geocodingRunning = @NO;
 		geocodingThread = nil;
 		
 		[geocodingProgressBar setHidden:YES];
@@ -635,16 +607,35 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 #pragma mark XML Helper Methods
 
+NSString * const applicationSupportFolderName = @"EarthAddresser";
+
+- (NSURL *) EAApplicationSupportURL {
+	NSError * error;
+	NSURL * applicationSupportURL = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+	NSURL * myApplicationSupportURL;
+	
+	if (applicationSupportURL) {
+		myApplicationSupportURL = [applicationSupportURL URLByAppendingPathComponent:applicationSupportFolderName isDirectory:YES];
+	}
+	else {
+		NSLog(@"Could not find/create Application Support folder");
+		if (error) {
+			NSLog(@"%@", [error localizedDescription]);
+		}
+	}
+	
+	return myApplicationSupportURL;
+}
+
+
+
 /*
  Returns absolute path to our Images folder in Application Support
 */
 - (NSString *) imagesFolderPath {
 	NSFileManager * myFM = [NSFileManager defaultManager];
-	NSString * appSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES)[0];
-	
-	NSString * EAAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"EarthAddresser"];
-	NSString * imagesFolderPath = [EAAppSupportPath stringByAppendingPathComponent:@"Images"];
-	if (![myFM fileExistsAtPath: imagesFolderPath]) { // create folders if needed
+	NSString * imagesFolderPath = [self.EAApplicationSupportURL URLByAppendingPathComponent:@"Images"].path;
+	if (![myFM fileExistsAtPath:imagesFolderPath]) { // create folders if needed
 		NSError * error;
 		if (![myFM createDirectoryAtPath:imagesFolderPath withIntermediateDirectories:YES attributes:nil error:&error]) {
 			[[NSThread currentThread] cancel];
@@ -657,7 +648,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	return imagesFolderPath;
 }
 
-	
+
 
 /*
  Returns full path to PNG image in Application Support with the name passed to it.
@@ -747,13 +738,13 @@ NSString * const failFileName = @"Failed Lookups.plist";
  action for writing KML file
 */
 - (IBAction) do: (id) sender {
-	if (!KMLRunning) {
+	if (!self.KMLRunning) {
 		[self beginBusy];
-		[self setValue:@.0 forKey:@"KMLProgress"];
-		[self setValue:@YES forKey:@"KMLRunning"];
-		[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];		
+		self.KMLProgress = 0;
+		self.KMLRunning = YES;
+		[NSThread detachNewThreadSelector:@selector(do2:) toTarget:self withObject:sender];
 	}
-	else if (KMLRunning) {
+	else if (self.KMLRunning) {
 		[KMLThread cancel];
 	}
 }
@@ -772,7 +763,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		NSArray * people = [self relevantPeople];
 
 		if (people) {
-			[self setValue:@([people count]) forKey:@"KMLMaximum"];
+			self.KMLMaximum = [people count];
 
 			NSEnumerator * myEnum = [people objectEnumerator];
 			ABPerson * person;
@@ -797,12 +788,11 @@ NSString * const failFileName = @"Failed Lookups.plist";
 			
 			while ((person = [myEnum nextObject]) && ![[NSThread currentThread] isCancelled]) {
 				@autoreleasepool {
-					[self setValue:@(currentPosition) forKey:@"KMLProgress"];
-
+					self.KMLProgress = currentPosition;
 					currentPosition += 1.;
 														
 					NSString * uniqueID = [person uniqueId];
-					NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] -9]];
+					NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] - 9]];
 					int flags = [[person valueForProperty:kABPersonFlags] intValue];
 
 					// get the name	or anonymous replacement
@@ -1117,8 +1107,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 				}
 			}
 
-			[self setValue:@([people count]) forKey:@"KMLProgress"];
-				
+			self.KMLProgress = [people count];
+			
 			if (![[NSThread currentThread] isCancelled]) {
 #pragma mark -do2: Write KML
 				NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
@@ -1150,8 +1140,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 					
 #pragma mark -do2: Clean Up 	
 			
-			[self setValue:@NO forKey:@"KMLRunning"];
-			[self setValue:@0.0 forKey:@"KMLProgress"];
+			self.KMLRunning = NO;
+			self.KMLProgress = 0;
 		}
 		
 		[self endBusy];
@@ -1269,18 +1259,18 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 - (BOOL) needToSearchNoticeHidden {
-	BOOL hidden = KMLRunning || (notSearchedCount == 0);
+	BOOL hidden = self.KMLRunning || (self.notSearchedCount == 0);
 	return hidden;
 }
 
 
 - (BOOL) nothingToSearch {
-	BOOL nothingToSearch = (notSearchedCount == 0);
+	BOOL nothingToSearch = (self.notSearchedCount == 0);
 	return nothingToSearch;
 }
 
 
-- (NSString*) geocodingButtonLabel {
+- (NSString *) geocodingButtonLabel {
 	NSString * label;
 	if (self.geocodingRunning) {
 		label = NSLocalizedString(@"Cancel Lookup", @"Title of geocoding button while geocoding is running and can be cancelled.");
@@ -1292,9 +1282,9 @@ NSString * const failFileName = @"Failed Lookups.plist";
 }
 
 
-- (NSString*) KMLWritingButtonLabel {
+- (NSString *) KMLWritingButtonLabel {
 	NSString * label;
-	if (KMLRunning) {
+	if (self.KMLRunning) {
 		label = NSLocalizedString(@"Cancel Placemark Creation", @"Text displayed in KML Creation button while KML Creation is running.");
 	}
 	else {
@@ -1384,7 +1374,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 			[WORKSPACE openURL:[NSURL URLWithString:@"http://earthlingsoft.net/Earth%20Addresser"]];
 			break;
 		case 3: // Send Mail
-			[WORKSPACE openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Earth%%20Addresser%%20%@", [self myVersionString]]]];
+			[WORKSPACE openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Earth%%20Addresser%%20%@", self.myVersionString]]];
 			break;
 		case 4: // Paypal
 			[WORKSPACE openURL: [NSURL URLWithString:[@"https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=earthlingsoft%40earthlingsoft.net&item_name=Earth%20Addresser&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&lc=" stringByAppendingString: NSLocalizedString(@"PayPal Region Code", @"PayPal Region Code - used in PayPal URL")]]];

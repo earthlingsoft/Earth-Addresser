@@ -493,6 +493,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				Build_Number = 29;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				IBC_FLATTEN_NIBS = NO;
@@ -506,6 +507,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				Build_Number = 29;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "Earth Addresser";
 				Version_Number = 3b1;

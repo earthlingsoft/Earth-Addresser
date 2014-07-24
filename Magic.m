@@ -103,12 +103,6 @@
 	if (KMLRunning && KMLThread) {
 		[KMLThread cancel];
 	}
-
-	[locations release];
-	[failLocations release];
-	[groups release];
-	
-	[super dealloc];
 }
 
 
@@ -176,12 +170,12 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 - (void) readCaches {
-	locations = [[self mutableDictionaryFromApplicationSupportFileName:successFileName] retain];
+	locations = [self mutableDictionaryFromApplicationSupportFileName:successFileName];
 	if (!locations) {
 		locations = [[NSMutableDictionary alloc] init];
 	}
 	
-	failLocations = [[self mutableDictionaryFromApplicationSupportFileName:failFileName] retain];
+	failLocations = [self mutableDictionaryFromApplicationSupportFileName:failFileName];
 	if (!failLocations) {
 		failLocations = [[NSMutableDictionary alloc] init];
 	}
@@ -341,8 +335,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	}
 
 	NSNumber * sortByFirstName = [NSNumber numberWithBool:NO];
-	
-	people =  [people sortedArrayUsingFunction:nameSort context: sortByFirstName];
+	people =  [people sortedArrayUsingFunction:nameSort context:(__bridge void *)(sortByFirstName)];
 
 	[self updateRelevantPeopleInfo:people];
 	
@@ -537,110 +530,106 @@ NSString * const failFileName = @"Failed Lookups.plist";
  to be run in separate thread
 */
 - (void) convertAddresses2: (id) sender {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	geocodingThread = [NSThread currentThread];
-	double geocodingCurrentPosition = .000001;
+	@autoreleasepool {
+		geocodingThread = [NSThread currentThread];
+		double geocodingCurrentPosition = .000001;
 
-	NSArray * people;
-	if (sender == self) {
-		// if message comes from self, look up all remaining addresses...
-		people = [[ABAddressBook sharedAddressBook] people];
-	}
-	else {
-		// ... otherwise (messages comes from GUI) only look up for current selection.
-		people = [self relevantPeople];
-	}
-	NSEnumerator * myEnum = [people objectEnumerator];
-	ABPerson * myPerson;
-	NSTimeInterval previousLookup = 0;
-	BOOL error = NO;
-	
-	[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
-		
-	while ((myPerson = [myEnum nextObject]) && !error && ![[NSThread currentThread] isCancelled]) {
-		NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
-		
-		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
-		NSUInteger addressCount = [addresses count];
-		NSUInteger index = 0;
-
-		while (addressCount > index && !error) {
-			NSDictionary * addressDict = [addresses valueAtIndex:index];
-			NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
-			
-			if (![locations objectForKey:addressString] && ![failLocations objectForKey:addressString]) {
-				// Look up address if we don't know its coordinates already
-
-				self.currentLookupAddress = addressString;
-				[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
-				geocodingCurrentPosition += 1.;
-							
-				// throttle queries
-				if (previousLookup != 0) {
-					NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:previousLookup + SECONDSBETWEENCOORDINATELOOKUPS];
-					[NSThread sleepUntilDate:wakeUpTime];
-				}
-				previousLookup = [NSDate timeIntervalSinceReferenceDate];
-
-				
-				[[[CLGeocoder alloc] init] geocodeAddressDictionary:addressDict
-												  completionHandler:^(NSArray * placemarks, NSError * lookupError) {
-					if ([placemarks count] == 1) {
-						CLPlacemark * placemark = placemarks[0];
-						CLLocation * location = placemark.location;
-						[locations setObject:@{
-											   @"lat":[NSNumber numberWithDouble:location.coordinate.latitude],
-											   @"lon":[NSNumber numberWithDouble:location.coordinate.longitude],
-											   @"accuracy":[NSNumber numberWithDouble:location.horizontalAccuracy],
-											   @"timestamp":[NSNumber numberWithDouble:location.timestamp.timeIntervalSince1970],
-											   @"resultType":@"unique"
-											 }
-									  forKey:addressString];
-					}
-					else if ([placemarks count] > 1) {
-						NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
-						NSMutableArray * locationStrings = [NSMutableArray array];
-						[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
-							[locationStrings addObject:[placemark.location description]];
-						}];
-						NSDictionary * failInfo = @{
-													@"type": @"multiple",
-													@"locations": locationStrings
-												   };
-						[failLocations setObject:failInfo forKey: addressString];
-					}
-					else {
-						if (lookupError) {
-							NSLog(@"Could not locate address: %@", addressString);
-							NSLog(@"error: %@", lookupError);
-							NSDictionary * errorInfo = @{
-														 @"type": @"error",
-														 @"domain": [lookupError domain],
-														 @"code": [NSNumber numberWithInt:[lookupError code]],
-														 @"userInfo": [lookupError userInfo]
-														};
-							[failLocations setObject:errorInfo forKey: addressString];
-						}
-					}
-				}];
-				[self relevantPeople];
-			}
-			index++;
+		NSArray * people;
+		if (sender == self) {
+			// if message comes from self, look up all remaining addresses...
+			people = [[ABAddressBook sharedAddressBook] people];
 		}
+		else {
+			// ... otherwise (messages comes from GUI) only look up for current selection.
+			people = [self relevantPeople];
+		}
+		NSEnumerator * myEnum = [people objectEnumerator];
+		ABPerson * myPerson;
+		NSTimeInterval previousLookup = 0;
+		BOOL error = NO;
 		
-		[innerPool release];
-	}
+		[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
+			
+		while ((myPerson = [myEnum nextObject]) && !error && ![[NSThread currentThread] isCancelled]) {
+			@autoreleasepool {
+				ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
+				NSUInteger addressCount = [addresses count];
+				NSUInteger index = 0;
 
-	self.currentLookupAddress = @"";
-	[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
-	geocodingThread = nil;
-	
-	[geocodingProgressBar setHidden:YES];			
+				while (addressCount > index && !error) {
+					NSDictionary * addressDict = [addresses valueAtIndex:index];
+					NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
+					
+					if (![locations objectForKey:addressString] && ![failLocations objectForKey:addressString]) {
+						// Look up address if we don't know its coordinates already
 
-	[self writeCaches];
+						self.currentLookupAddress = addressString;
+						[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
+						geocodingCurrentPosition += 1.;
+						
+						// throttle queries
+						if (previousLookup != 0) {
+							NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:previousLookup + SECONDSBETWEENCOORDINATELOOKUPS];
+							[NSThread sleepUntilDate:wakeUpTime];
+						}
+						previousLookup = [NSDate timeIntervalSinceReferenceDate];
+						
+						[[[CLGeocoder alloc] init] geocodeAddressDictionary:addressDict
+														  completionHandler:^(NSArray * placemarks, NSError * lookupError) {
+							if ([placemarks count] == 1) {
+								CLPlacemark * placemark = placemarks[0];
+								CLLocation * location = placemark.location;
+								[locations setObject:@{
+													   @"lat":[NSNumber numberWithDouble:location.coordinate.latitude],
+													   @"lon":[NSNumber numberWithDouble:location.coordinate.longitude],
+													   @"accuracy":[NSNumber numberWithDouble:location.horizontalAccuracy],
+													   @"timestamp":[NSNumber numberWithDouble:location.timestamp.timeIntervalSince1970],
+													   @"resultType":@"unique"
+													 }
+											  forKey:addressString];
+							}
+							else if ([placemarks count] > 1) {
+								NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
+								NSMutableArray * locationStrings = [NSMutableArray array];
+								[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
+									[locationStrings addObject:[placemark.location description]];
+								}];
+								NSDictionary * failInfo = @{
+															@"type": @"multiple",
+															@"locations": locationStrings
+														   };
+								[failLocations setObject:failInfo forKey: addressString];
+							}
+							else {
+								if (lookupError) {
+									NSLog(@"Could not locate address: %@", addressString);
+									NSLog(@"error: %@", lookupError);
+									NSDictionary * errorInfo = @{
+																 @"type": @"error",
+																 @"domain": [lookupError domain],
+																 @"code": [NSNumber numberWithInt:[lookupError code]],
+																 @"userInfo": [lookupError userInfo]
+																};
+									[failLocations setObject:errorInfo forKey: addressString];
+								}
+							}
+						}];
+						[self relevantPeople];
+					}
+					index++;
+				}
+			} // @autoreleasepool (inner)
+		}
 
-	[self endBusy];
-	[pool release];
+		self.currentLookupAddress = @"";
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
+		geocodingThread = nil;
+		
+		[geocodingProgressBar setHidden:YES];
+
+		[self writeCaches];
+		[self endBusy];
+	} // @autoreleasepool (for thread)
 }
 
 
@@ -777,398 +766,397 @@ NSString * const failFileName = @"Failed Lookups.plist";
  to be run in separate thread
 */
 - (void) do2:(id) sender {
-	NSAutoreleasePool * myPool = [[NSAutoreleasePool alloc] init];
-	KMLThread = [NSThread currentThread];
-	double currentPosition = .000001;
+	@autoreleasepool {
+		KMLThread = [NSThread currentThread];
+		double currentPosition = .000001;
 
-	NSArray * people = [self relevantPeople];
+		NSArray * people = [self relevantPeople];
 
-	if (people) {
-		[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLMaximum"];
+		if (people) {
+			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLMaximum"];
 
-		NSEnumerator * myEnum = [people objectEnumerator];
-		ABPerson * person;
+			NSEnumerator * myEnum = [people objectEnumerator];
+			ABPerson * person;
 			
-		// Basic XML setup for KML file
-		NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
-		NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:[[NSUUID UUID] UUIDString]];
-		[myXML addAttribute:documentID];
-		[myXML addChild:[NSXMLNode elementWithName:@"name" stringValue:NSLocalizedString(@"Addresses", @"Addresses")]];
+			// Basic XML setup for KML file
+			NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
+			NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:[[NSUUID UUID] UUIDString]];
+			[myXML addAttribute:documentID];
+			[myXML addChild:[NSXMLNode elementWithName:@"name" stringValue:NSLocalizedString(@"Addresses", @"Addresses")]];
 			
-		// Add generic home and work place styles
-		NSXMLElement * genericStyle = [self genericStyleNamed:@"home"];
-		if (genericStyle) {	[myXML addChild:genericStyle]; }
-		genericStyle = [self genericStyleNamed:@"work"];
-		if (genericStyle) {	[myXML addChild:genericStyle]; }
-		
-		NSMutableDictionary * addressLabelGroups = [NSMutableDictionary dictionary];
+			// Add generic home and work place styles
+			NSXMLElement * genericStyle = [self genericStyleNamed:@"home"];
+			if (genericStyle) {	[myXML addChild:genericStyle]; }
+			genericStyle = [self genericStyleNamed:@"work"];
+			if (genericStyle) {	[myXML addChild:genericStyle]; }
+			
+			NSMutableDictionary * addressLabelGroups = [NSMutableDictionary dictionary];
 #pragma mark -do2: People loop
-		//
-		// Run through all people in the list
-		//
-		
-		while ((person = [myEnum nextObject]) && ![[NSThread currentThread] isCancelled]) {
-			NSAutoreleasePool * innerPool = [[NSAutoreleasePool alloc] init];
-
-			[self setValue:[NSNumber numberWithDouble:currentPosition] forKey:@"KMLProgress"];				
-
-			currentPosition += 1.;
-												
-			NSString * uniqueID = [person uniqueId];
-			NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] -9]];
-			int flags = [[person valueForProperty:kABPersonFlags] intValue];
-
-			// get the name	or anonymous replacement
-			NSString * name;
-			BOOL useName = [[UDC valueForKeyPath:@"values.placemarkWithName"] boolValue];
-			if (!useName) {
-				// don't use names in the KML file
-				name = [UDC valueForKeyPath:@"values.placemarkNameReplacement"];
-			}
-			else {
-				// put names into KML file
-				NSString * vorname;
-				NSString * nachname;
-				if (!(flags & kABShowAsCompany)) {
-					vorname = [person valueForProperty:kABFirstNameProperty];
-					if (!vorname) { vorname = @"";}
-					nachname = [person valueForProperty:kABLastNameProperty];
-					if (!nachname) {nachname = @"";}
-					name = [vorname stringByAppendingFormat:@" %@", nachname];
-				}
-				else {
-					name = [person valueForProperty:kABOrganizationProperty];
-					if (!name) {name = @"???";}
-				}
-			}
-			
-
 			//
-			// insert style with appropriate image for this person
-			NSString * fullImagePath = nil; // need this later to put image into contact description
-			NSData * imageData = nil; // need this later to put image into contact description
-			if ([[UDC valueForKeyPath:@"values.placemarkWithImage"] boolValue]) {
-				imageData = [person imageData];
-				NSXMLElement * styleXML = [self createStyleForImageData:imageData withID:ID];
-				if (styleXML) {
-					[myXML addChild:styleXML];
-					fullImagePath = [self fullPNGImagePathForName:ID];
-				}
-			}
-			
-
+			// Run through all people in the list
 			//
-			// now cycle through the various addresses and create placemarks
-			ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
-			NSUInteger addressCount = [addresses count];
-			NSUInteger index = 0;
+			
+			while ((person = [myEnum nextObject]) && ![[NSThread currentThread] isCancelled]) {
+				@autoreleasepool {
+					[self setValue:[NSNumber numberWithDouble:currentPosition] forKey:@"KMLProgress"];				
 
-			while (addressCount > index) {
+					currentPosition += 1.;
+														
+					NSString * uniqueID = [person uniqueId];
+					NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] -9]];
+					int flags = [[person valueForProperty:kABPersonFlags] intValue];
+
+					// get the name	or anonymous replacement
+					NSString * name;
+					BOOL useName = [[UDC valueForKeyPath:@"values.placemarkWithName"] boolValue];
+					if (!useName) {
+						// don't use names in the KML file
+						name = [UDC valueForKeyPath:@"values.placemarkNameReplacement"];
+					}
+					else {
+						// put names into KML file
+						NSString * vorname;
+						NSString * nachname;
+						if (!(flags & kABShowAsCompany)) {
+							vorname = [person valueForProperty:kABFirstNameProperty];
+							if (!vorname) { vorname = @"";}
+							nachname = [person valueForProperty:kABLastNameProperty];
+							if (!nachname) {nachname = @"";}
+							name = [vorname stringByAppendingFormat:@" %@", nachname];
+						}
+						else {
+							name = [person valueForProperty:kABOrganizationProperty];
+							if (!name) {name = @"???";}
+						}
+					}
+					
+
+					//
+					// insert style with appropriate image for this person
+					NSString * fullImagePath = nil; // need this later to put image into contact description
+					NSData * imageData = nil; // need this later to put image into contact description
+					if ([[UDC valueForKeyPath:@"values.placemarkWithImage"] boolValue]) {
+						imageData = [person imageData];
+						NSXMLElement * styleXML = [self createStyleForImageData:imageData withID:ID];
+						if (styleXML) {
+							[myXML addChild:styleXML];
+							fullImagePath = [self fullPNGImagePathForName:ID];
+						}
+					}
+					
+
+					//
+					// now cycle through the various addresses and create placemarks
+					ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
+					NSUInteger addressCount = [addresses count];
+					NSUInteger index = 0;
+
+					while (addressCount > index) {
 
 #pragma mark -do2: Address Label			
-				NSDictionary * theAddress = [addresses valueAtIndex:index];
-				NSString * addressLocationKey = [self dictionaryKeyForAddressDictionary:theAddress];
-				NSArray * addressCoordinates = [locations objectForKey:addressLocationKey];
+						NSDictionary * theAddress = [addresses valueAtIndex:index];
+						NSString * addressLocationKey = [self dictionaryKeyForAddressDictionary:theAddress];
+						NSArray * addressCoordinates = [locations objectForKey:addressLocationKey];
 
-				if ([addressCoordinates isKindOfClass:[NSArray class]]) {
-					// only include addresses we resolved before
-					NSString * addressName = [addresses labelAtIndex:index];
-					NSString * addressLabel = [self localisedLabelName: addressName];
-					NSString * normalisedLabel = [addressLabel capitalizedString];
+						if ([addressCoordinates isKindOfClass:[NSArray class]]) {
+							// only include addresses we resolved before
+							NSString * addressName = [addresses labelAtIndex:index];
+							NSString * addressLabel = [self localisedLabelName: addressName];
+							NSString * normalisedLabel = [addressLabel capitalizedString];
 
-					NSString * nameAndLabel;
-					if (addressLabel) {
-						nameAndLabel = [name stringByAppendingFormat:@" (%@)", normalisedLabel];
-					}
-					else {
-						nameAndLabel = name;
-					}
-					
-					
-#pragma mark -do2: Address String
-					NSXMLElement * placemarkElement = [NSXMLElement elementWithName:@"Placemark"];
-					// [placemarkElement addAttribute: [NSXMLNode attributeWithName:@"id" stringValue:ID]];
-					NSXMLElement * nameElement;
-					if ([[UDC valueForKeyPath:@"values.placemarkWithLabel"] boolValue]) {
-						nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];						
-					}
-					else {
-						nameElement = [NSXMLNode elementWithName:@"name" stringValue: name];
-					}
-					[placemarkElement addChild: nameElement];
-										
-					NSString * visibilityString = ([OLDLABELS containsObject:normalisedLabel]) ? @"0" : @"1";
-					NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: visibilityString];
-					[placemarkElement addChild: visibilityElement];
-											
-					NSXMLElement * pointElement = [NSXMLElement elementWithName:@"Point"];
-					NSXMLElement * coordinatesElement = [NSXMLNode elementWithName:@"coordinates" stringValue:[NSString stringWithFormat:@"%@,%@", [addressCoordinates objectAtIndex:2], [addressCoordinates objectAtIndex:1]]];
-					[pointElement addChild:coordinatesElement];
-					[placemarkElement addChild:pointElement];
-					
-				
-					NSMutableString * descriptionHTMLString = [NSMutableString string];
-					
-					if (fullImagePath) {
-						[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-1em;margin-left:1em;\">\n",
-						 [fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-						 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
-					}
-					
-					if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
-						NSArray * addressComponents = [self componentsFromAddressDictionary:theAddress];
-						NSString * addressString = [addressComponents componentsJoinedByString:@"<br />"];
-						[descriptionHTMLString appendFormat:@"%@", addressString];
-					}
-					
-					if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
-						[descriptionHTMLString appendFormat: @"<br /><a href=\"addressbook://%@\">%@</a>",
-						 uniqueID,
-						 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
-					}
-				
-					[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;' />"];
-						
-					
-#pragma mark -do2: Related People
-					if ([[UDC valueForKeyPath:@"values.placemarkWithContacts"] boolValue]) {
-						ABMultiValue * people = [person valueForProperty:kABRelatedNamesProperty];
-						NSUInteger peopleCount = [people count];
-						if (peopleCount != 0) {
-							[descriptionHTMLString appendString:@"<br />"];
-							NSInteger personIndex = 0;
-							while (personIndex < peopleCount ) {
-								NSString * personName = [people valueAtIndex: personIndex];
-								NSString * personLabel = [self localisedLabelName:[people labelAtIndex: personIndex]];
-								if (personName != nil && personLabel != nil) {
-									[descriptionHTMLString appendFormat:@"<br /><strong>%@:</strong> %@", personLabel, personName];
-								}
-								personIndex++;
+							NSString * nameAndLabel;
+							if (addressLabel) {
+								nameAndLabel = [name stringByAppendingFormat:@" (%@)", normalisedLabel];
 							}
-						}
-					}
-					
-					
-#pragma mark -do2: EMail, Phone, Web extras			
-					if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
-						// include non-old e-mail addresses in placemark
-						ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
-						NSUInteger eMailCount = [eMails count];
-						if (eMailCount != 0) {
-							NSInteger index = 0;
-							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)")];
-							NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
-							NSString * allEMails = nil;
-							while (index < eMailCount) {
-								if (![OLDLABELS containsObject:[[eMails labelAtIndex:index] capitalizedString]]) {
-									NSString * eMailAddress = [eMails valueAtIndex:index];
-									if (eMailAddress) {
-										NSString * localisedLabel = [self localisedLabelName:[eMails labelAtIndex:index]];
-										if (localisedLabel) {
-											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-										}
-										else {
-											localisedLabel = @"";
-										}
-										[eMailArray addObject:[NSString stringWithFormat:@"<a href='mailto:%@'>%@</a>%@", eMailAddress, eMailAddress, localisedLabel]];
-										allEMails = [eMailArray componentsJoinedByString:@", "];
-									}
-								}
-								index++;
+							else {
+								nameAndLabel = name;
 							}
-							if (allEMails) {
-								[descriptionHTMLString appendFormat:@"%@.", allEMails];
-							}
-						}
-					}
-						
-
-					if ([[UDC valueForKeyPath:@"values.placemarkWithWeblinks"] boolValue]) {
-						// include non-old web-addresses in placemark
-						ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
-						NSUInteger weblinkCount = [weblinks count];
-						if (weblinkCount != 0) {
-							int index = 0;
-							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)")];
-							NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
-							NSString * allWeblinks = nil;
-							while (index < weblinkCount) {
-								if (![OLDLABELS containsObject:[[weblinks labelAtIndex:index] capitalizedString]]) {
-									NSString * weblink = [weblinks valueAtIndex:index];
-									if (weblink) {
-										NSString * localisedLabel = [self localisedLabelName:[weblinks labelAtIndex:index]];
-										if (localisedLabel) {
-											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-										}
-										else {
-											localisedLabel = @"";
-										}
-										[weblinkArray addObject:[NSString stringWithFormat:@"<a href='%@'>%@</a>%@", weblink, weblink, localisedLabel]];
-										allWeblinks = [weblinkArray componentsJoinedByString:@", "];
-									}
-								}
-								index++;
-							}
-							if (allWeblinks) {
-								[descriptionHTMLString appendFormat:@"%@.", allWeblinks];
-							}
-						}
-					}
-						
-						
-					if ([[UDC valueForKeyPath:@"values.placemarkWithPhone"] boolValue]) {
-						// include non-old phone numbers in placemark
-						ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
-						NSUInteger phoneCount = [phones count];
-						if (phoneCount != 0) {
-							int index = 0;
-							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Phone", @"Phone (appears in Google Earth Info Balloon)")];
-							NSMutableArray * phoneArray = [NSMutableArray arrayWithCapacity:phoneCount];
-							NSString * allPhoneNumbers = nil;
-							while (index < phoneCount) {
-								if (![OLDLABELS containsObject:[[phones labelAtIndex:index] capitalizedString]]) {
-									NSString * phoneNumber = [phones valueAtIndex:index];
-									if (phoneNumber) {
-										NSString * localisedLabel = [self localisedLabelName:[phones labelAtIndex:index]];
-										if (localisedLabel) {
-											localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-										}
-										else {
-											localisedLabel = @"";
-										}
-										[phoneArray addObject:[NSString stringWithFormat:@"%@%@", phoneNumber,  localisedLabel]];
-										allPhoneNumbers = [phoneArray componentsJoinedByString:@", "];
-									}
-								}
-								index++;
-							}
-							if (allPhoneNumbers) {
-								[descriptionHTMLString appendFormat:@"%@.", allPhoneNumbers];
-							}
-						}
-					}
-					
-					if ([[UDC valueForKeyPath:@"values.placemarkWithNotes"] boolValue]) {
-						NSString * noteString = [person valueForProperty: kABNoteProperty];
-						if ( [noteString length] > 0 ) {
-							NSMutableString * noteStringWithNewlines = [[noteString mutableCopy] autorelease];
-							[noteStringWithNewlines replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
-							[noteStringWithNewlines replaceOccurrencesOfString:@"\r" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
-							[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> %@", NSLocalizedString(@"Note", @"Note (appears in Google Earth Info Balloon)"), noteStringWithNewlines];
-						}
-					}
-	
-					[descriptionHTMLString appendString:@"<br />"];
-						
-					NSXMLElement * descriptionElement = [NSXMLElement elementWithName:@"description" stringValue:descriptionHTMLString];
-					[placemarkElement addChild: descriptionElement];
-					NSXMLElement * snippetElement = [NSXMLElement elementWithName:@"Snippet"];
-					[placemarkElement addChild:snippetElement];
-					NSXMLElement * styleURLElement = nil;
-					if (imageData) {
-						// use custom pin style if we have an image for the person
-						styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[@"#" stringByAppendingString:ID]];
-					}
-					else {
-						// if we don't have and image for the person, use own generic home and work images unless the hidden noHomeWorkIcons preference is set to YES
-						BOOL wantImages = ![[UDC valueForKeyPath:@"values.noHomeWorkIcons"] boolValue];
-						if (wantImages) {
-							if ([addressName isEqualToString:kABAddressHomeLabel]) {
-								styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICHOMEICONNAME]];
-							}
-							else if ([addressName isEqualToString:kABAddressWorkLabel]) {
-								styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICWORKICONNAME]];
-							}
-						}
-						// don't specify a style if there is neither an image nor a home or work address
-					}
-					if (styleURLElement) {
-						[placemarkElement addChild:styleURLElement];
-					}
-					if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
-						// create a group for each address label and add the addresses accordingly
-						NSXMLElement * addressGroup = [addressLabelGroups objectForKey:normalisedLabel];
-					
-						if (addressGroup == nil) {
-							// group doesn't exist yet => create it
-							addressGroup = [NSXMLElement elementWithName:@"Folder"];
-
-							[addressGroup addChild:[NSXMLNode elementWithName:@"name" stringValue:normalisedLabel]];
-							[addressLabelGroups setObject:addressGroup forKey:normalisedLabel];
 							
-							if ([OLDLABELS containsObject:normalisedLabel]) {
-								// this is the group for old addresses
-								[addressGroup addChild:[NSXMLNode elementWithName:@"visibility" stringValue: @"0"]];
+							
+#pragma mark -do2: Address String
+							NSXMLElement * placemarkElement = [NSXMLElement elementWithName:@"Placemark"];
+							// [placemarkElement addAttribute: [NSXMLNode attributeWithName:@"id" stringValue:ID]];
+							NSXMLElement * nameElement;
+							if ([[UDC valueForKeyPath:@"values.placemarkWithLabel"] boolValue]) {
+								nameElement = [NSXMLNode elementWithName:@"name" stringValue: nameAndLabel];						
+							}
+							else {
+								nameElement = [NSXMLNode elementWithName:@"name" stringValue: name];
+							}
+							[placemarkElement addChild: nameElement];
+												
+							NSString * visibilityString = ([OLDLABELS containsObject:normalisedLabel]) ? @"0" : @"1";
+							NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: visibilityString];
+							[placemarkElement addChild: visibilityElement];
+													
+							NSXMLElement * pointElement = [NSXMLElement elementWithName:@"Point"];
+							NSXMLElement * coordinatesElement = [NSXMLNode elementWithName:@"coordinates" stringValue:[NSString stringWithFormat:@"%@,%@", [addressCoordinates objectAtIndex:2], [addressCoordinates objectAtIndex:1]]];
+							[pointElement addChild:coordinatesElement];
+							[placemarkElement addChild:pointElement];
+							
+						
+							NSMutableString * descriptionHTMLString = [NSMutableString string];
+							
+							if (fullImagePath) {
+								[descriptionHTMLString appendFormat: @"<img src=\"file:%@\" alt=\"%@\" style=\"float:right;height:128px;margin-top:-1em;margin-left:1em;\">\n",
+								 [fullImagePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+								 NSLocalizedString (@"Photo", @"Photo (alt tag for image)")];		
+							}
+							
+							if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
+								NSArray * addressComponents = [self componentsFromAddressDictionary:theAddress];
+								NSString * addressString = [addressComponents componentsJoinedByString:@"<br />"];
+								[descriptionHTMLString appendFormat:@"%@", addressString];
+							}
+							
+							if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
+								[descriptionHTMLString appendFormat: @"<br /><a href=\"addressbook://%@\">%@</a>",
+								 uniqueID,
+								 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
+							}
+						
+							[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;' />"];
+								
+							
+#pragma mark -do2: Related People
+							if ([[UDC valueForKeyPath:@"values.placemarkWithContacts"] boolValue]) {
+								ABMultiValue * people = [person valueForProperty:kABRelatedNamesProperty];
+								NSUInteger peopleCount = [people count];
+								if (peopleCount != 0) {
+									[descriptionHTMLString appendString:@"<br />"];
+									NSInteger personIndex = 0;
+									while (personIndex < peopleCount ) {
+										NSString * personName = [people valueAtIndex: personIndex];
+										NSString * personLabel = [self localisedLabelName:[people labelAtIndex: personIndex]];
+										if (personName != nil && personLabel != nil) {
+											[descriptionHTMLString appendFormat:@"<br /><strong>%@:</strong> %@", personLabel, personName];
+										}
+										personIndex++;
+									}
+								}
+							}
+							
+							
+#pragma mark -do2: EMail, Phone, Web extras			
+							if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
+								// include non-old e-mail addresses in placemark
+								ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
+								NSUInteger eMailCount = [eMails count];
+								if (eMailCount != 0) {
+									NSInteger index = 0;
+									[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)")];
+									NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
+									NSString * allEMails = nil;
+									while (index < eMailCount) {
+										if (![OLDLABELS containsObject:[[eMails labelAtIndex:index] capitalizedString]]) {
+											NSString * eMailAddress = [eMails valueAtIndex:index];
+											if (eMailAddress) {
+												NSString * localisedLabel = [self localisedLabelName:[eMails labelAtIndex:index]];
+												if (localisedLabel) {
+													localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+												}
+												else {
+													localisedLabel = @"";
+												}
+												[eMailArray addObject:[NSString stringWithFormat:@"<a href='mailto:%@'>%@</a>%@", eMailAddress, eMailAddress, localisedLabel]];
+												allEMails = [eMailArray componentsJoinedByString:@", "];
+											}
+										}
+										index++;
+									}
+									if (allEMails) {
+										[descriptionHTMLString appendFormat:@"%@.", allEMails];
+									}
+								}
+							}
+							
+							
+							if ([[UDC valueForKeyPath:@"values.placemarkWithWeblinks"] boolValue]) {
+								// include non-old web-addresses in placemark
+								ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
+								NSUInteger weblinkCount = [weblinks count];
+								if (weblinkCount != 0) {
+									int index = 0;
+									[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)")];
+									NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
+									NSString * allWeblinks = nil;
+									while (index < weblinkCount) {
+										if (![OLDLABELS containsObject:[[weblinks labelAtIndex:index] capitalizedString]]) {
+											NSString * weblink = [weblinks valueAtIndex:index];
+											if (weblink) {
+												NSString * localisedLabel = [self localisedLabelName:[weblinks labelAtIndex:index]];
+												if (localisedLabel) {
+													localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+												}
+												else {
+													localisedLabel = @"";
+												}
+												[weblinkArray addObject:[NSString stringWithFormat:@"<a href='%@'>%@</a>%@", weblink, weblink, localisedLabel]];
+												allWeblinks = [weblinkArray componentsJoinedByString:@", "];
+											}
+										}
+										index++;
+									}
+									if (allWeblinks) {
+										[descriptionHTMLString appendFormat:@"%@.", allWeblinks];
+									}
+								}
+							}
+							
+							
+							if ([[UDC valueForKeyPath:@"values.placemarkWithPhone"] boolValue]) {
+								// include non-old phone numbers in placemark
+								ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
+								NSUInteger phoneCount = [phones count];
+								if (phoneCount != 0) {
+									int index = 0;
+									[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Phone", @"Phone (appears in Google Earth Info Balloon)")];
+									NSMutableArray * phoneArray = [NSMutableArray arrayWithCapacity:phoneCount];
+									NSString * allPhoneNumbers = nil;
+									while (index < phoneCount) {
+										if (![OLDLABELS containsObject:[[phones labelAtIndex:index] capitalizedString]]) {
+											NSString * phoneNumber = [phones valueAtIndex:index];
+											if (phoneNumber) {
+												NSString * localisedLabel = [self localisedLabelName:[phones labelAtIndex:index]];
+												if (localisedLabel) {
+													localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+												}
+												else {
+													localisedLabel = @"";
+												}
+												[phoneArray addObject:[NSString stringWithFormat:@"%@%@", phoneNumber,  localisedLabel]];
+												allPhoneNumbers = [phoneArray componentsJoinedByString:@", "];
+											}
+										}
+										index++;
+									}
+									if (allPhoneNumbers) {
+										[descriptionHTMLString appendFormat:@"%@.", allPhoneNumbers];
+									}
+								}
+							}
+							
+							if ([[UDC valueForKeyPath:@"values.placemarkWithNotes"] boolValue]) {
+								NSString * noteString = [person valueForProperty: kABNoteProperty];
+								if ( [noteString length] > 0 ) {
+									NSMutableString * noteStringWithNewlines = [noteString mutableCopy];
+									[noteStringWithNewlines replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
+									[noteStringWithNewlines replaceOccurrencesOfString:@"\r" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
+									[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> %@", NSLocalizedString(@"Note", @"Note (appears in Google Earth Info Balloon)"), noteStringWithNewlines];
+								}
+							}
+							
+							[descriptionHTMLString appendString:@"<br />"];
+							
+							NSXMLElement * descriptionElement = [NSXMLElement elementWithName:@"description" stringValue:descriptionHTMLString];
+							[placemarkElement addChild: descriptionElement];
+							NSXMLElement * snippetElement = [NSXMLElement elementWithName:@"Snippet"];
+							[placemarkElement addChild:snippetElement];
+							NSXMLElement * styleURLElement = nil;
+							if (imageData) {
+								// use custom pin style if we have an image for the person
+								styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[@"#" stringByAppendingString:ID]];
+							}
+							else {
+								// if we don't have and image for the person, use own generic home and work images unless the hidden noHomeWorkIcons preference is set to YES
+								BOOL wantImages = ![[UDC valueForKeyPath:@"values.noHomeWorkIcons"] boolValue];
+								if (wantImages) {
+									if ([addressName isEqualToString:kABAddressHomeLabel]) {
+										styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICHOMEICONNAME]];
+									}
+									else if ([addressName isEqualToString:kABAddressWorkLabel]) {
+										styleURLElement = [NSXMLElement elementWithName:@"styleUrl" stringValue:[NSString stringWithFormat:@"#%@%@", EAGENERICSTYLEPREFIX, GENERICWORKICONNAME]];
+									}
+								}
+								// don't specify a style if there is neither an image nor a home or work address
+							}
+							if (styleURLElement) {
+								[placemarkElement addChild:styleURLElement];
+							}
+							if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
+								// create a group for each address label and add the addresses accordingly
+								NSXMLElement * addressGroup = [addressLabelGroups objectForKey:normalisedLabel];
+							
+								if (addressGroup == nil) {
+									// group doesn't exist yet => create it
+									addressGroup = [NSXMLElement elementWithName:@"Folder"];
+
+									[addressGroup addChild:[NSXMLNode elementWithName:@"name" stringValue:normalisedLabel]];
+									[addressLabelGroups setObject:addressGroup forKey:normalisedLabel];
+									
+									if ([OLDLABELS containsObject:normalisedLabel]) {
+										// this is the group for old addresses
+										[addressGroup addChild:[NSXMLNode elementWithName:@"visibility" stringValue: @"0"]];
+									}
+								}
+								// add element to this group
+								[addressGroup addChild:placemarkElement];
+								// groups will be sorted and added to the main XML tree after the loop has finished
+							}
+							else {
+								// add element to the main group immediately
+								[myXML addChild: placemarkElement];
 							}
 						}
-						// add element to this group
-						[addressGroup addChild:placemarkElement];
-						// groups will be sorted and added to the main XML tree after the loop has finished
-					}
-					else {
-						// add element to the main group immediately
-						[myXML addChild: placemarkElement];
-					}
+						
+						index++;
+					} // end of address loop
+
+				} // @autoreleasepool (inner)
+			} // end of people loop
+
+			
+			
+			if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
+				// sort and add folders of contacts for each group to main XML tree
+				NSArray * sortedLabels = [[addressLabelGroups allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+				NSEnumerator * labelEnumerator = [sortedLabels objectEnumerator];
+				id label;
+				
+				while (label = [labelEnumerator nextObject]) {
+					[myXML addChild: [addressLabelGroups objectForKey:label]];
+				}
+			}
+
+			[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLProgress"];
+				
+			if (![[NSThread currentThread] isCancelled]) {
+#pragma mark -do2: Write KML
+				NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
+				[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
+				[kmlElement addChild: myXML];
+				NSXMLDocument * myXMLDocument = [[NSXMLDocument alloc] initWithRootElement:kmlElement];
+				[myXMLDocument setCharacterEncoding:@"utf-8"];
+					
+				NSData * xmlData = [myXMLDocument XMLData];
+					
+				//
+				// now compress the result
+				NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
+				NSString * XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
+				int i = 2;
+					
+				while ([[NSFileManager defaultManager] fileExistsAtPath:XMLpath]) {
+					KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
+					XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
+					i++;
 				}
 
-				index++;
-			} // end of address loop
-
-			[innerPool release];
-		} // end of people loop
-
-		
-		
-		if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
-			// sort and add folders of contacts for each group to main XML tree
-			NSArray * sortedLabels = [[addressLabelGroups allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-			NSEnumerator * labelEnumerator = [sortedLabels objectEnumerator];
-			id label;
-			
-			while (label = [labelEnumerator nextObject]) {
-				[myXML addChild: [addressLabelGroups objectForKey:label]];
+				[xmlData writeToFile:XMLpath atomically:YES];
+				[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName] forKey:@"doneMessage"];
 			}
-		}
-
-		[self setValue:[NSNumber numberWithUnsignedInteger:[people count]] forKey:@"KMLProgress"];			
-			
-		if (![[NSThread currentThread] isCancelled]) {
-#pragma mark -do2: Write KML
-			NSXMLElement * kmlElement = [NSXMLElement elementWithName:@"kml"];
-			[kmlElement addAttribute: [NSXMLNode attributeWithName: @"xmlns" stringValue:@"http://earth.google.com/kml/2.1"]];
-			[kmlElement addChild: myXML];
-			NSXMLDocument * myXMLDocument = [[[NSXMLDocument alloc] initWithRootElement:kmlElement] autorelease];
-			[myXMLDocument setCharacterEncoding:@"utf-8"];
-				
-			NSData * xmlData = [myXMLDocument XMLData];
-				
-			//
-			// now compress the result
-			NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
-			NSString * XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
-			int i = 2;
-				
-			while ([[NSFileManager defaultManager] fileExistsAtPath:XMLpath]) {
-				KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
-				XMLpath = [NSString stringWithFormat:[@"~/Desktop/%@" stringByExpandingTildeInPath], KMLFileName];
-				i++;
+			else {
+				[self setValue:NSLocalizedString(@"Placemark generation was cancelled.", @"Status message after cancelled KML file creation.") forKey:@"doneMessage"];
 			}
-
-			[xmlData writeToFile:XMLpath atomically:YES];	
-			[self setValue:[NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName] forKey:@"doneMessage"];
-		}
-		else {
-			[self setValue:NSLocalizedString(@"Placemark generation was cancelled.", @"Status message after cancelled KML file creation.") forKey:@"doneMessage"];
-		}
-				
+					
 #pragma mark -do2: Clean Up 	
+			
+			[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
+			[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];
+		}
 		
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"KMLRunning"];
-		[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"KMLProgress"];			
-	}
-	
-	[self endBusy];
-	[myPool release];
+		[self endBusy];
+	} // @autoreleasepool (thread)
 }
 
 
@@ -1355,9 +1343,8 @@ NSString * const failFileName = @"Failed Lookups.plist";
 /*
  Localises Address Boook labels, could return nil
 */
-- (NSString *) localisedLabelName: (NSString*) labelName {
-	NSString * localisedLabelName = (NSString*) ABCopyLocalizedPropertyOrLabel((CFStringRef)labelName);
-	[localisedLabelName autorelease];
+- (NSString *) localisedLabelName:(NSString *)labelName {
+	NSString * localisedLabelName = (NSString *) CFBridgingRelease(ABCopyLocalizedPropertyOrLabel((__bridge CFStringRef)labelName));
 	return localisedLabelName;
 }
 

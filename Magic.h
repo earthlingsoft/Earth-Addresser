@@ -58,7 +58,7 @@
 
 @property BOOL geocodingRunning;
 @property NSInteger addressesAreAvailable;
-@property (retain) NSString * currentLookupAddress;
+@property (strong) NSString * currentLookupAddress;
 
 - (void) buildGroupList;
 

@@ -33,6 +33,8 @@
 		6C916E650F58C384003EA1EB /* work.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E630F58C384003EA1EB /* work.png */; };
 		6C916E660F58C384003EA1EB /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E640F58C384003EA1EB /* home.png */; };
 		6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C916EBD0F5963A4003EA1EB /* Icon Large.icns */; };
+		6CAE962B19803B19001DCFC8 /* Failed Lookups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */; };
+		6CAE962D19803B1F001DCFC8 /* Successful Lookups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */; };
 		6CEABD5C0BB322240059641A /* Magic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* Magic.m */; };
 		6CEABD780BB322BC0059641A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CEABD770BB322BC0059641A /* AddressBook.framework */; };
 		6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CEAC2720BB4B3290059641A /* Localizable.strings */; };
@@ -137,8 +139,10 @@
 		6C916E630F58C384003EA1EB /* work.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = work.png; path = Graphics/work.png; sourceTree = "<group>"; };
 		6C916E640F58C384003EA1EB /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home.png; path = Graphics/home.png; sourceTree = "<group>"; };
 		6C916EBD0F5963A4003EA1EB /* Icon Large.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Icon Large.icns"; path = "Icon/Icon Large.icns"; sourceTree = "<group>"; };
-		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
-		6CEABD5B0BB322240059641A /* Magic.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Magic.m; sourceTree = "<group>"; };
+		6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Failed Lookups.plist"; path = "../../Library/Application Support/EarthAddresser/Failed Lookups.plist"; sourceTree = "<group>"; };
+		6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Successful Lookups.plist"; path = "../../Library/Application Support/EarthAddresser/Successful Lookups.plist"; sourceTree = "<group>"; };
+		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
+		6CEABD5B0BB322240059641A /* Magic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Magic.m; sourceTree = "<group>"; };
 		6CEABD770BB322BC0059641A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Earth Addresser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Earth Addresser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,8 +188,10 @@
 				6C4FBD4519766C4E0010DC7F /* Readme.md */,
 				6C26C4220BB711AC0001C5D3 /* Ideas.md */,
 				6C4FBD4E197670B10010DC7F /* License.text */,
-				6C10559A1911C49100FA13B7 /* net.earthlingsoft.earthaddresser.plist */,
 				6C4FBD4119758A850010DC7F /* appcast.xml */,
+				6C10559A1911C49100FA13B7 /* net.earthlingsoft.earthaddresser.plist */,
+				6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */,
+				6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */,
 				6C4FBD24197573CB0010DC7F /* Sparkle.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -342,6 +348,7 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */,
+				6CAE962B19803B19001DCFC8 /* Failed Lookups.plist in Resources */,
 				6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */,
 				6CFB92660BBC498100191CDD /* readme.html in Resources */,
 				6C292AA00F1D15CD00B5059B /* Help.css in Resources */,
@@ -349,6 +356,7 @@
 				6C916E650F58C384003EA1EB /* work.png in Resources */,
 				6C916E660F58C384003EA1EB /* home.png in Resources */,
 				6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */,
+				6CAE962D19803B1F001DCFC8 /* Successful Lookups.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

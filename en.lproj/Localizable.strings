@@ -75,7 +75,7 @@ Displayed in bottom section after Placemarks have been created.
 /*
  Title of geocoding button while geocoding is running and can be cancelled.
 */
-"Cancel Lookup" = "Cancel Lookup";
+"Cancel Lookup" = "Stop Lookup";
 
 
 /*

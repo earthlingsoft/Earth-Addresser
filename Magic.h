@@ -35,7 +35,6 @@
 	IBOutlet NSProgressIndicator * geocodingProgressBar;
 	double geocodingProgress;
 	double geocodingMaximum;
-	NSString * geocodingError;
 	
 	NSString * relevantPeopleInfo;
 	NSString * lookupInfo;
@@ -59,16 +58,15 @@
 
 @property BOOL geocodingRunning;
 @property NSInteger addressesAreAvailable;
+@property (retain) NSString * currentLookupAddress;
 
-
-- (void) saveLocations;
 - (void) buildGroupList;
 
 - (IBAction) addressBookScopeChanged: (id) sender;
 - (IBAction) groupListSelectionChanged: (id) sender;
 
 - (IBAction) convertAddresses: (id) sender;
-- (IBAction) convertAddresses2: (id) sender;
+- (void) convertAddresses2: (id) sender;
 
 - (NSString *) imagesFolderPath;
 - (NSString *) fullPNGImagePathForName: (NSString *) name;
@@ -81,7 +79,7 @@
 - (NSArray*) relevantPeople;
 - (void) updateRelevantPeopleInfo:(NSArray*) people;
 
-- (NSMutableString*) dictionaryKeyForAddressDictionary : (NSDictionary*) address;
+- (NSString*) dictionaryKeyForAddressDictionary:(NSDictionary *)address;
 - (NSString*) cleanString:(NSString*) s from:(NSString*) evil ;
 
 - (BOOL) needToSearchNoticeHidden;

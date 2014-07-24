@@ -3,12 +3,12 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">13E28</string>
-		<string key="IBDocument.InterfaceBuilderVersion">5056</string>
+		<string key="IBDocument.InterfaceBuilderVersion">6185.11</string>
 		<string key="IBDocument.AppKitVersion">1265.21</string>
 		<string key="IBDocument.HIToolboxVersion">698.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">5056</string>
+			<string key="NS.object.0">6185.11</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSArrayController</string>
@@ -36,10 +36,7 @@
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 		</array>
-		<object class="NSMutableDictionary" key="IBDocument.Metadata">
-			<string key="NS.key.0">PluginDependencyRecalculationVersion</string>
-			<integer value="1" key="NS.object.0"/>
-		</object>
+		<dictionary class="NSMutableDictionary" key="IBDocument.Metadata"/>
 		<array class="NSMutableArray" key="IBDocument.RootObjects" id="338395291">
 			<object class="NSCustomObject" id="440723520">
 				<object class="NSMutableString" key="NSClassName">
@@ -66,7 +63,7 @@
 				<string key="NSWindowContentMaxSize">{653, 500}</string>
 				<string key="NSWindowContentMinSize">{653, 500}</string>
 				<object class="NSView" key="NSWindowView" id="230539147">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">268</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSTextField" id="264597672">
@@ -81,7 +78,7 @@
 								<int key="NSCellFlags2">272760832</int>
 								<string key="NSContents">Es wurde noch nicht versucht, für alle ausgewählten Adressen die Koordinaten zu ermitteln.</string>
 								<object class="NSFont" key="NSSupport" id="26">
-									<string key="NSName">.LucidaGrandeUI</string>
+									<bool key="IBIsSystemFont">YES</bool>
 									<double key="NSSize">11</double>
 									<int key="NSfFlags">3100</int>
 								</object>
@@ -113,13 +110,14 @@
 							<int key="NSvFlags">265</int>
 							<string key="NSFrame">{{461, 12}, {178, 32}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
+							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="632093205">
 								<int key="NSCellFlags">67108864</int>
 								<int key="NSCellFlags2">134217728</int>
 								<string key="NSContents">Ortsmarken erzeugen</string>
 								<object class="NSFont" key="NSSupport" id="433704967">
-									<string key="NSName">.LucidaGrandeUI</string>
+									<bool key="IBIsSystemFont">YES</bool>
 									<double key="NSSize">13</double>
 									<int key="NSfFlags">1044</int>
 								</object>
@@ -221,8 +219,8 @@
 								<int key="NSCellFlags">68157504</int>
 								<int key="NSCellFlags2">272630784</int>
 								<string key="NSContents">Kontakte auswählen</string>
-								<object class="NSFont" key="NSSupport" id="191649652">
-									<string key="NSName">.LucidaGrandeUI-Bold</string>
+								<object class="NSFont" key="NSSupport" id="151045398">
+									<bool key="IBIsSystemFont">YES</bool>
 									<double key="NSSize">13</double>
 									<int key="NSfFlags">2072</int>
 								</object>
@@ -355,7 +353,7 @@
 								<int key="NSCellFlags">68157504</int>
 								<int key="NSCellFlags2">272630784</int>
 								<string key="NSContents">Koordinaten ermitteln</string>
-								<reference key="NSSupport" ref="191649652"/>
+								<reference key="NSSupport" ref="151045398"/>
 								<reference key="NSControlView" ref="775049808"/>
 								<reference key="NSBackgroundColor" ref="351498912"/>
 								<reference key="NSTextColor" ref="273249351"/>
@@ -368,7 +366,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{181, 248}, {455, 47}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
-							<reference key="NSNextKeyView" ref="211310508"/>
+							<reference key="NSNextKeyView" ref="63428328"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="721738505">
 								<int key="NSCellFlags">67108864</int>
@@ -419,7 +417,7 @@
 								<int key="NSCellFlags">68157504</int>
 								<int key="NSCellFlags2">272630784</int>
 								<string key="NSContents">Ortsmarken erzeugen mit</string>
-								<reference key="NSSupport" ref="191649652"/>
+								<reference key="NSSupport" ref="151045398"/>
 								<reference key="NSControlView" ref="385991191"/>
 								<reference key="NSBackgroundColor" ref="351498912"/>
 								<reference key="NSTextColor" ref="273249351"/>
@@ -575,7 +573,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{340, 218}, {296, 28}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
-							<reference key="NSNextKeyView" ref="63428328"/>
+							<reference key="NSNextKeyView" ref="570013796"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="397907215">
 								<int key="NSCellFlags">67108864</int>
@@ -861,14 +859,14 @@
 						<object class="NSTextField" id="63428328">
 							<reference key="NSNextResponder" ref="230539147"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{181, 168}, {282, 48}}</string>
+							<string key="NSFrame">{{180, 218}, {459, 14}}</string>
 							<reference key="NSSuperview" ref="230539147"/>
-							<reference key="NSNextKeyView" ref="570013796"/>
+							<reference key="NSNextKeyView" ref="211310508"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="666946668">
-								<int key="NSCellFlags">67108864</int>
-								<int key="NSCellFlags2">272760832</int>
-								<string key="NSContents">Test</string>
+								<int key="NSCellFlags">67108928</int>
+								<int key="NSCellFlags2">272762944</int>
+								<string key="NSContents">Aktuelle Adresse</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="63428328"/>
 								<reference key="NSBackgroundColor" ref="351498912"/>
@@ -1001,11 +999,12 @@
 						</object>
 					</array>
 					<string key="NSFrameSize">{653, 500}</string>
+					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="128552335"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
-				<string key="NSMinSize">{653, 522}</string>
-				<string key="NSMaxSize">{653, 522}</string>
+				<string key="NSMinSize">{653, 518}</string>
+				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<string key="NSFrameAutosaveName">main window</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -1505,7 +1504,7 @@
 								<int key="NSCellFlags">67108864</int>
 								<int key="NSCellFlags2">272629760</int>
 								<string key="NSContents">Willkommen bei Earth Addresser</string>
-								<reference key="NSSupport" ref="191649652"/>
+								<reference key="NSSupport" ref="151045398"/>
 								<reference key="NSControlView" ref="476508197"/>
 								<reference key="NSBackgroundColor" ref="351498912"/>
 								<reference key="NSTextColor" ref="273249351"/>
@@ -1609,7 +1608,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 			<object class="NSUserDefaultsController" id="565851004">
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
-			<object class="NSCustomObject" id="445804045">
+			<object class="NSCustomObject" id="1030845609">
 				<string key="NSClassName">SUUpdater</string>
 			</object>
 		</array>
@@ -1747,10 +1746,10 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: automaticallyChecksForUpdates</string>
 						<reference key="source" ref="239946450"/>
-						<reference key="destination" ref="445804045"/>
+						<reference key="destination" ref="1030845609"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="239946450"/>
-							<reference key="NSDestination" ref="445804045"/>
+							<reference key="NSDestination" ref="1030845609"/>
 							<string key="NSLabel">value: automaticallyChecksForUpdates</string>
 							<string key="NSBinding">value</string>
 							<string key="NSKeyPath">automaticallyChecksForUpdates</string>
@@ -1788,7 +1787,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 						<string key="label">enabled: geocodingRunning</string>
 						<reference key="source" ref="1029541767"/>
 						<reference key="destination" ref="1000509216"/>
-						<object class="NSNibBindingConnector" key="connector" id="333107009">
+						<object class="NSNibBindingConnector" key="connector" id="75706950">
 							<reference key="NSSource" ref="1029541767"/>
 							<reference key="NSDestination" ref="1000509216"/>
 							<string key="NSLabel">enabled: geocodingRunning</string>
@@ -1820,7 +1819,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 								<integer value="-1" key="NSNotApplicablePlaceholder"/>
 								<integer value="-1" key="NSNullPlaceholder"/>
 							</dictionary>
-							<reference key="NSPreviousConnector" ref="333107009"/>
+							<reference key="NSPreviousConnector" ref="75706950"/>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -3204,19 +3203,43 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: geocodingError</string>
+						<string key="label">hidden: geocodingRunning</string>
 						<reference key="source" ref="63428328"/>
 						<reference key="destination" ref="1000509216"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="63428328"/>
 							<reference key="NSDestination" ref="1000509216"/>
-							<string key="NSLabel">value: geocodingError</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">geocodingError</string>
+							<string key="NSLabel">hidden: geocodingRunning</string>
+							<string key="NSBinding">hidden</string>
+							<string key="NSKeyPath">geocodingRunning</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">NSNegateBoolean</string>
+							</object>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">885</int>
+					<int key="connectionID">1088</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">displayPatternValue1: currentLookupAddress</string>
+						<reference key="source" ref="63428328"/>
+						<reference key="destination" ref="1000509216"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="63428328"/>
+							<reference key="NSDestination" ref="1000509216"/>
+							<string key="NSLabel">displayPatternValue1: currentLookupAddress</string>
+							<string key="NSBinding">displayPatternValue1</string>
+							<string key="NSKeyPath">currentLookupAddress</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSDisplayPattern</string>
+								<string key="NS.object.0">Adresse nachschlagen: %{value1}@</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1090</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3514,7 +3537,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">checkForUpdates:</string>
-						<reference key="source" ref="445804045"/>
+						<reference key="source" ref="1030845609"/>
 						<reference key="destination" ref="1071363511"/>
 					</object>
 					<int key="connectionID">1034</int>
@@ -3577,7 +3600,6 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 							<reference ref="1029541767"/>
 							<reference ref="210290737"/>
 							<reference ref="437664994"/>
-							<reference ref="63428328"/>
 							<reference ref="373565940"/>
 							<reference ref="31121896"/>
 							<reference ref="875042777"/>
@@ -3593,6 +3615,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 							<reference ref="768254630"/>
 							<reference ref="217106998"/>
 							<reference ref="128552335"/>
+							<reference ref="63428328"/>
 						</array>
 						<reference key="parent" ref="1029617068"/>
 					</object>
@@ -4450,7 +4473,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1033</int>
-						<reference key="object" ref="445804045"/>
+						<reference key="object" ref="1030845609"/>
 						<reference key="parent" ref="0"/>
 					</object>
 				</array>
@@ -4504,7 +4527,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 					</object>
 				</object>
 				<string key="209.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="21.IBPersistedLastKnownCanvasPosition">{134.5, -342}</string>
+				<string key="21.IBPersistedLastKnownCanvasPosition">{207.5, -313}</string>
 				<string key="21.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="21.IBWindowTemplateEditedContentRect">{{269, 646}, {653, 500}}</string>
 				<boolean value="YES" key="21.NSWindowTemplate.visibleAtLaunch"/>
@@ -4634,6 +4657,7 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 				<string key="872.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="877.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="878.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="NO" key="883.IBNSControlSetsMaxLayoutWidthAtFirstLayoutMetadataKey"/>
 				<string key="883.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="884.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="897.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4665,149 +4689,15 @@ biBBcHBsZSB6dSBzZW5kZW4uA</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1067</int>
+			<int key="maxID">1090</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
-					<string key="className">Magic</string>
-					<string key="superclassName">NSObject</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="addressBookScopeChanged:">id</string>
-						<string key="convertAddresses2:">id</string>
-						<string key="convertAddresses:">id</string>
-						<string key="createListOfNonLocatableAddresses:">id</string>
-						<string key="dismissSheet:">id</string>
-						<string key="do:">id</string>
-						<string key="groupListSelectionChanged:">id</string>
-						<string key="lookupNonLocatableAddresses:">id</string>
-						<string key="readme:">id</string>
-						<string key="showWarningInfo:">id</string>
-						<string key="toggleAutoCheckForUpdates:">id</string>
-						<string key="toggleGroupByLabel:">id</string>
-						<string key="toggleHideOldByDefault:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="addressBookScopeChanged:">
-							<string key="name">addressBookScopeChanged:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="convertAddresses2:">
-							<string key="name">convertAddresses2:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="convertAddresses:">
-							<string key="name">convertAddresses:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="createListOfNonLocatableAddresses:">
-							<string key="name">createListOfNonLocatableAddresses:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="dismissSheet:">
-							<string key="name">dismissSheet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="do:">
-							<string key="name">do:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="groupListSelectionChanged:">
-							<string key="name">groupListSelectionChanged:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="lookupNonLocatableAddresses:">
-							<string key="name">lookupNonLocatableAddresses:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="readme:">
-							<string key="name">readme:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="showWarningInfo:">
-							<string key="name">showWarningInfo:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="toggleAutoCheckForUpdates:">
-							<string key="name">toggleAutoCheckForUpdates:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="toggleGroupByLabel:">
-							<string key="name">toggleGroupByLabel:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="toggleHideOldByDefault:">
-							<string key="name">toggleHideOldByDefault:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="createKMLButton">NSButton</string>
-						<string key="geocodingProgressBar">NSProgressIndicator</string>
-						<string key="mainWindow">NSWindow</string>
-						<string key="progressBar">NSProgressIndicator</string>
-						<string key="runGeolocationButton">NSButton</string>
-						<string key="warningMessage">NSPanel</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="createKMLButton">
-							<string key="name">createKMLButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="geocodingProgressBar">
-							<string key="name">geocodingProgressBar</string>
-							<string key="candidateClassName">NSProgressIndicator</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="mainWindow">
-							<string key="name">mainWindow</string>
-							<string key="candidateClassName">NSWindow</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="progressBar">
-							<string key="name">progressBar</string>
-							<string key="candidateClassName">NSProgressIndicator</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="runGeolocationButton">
-							<string key="name">runGeolocationButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="warningMessage">
-							<string key="name">warningMessage</string>
-							<string key="candidateClassName">NSPanel</string>
-						</object>
-					</dictionary>
+					<string key="className">FirstResponder</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/Magic.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">SUUpdater</string>
-					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">checkForUpdates:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">checkForUpdates:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">checkForUpdates:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">delegate</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">delegate</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">delegate</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/SUUpdater.h</string>
+						<string key="majorKey">IBUserSource</string>
+						<string key="minorKey"/>
 					</object>
 				</object>
 			</array>

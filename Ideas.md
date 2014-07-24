@@ -1,5 +1,10 @@
 # Ideas
 
+* improve handling of no-network errors
+* configurable list of strings to remove
+* configurable list of labels to hide by default
+* improve FAIL report
+* improve FAIL re-lookup / do not re-lookup ALL addresses?
 * sane class structure
 * use Container / Sandbox
 * use modern APIs / blocks

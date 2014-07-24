@@ -11,10 +11,11 @@
 #import <CoreLocation/CoreLocation.h>
 
 
-
 @implementation Magic
+
 @synthesize geocodingRunning;
 @synthesize addressesAreAvailable;
+@synthesize currentLookupAddress;
 
 - (id) init {
 	self = [super init];
@@ -24,28 +25,12 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(addressBookChanged:)
 													 name:kABDatabaseChangedExternallyNotification
-												   object:nil];	
-				
-		NSDictionary * myLocations = [UDC valueForKeyPath:@"values.locationsSuccess"];
-		if (myLocations) {
-			locations = [myLocations mutableCopy];
-		}
-		else {
-			locations = [[NSMutableDictionary alloc] init];
-		}
+												   object:nil];
 		
-		NSDictionary * myFailLocations = [UDC valueForKeyPath:@"values.locationsFail"];
-		if (myFailLocations) {
-			failLocations = [myFailLocations mutableCopy];
-		}
-		else {
-			failLocations = [[NSMutableDictionary alloc] init];
-		}
-		
+		[self readCaches];
 	}	
 	return self;
 }
-
 
 
 - (void)awakeFromNib {
@@ -53,13 +38,11 @@
 }
 
 
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
 		[self showWarningInfo:nil];
 	}
 }	
-
 
 
 + (NSSet *) keyPathsForValuesAffectingValueForKey: (NSString *)key {
@@ -84,7 +67,6 @@
 
 	return keyPaths;
 }
-
 
 
 + (void)initialize {
@@ -168,8 +150,86 @@
 
 
 
+#pragma mark Caches
+
+NSString * const applicationSupportFolderName = @"EarthAddresser";
+NSString * const successFileName = @"Successful Lookups.plist";
+NSString * const failFileName = @"Failed Lookups.plist";
+
+- (NSURL *) EAApplicationSupportFolder {
+	NSError * error;
+	NSURL * applicationSupportURL = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+	NSURL * myApplicationSupportURL;
+	
+	if (applicationSupportURL) {
+		myApplicationSupportURL = [applicationSupportURL URLByAppendingPathComponent:applicationSupportFolderName isDirectory:YES];
+	}
+	else {
+		NSLog(@"Could not find/create Application Support folder");
+		if (error) {
+			NSLog(@"%@", [error localizedDescription]);
+		}
+	}
+	
+	return myApplicationSupportURL;
+}
 
 
+- (void) readCaches {
+	locations = [[self mutableDictionaryFromApplicationSupportFileName:successFileName] retain];
+	if (!locations) {
+		locations = [[NSMutableDictionary alloc] init];
+	}
+	
+	failLocations = [[self mutableDictionaryFromApplicationSupportFileName:failFileName] retain];
+	if (!failLocations) {
+		failLocations = [[NSMutableDictionary alloc] init];
+	}
+}
+
+
+- (void) writeCaches {
+	[self writeDictionary:locations toApplicationSupportFileName:successFileName];
+	[self writeDictionary:failLocations toApplicationSupportFileName:failFileName];
+}
+
+
+- (NSMutableDictionary *) mutableDictionaryFromApplicationSupportFileName:(NSString *)fileName {
+	NSURL * EAApplicationSupportURL = [self EAApplicationSupportFolder];
+	NSURL * fileURL = [EAApplicationSupportURL URLByAppendingPathComponent:fileName];
+	NSMutableDictionary * dictionary = [NSMutableDictionary dictionaryWithContentsOfURL:fileURL];
+	return dictionary;
+}
+
+
+- (BOOL) writeDictionary:(NSDictionary *)dictionary toApplicationSupportFileName:(NSString *)fileName {
+	BOOL success = NO;
+	NSError * error;
+	
+	NSURL * EAApplicationSupportURL = [self EAApplicationSupportFolder];
+	
+	if([[NSFileManager defaultManager] createDirectoryAtURL:EAApplicationSupportURL withIntermediateDirectories:YES attributes:nil error:&error]) {
+		if (EAApplicationSupportURL) {
+			NSURL * fileURL = [EAApplicationSupportURL URLByAppendingPathComponent:fileName];
+			success = [dictionary writeToURL:fileURL atomically:YES];
+			if (!success) {
+				NSLog(@"Could not write file ”%@“", [fileURL path]);
+			}
+		}
+	}
+	else {
+		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [EAApplicationSupportURL path]);
+		if (error) {
+			NSLog(@"%@", [error localizedDescription]);
+		}
+	}
+	
+	return success;
+}
+
+
+
+#pragma mark Address Book
 
 /*
 	when Address Book changes, update everything that depends on it
@@ -180,8 +240,6 @@
 }
 
 
-
-#pragma mark Address Book People Selection
 
 /*
 	Rebuilds the Group list from the Address Book and re-sets the selection in case the selected object ceased existing after the rebuild.
@@ -251,8 +309,6 @@
 
 
 
-
-
 /*
  returns array with the people selected in the UI
  the array is sorted
@@ -272,14 +328,14 @@
 		}
 		else {
 			// the group doesn't exist anymore => switch to all
-			NSLog(@"Previously selecte group with ID %@ does not exist anymore. Setting selection to All.", selectedGroup);
+			NSLog(@"Previously selected group with ID %@ does not exist anymore. Setting selection to All.", selectedGroup);
 			[UDC setValue:[NSNumber numberWithInt: 0] forKeyPath:@"values.addressBookScope"];
 			people = [ab people];
 		}
 	}
 	else {
 		// group ID does not look like a group ID
-		NSLog(@"Selected group wasn't recognisable.");
+		NSLog(@"Selected group was not recognisable. Setting selection to All.");
 		[UDC setValue:[NSNumber numberWithInt: 0] forKeyPath:@"values.addressBookScope"];
 		people = [ab people];
 	}
@@ -315,8 +371,8 @@
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
 			NSObject * addressObject = [locations objectForKey:addressKey];
-			if ([[locations objectForKey:addressKey] isKindOfClass:[NSArray class]]) {
-				// it's an array of coordinates => successfully located
+			if (addressObject) {
+				// object with coordinates exists => successfully located
 				locatedAddressCount++;
 			}
 			else if ([failLocations objectForKey:addressKey]) {
@@ -407,40 +463,53 @@
 
 
 
-#pragma mark Convert Addresses to Relevant Formats
+#pragma mark Extract address information for dictionary keys
 
-- (NSMutableString *) dictionaryKeyForAddressDictionary : (NSDictionary*) address {
-	NSMutableString * addressString = [NSMutableString string];
-	NSString * addressPiece;
-	if ((addressPiece = [address valueForKey:kABAddressStreetKey])) {
+- (NSString *) dictionaryKeyForAddressDictionary:(NSDictionary *)address {
+	return [[self componentsFromAddressDictionary:address] componentsJoinedByString:@", "];
+}
+
+
+- (NSArray *) componentsFromAddressDictionary:(NSDictionary *)address {
+	NSMutableArray * addressComponents = [NSMutableArray arrayWithCapacity:5];
+	
+	NSString * addressComponent;
+	if ((addressComponent = [address valueForKey:kABAddressStreetKey])) {
 		NSArray * evilWords = [NSArray arrayWithObjects: @"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Dept.", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"App.", @"Apt ", @"Apt.", @"#", @"P.O. Box", @"P.O.Box", @"Postfach ", @"B\303\274ro", @"Office", nil];
 		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
 		NSString * evilWord;
 		while (evilWord = [evilWordEnumerator nextObject]) {
-			addressPiece = [self cleanString:addressPiece from: evilWord];
+			addressComponent = [self cleanString:addressComponent from:evilWord];
 		}
-		[addressString appendFormat:@"%@\n", addressPiece];
-	}
-	if ((addressPiece = [address valueForKey:kABAddressCityKey])) {
-		[addressString appendFormat:@"%@\n", addressPiece];
-	}
-	if ((addressPiece = [address valueForKey:kABAddressZIPKey])) {
-		[addressString appendFormat:@"%@\n", addressPiece];
-	}
-	if ((addressPiece = [address valueForKey:kABAddressStateKey])) {
-		[addressString appendFormat:@"%@\n", addressPiece];
-	}
-	if ((addressPiece = [address valueForKey:kABAddressCountryCodeKey])) {
-		[addressString appendFormat:@"%@", addressPiece];
+		
+		[self addString:addressComponent toArray:addressComponents];
 	}
 
-	// NSLog(addressString);
-	NSMutableString * result = [[[addressString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy] autorelease];
-	
-	return result;
+	[self addComponent:kABAddressCityKey ofAddress:address toArray:addressComponents];
+	[self addComponent:kABAddressZIPKey ofAddress:address toArray:addressComponents];
+	[self addComponent:kABAddressStateKey ofAddress:address toArray:addressComponents];
+	[self addComponent:kABAddressCountryCodeKey ofAddress:address toArray:addressComponents];
+
+	return addressComponents;
 }
 
+- (void) addComponent:(NSString *)componentKey ofAddress:(NSDictionary *)address toArray:(NSMutableArray *)array {
+	NSString * addressComponent = [address valueForKey:componentKey];
+	
+	if (addressComponent) {
+		[self addString:addressComponent toArray:array];
+	}
+}
 
+- (void) addString:(NSString *)string toArray:(NSMutableArray *)array {
+	NSString * cleanedString = [[string
+								stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+								stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+	
+	if ([cleanedString length] > 0) {
+		[array addObject:cleanedString];
+	}
+}
 
 
 #pragma mark Address Lookup
@@ -486,8 +555,6 @@
 	NSTimeInterval previousLookup = 0;
 	BOOL error = NO;
 	
-	[self setValue:@"" forKey:@"geocodingError"];
-
 	[self setValue:[NSNumber numberWithFloat:notSearchedCount] forKey:@"geocodingMaximum"];
 		
 	while ((myPerson = [myEnum nextObject]) && !error && ![[NSThread currentThread] isCancelled]) {
@@ -504,6 +571,7 @@
 			if (![locations objectForKey:addressString] && ![failLocations objectForKey:addressString]) {
 				// Look up address if we don't know its coordinates already
 
+				self.currentLookupAddress = addressString;
 				[self setValue:[NSNumber numberWithDouble:geocodingCurrentPosition] forKey:@"geocodingProgress"];
 				geocodingCurrentPosition += 1.;
 							
@@ -520,11 +588,13 @@
 					if ([placemarks count] == 1) {
 						CLPlacemark * placemark = placemarks[0];
 						CLLocation * location = placemark.location;
-						[locations setObject:[NSArray arrayWithObjects:
-											  [NSNumber numberWithDouble:location.horizontalAccuracy],
-											  [NSNumber numberWithDouble:location.coordinate.latitude],
-											  [NSNumber numberWithDouble:location.coordinate.longitude],
-											  nil]
+						[locations setObject:@{
+											   @"lat":[NSNumber numberWithDouble:location.coordinate.latitude],
+											   @"lon":[NSNumber numberWithDouble:location.coordinate.longitude],
+											   @"accuracy":[NSNumber numberWithDouble:location.horizontalAccuracy],
+											   @"timestamp":[NSNumber numberWithDouble:location.timestamp.timeIntervalSince1970],
+											   @"resultType":@"unique"
+											 }
 									  forKey:addressString];
 					}
 					else if ([placemarks count] > 1) {
@@ -561,26 +631,16 @@
 		[innerPool release];
 	}
 
+	self.currentLookupAddress = @"";
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"geocodingRunning"];
 	geocodingThread = nil;
 	
 	[geocodingProgressBar setHidden:YES];			
 
-	[self saveLocations];
+	[self writeCaches];
 
 	[self endBusy];
 	[pool release];
-}
-
-
-
-
-/*
- saves variable with looked up locations to preferences
-*/
-- (void) saveLocations {
-	[UDC setValue:locations forKeyPath:@"values.locationsSuccess"];
-	[UDC setValue:failLocations forKeyPath:@"values.locationsFail"];
 }
 
 
@@ -633,7 +693,7 @@
 - (NSXMLElement *) createStyleForImageData: (NSData *) imageData withID:(NSString *) ID {
 	NSXMLElement * styleElement = nil;
 	
-	// only execute if we haven�t been cancelled (mainly to avoid duplicate error messages)
+	// only execute if we haven’t been cancelled (mainly to avoid duplicate error messages)
 	if (![[NSThread currentThread] isCancelled]) {
 		// ensure folders to our image exist
 		NSString * fullImagePath = [self fullPNGImagePathForName: ID];
@@ -856,8 +916,8 @@
 					}
 					
 					if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
-						NSMutableString * addressString = [self dictionaryKeyForAddressDictionary:theAddress];
-						[addressString replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [addressString length])];
+						NSArray * addressComponents = [self componentsFromAddressDictionary:theAddress];
+						NSString * addressString = [addressComponents componentsJoinedByString:@"<br />"];
 						[descriptionHTMLString appendFormat:@"%@", addressString];
 					}
 					

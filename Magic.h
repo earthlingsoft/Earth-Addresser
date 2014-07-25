@@ -17,17 +17,15 @@
 #define GENERICHOMEICONNAME @"home"
 #define GENERICWORKICONNAME @"work"
 #define ALLDICTIONARY [NSDictionary dictionaryWithObjectsAndKeys:MENUITEMALL, MENUOBJECT, NSLocalizedString(@"All Contacts", @"All Contacts"), MENUNAME, nil]
-#define SECONDSBETWEENCOORDINATELOOKUPS 1.0
 #define UDC [NSUserDefaultsController sharedUserDefaultsController]
 #define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
 
+@class ESAddressLookupOperation;
+@class ESAddressHelper;
 
 @interface Magic : NSObject {
 	NSThread * KMLThread;
 	IBOutlet NSProgressIndicator * progressBar;
-	
-	NSThread * geocodingThread;
-	IBOutlet NSProgressIndicator * geocodingProgressBar;
 	
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
@@ -37,20 +35,18 @@
 	
 	NSArray * groups;
 	BOOL noGroups;
-
-	NSMutableDictionary * locations;
-	NSMutableDictionary * failLocations;
 }
 
-@property BOOL geocodingRunning;
-@property double geocodingProgress;
-@property double geocodingMaximum;
+@property ESAddressLookupOperation * geocodingOperation;
 @property (readonly) NSString * geocodingButtonLabel;
 
 @property BOOL KMLRunning;
 @property double KMLProgress;
 @property double KMLMaximum;
 @property (readonly) NSString * KMLWritingButtonLabel;
+
+@property NSMutableDictionary * locations;
+@property NSMutableDictionary * failLocations;
 
 @property NSInteger notSearchedCount;
 @property BOOL nonLocatableAddressesExist;
@@ -72,7 +68,7 @@
 @property (readonly) NSURL * EAApplicationSupportURL;
 @property (readonly) NSString * myVersionString;
 
-@property NSMutableArray * addressTermsToRemove;
+@property ESAddressHelper * addressHelper;
 @property IBOutlet NSArrayController * addressTermsToRemoveController;
 
 @property NSMutableArray * oldLabels;
@@ -81,11 +77,12 @@
 
 - (void) buildGroupList;
 
+- (void) writeCaches;
+
 - (IBAction) addressBookScopeChanged: (id) sender;
 - (IBAction) groupListSelectionChanged: (id) sender;
 
 - (IBAction) convertAddresses: (id) sender;
-- (void) convertAddresses2: (id) sender;
 
 - (NSString *) fullPNGImagePathForName:(NSString *)name;
 - (NSXMLElement *) createStyleForImageData:(NSData *)image withID:(NSString *)ID;
@@ -96,8 +93,6 @@
 
 - (NSArray *) relevantPeople;
 - (void) updateRelevantPeopleInfo:(NSArray*)people;
-
-- (NSString *) dictionaryKeyForAddressDictionary:(NSDictionary *)address;
 
 - (NSString *) localisedLabelName: (NSString*) label;
 

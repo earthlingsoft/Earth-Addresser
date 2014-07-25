@@ -8,8 +8,9 @@
 
 #import "Magic.h"
 #import <AddressBook/ABAddressBookC.h>
-#import <CoreLocation/CoreLocation.h>
 #import "ESTerm.h"
+#import "ESAddressLookupOperation.h"
+#import "ESAddressHelper.h"
 
 @implementation Magic
 
@@ -28,6 +29,8 @@
 													 name:ESTermContentChangedNotification
 												   object:NULL];
 
+		self.addressHelper = [[ESAddressHelper alloc] init];
+		
 		[self readDefaults];
 		[self readCaches];
 	}
@@ -36,7 +39,7 @@
 
 
 - (void)awakeFromNib {
-	[self.addressTermsToRemoveController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
+	[self.addressTermsToRemoveController addObserver:self.addressHelper forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self.oldLabelsController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self relevantPeople];
 }
@@ -61,7 +64,7 @@
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKeys];
 	}
 	else if ([key isEqualToString:@"geocodingButtonLabel"]) {
-		NSSet * affectingKeys = [NSSet setWithObjects:@"geocodingRunning", nil];
+		NSSet * affectingKeys = [NSSet setWithObjects:@"geocodingOperation", nil];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKeys];
 	}
 	else if ([key isEqualToString:@"KMLWritingButtonLabel"]) {
@@ -131,8 +134,8 @@
 
 
 - (void) dealloc {
-	if (self.geocodingRunning && geocodingThread) {
-		[geocodingThread cancel];
+	if (self.geocodingOperation && !self.geocodingOperation.finished) {
+		[self.geocodingOperation cancel];
 	}
 	if (self.KMLRunning && KMLThread) {
 		[KMLThread cancel];
@@ -154,7 +157,7 @@
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
 	NSApplicationTerminateReply result = NSTerminateNow;
 	
-	if (self.KMLRunning || self.geocodingRunning) {
+	if (self.KMLRunning || (self.geocodingOperation && !self.geocodingOperation.finished)) {
 		result = NSTerminateLater;
 	}
 	
@@ -170,7 +173,7 @@
 */
 - (BOOL)windowShouldClose:(id)sender {
 	BOOL result = YES;
-	if (self.KMLRunning || self.geocodingRunning) {
+	if (self.KMLRunning || (self.geocodingOperation && !self.geocodingOperation.finished)) {
 		result = NO;
 	}
 	return result;
@@ -181,13 +184,6 @@
 #pragma mark User Defaults
 
 - (void) readDefaults {
-	self.addressTermsToRemove = [NSMutableArray array];
-	NSArray * parts = [UDC valueForKeyPath:@"values.addressTermsToRemove"];
-	for (NSDictionary * partDict in parts) {
-		ESTerm * partTerm = [[ESTerm alloc] initWithDictionary:partDict];
-		[self.addressTermsToRemove addObject:partTerm];
-	}
-	
 	self.oldLabels = [NSMutableArray array];
 	NSArray * labels = [UDC valueForKeyPath:@"values.oldLabels"];
 	for (NSDictionary * labelDict in labels) {
@@ -198,13 +194,8 @@
 
 
 - (void) updateDefaults:(NSNotification *) notification {
-	NSMutableArray * terms = [NSMutableArray array];
-	for (ESTerm * term in self.addressTermsToRemove) {
-		NSDictionary * dict = term.dictionary;
-		[terms addObject:dict];
-	}
-	[UDC setValue:terms forKeyPath:@"values.addressTermsToRemove"];
-	
+	[self.addressHelper updateDefaults];
+
 	NSMutableArray * labels = [NSMutableArray array];
 	for (ESTerm * term in self.oldLabels) {
 		NSDictionary * dict = term.dictionary;
@@ -223,21 +214,21 @@ NSString * const successFileName = @"Successful Lookups.plist";
 NSString * const failFileName = @"Failed Lookups.plist";
 
 - (void) readCaches {
-	locations = [self mutableDictionaryFromApplicationSupportFileName:successFileName];
-	if (!locations) {
-		locations = [[NSMutableDictionary alloc] init];
+	self.locations = [self mutableDictionaryFromApplicationSupportFileName:successFileName];
+	if (!self.locations) {
+		self.locations = [[NSMutableDictionary alloc] init];
 	}
 	
-	failLocations = [self mutableDictionaryFromApplicationSupportFileName:failFileName];
-	if (!failLocations) {
-		failLocations = [[NSMutableDictionary alloc] init];
+	self.failLocations = [self mutableDictionaryFromApplicationSupportFileName:failFileName];
+	if (!self.failLocations) {
+		self.failLocations = [[NSMutableDictionary alloc] init];
 	}
 }
 
 
 - (void) writeCaches {
-	[self writeDictionary:locations toApplicationSupportFileName:successFileName];
-	[self writeDictionary:failLocations toApplicationSupportFileName:failFileName];
+	[self writeDictionary:self.locations toApplicationSupportFileName:successFileName];
+	[self writeDictionary:self.failLocations toApplicationSupportFileName:failFileName];
 }
 
 
@@ -412,12 +403,12 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
-			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			if (locations[addressKey]) {
+			NSString * addressKey = [self.addressHelper keyForAddress:addressDict];
+			if (self.locations[addressKey]) {
 				// object with coordinates exists => successfully located
 				locatedAddressCount++;
 			}
-			else if (failLocations[addressKey]) {
+			else if (self.failLocations[addressKey]) {
 				// looked up but not located
 				nonLocatedAddressCount++;
 			}
@@ -485,7 +476,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	self.relevantPeopleInfo = infoString;
 	self.lookupInfo = lookupPart;
 	self.nonLocatableAddressesButtonHidden = !showNonLocatableAddressesButton;
-	self.nonLocatableAddressesExist = ([failLocations count] > 0);
+	self.nonLocatableAddressesExist = ([self.failLocations count] > 0);
 	self.notSearchedCount = notYetLocatedAddressCount;
 	self.addressesAreAvailable = (locatedAddressCount != 0);
 	self.doneMessage = @"";
@@ -503,54 +494,6 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 
-
-#pragma mark Extract address information for dictionary keys
-
-- (NSString *) dictionaryKeyForAddressDictionary:(NSDictionary *)address {
-	return [[self componentsFromAddressDictionary:address] componentsJoinedByString:@", "];
-}
-
-
-- (NSArray *) componentsFromAddressDictionary:(NSDictionary *)address {
-	NSMutableArray * addressComponents = [NSMutableArray arrayWithCapacity:5];
-	
-	NSString * addressComponent;
-	if ((addressComponent = [address valueForKey:kABAddressStreetKey])) {
-		NSString * cleanedComponent = [self cleanAddress:addressComponent];
-		if (cleanedComponent.length > 0) {
-			[self addString:cleanedComponent toArray:addressComponents];
-		}
-	}
-
-	[self addComponent:kABAddressCityKey ofAddress:address toArray:addressComponents];
-	[self addComponent:kABAddressZIPKey ofAddress:address toArray:addressComponents];
-	[self addComponent:kABAddressStateKey ofAddress:address toArray:addressComponents];
-	[self addComponent:kABAddressCountryCodeKey ofAddress:address toArray:addressComponents];
-
-	return addressComponents;
-}
-
-
-- (void) addComponent:(NSString *)componentKey ofAddress:(NSDictionary *)address toArray:(NSMutableArray *)array {
-	NSString * addressComponent = [address valueForKey:componentKey];
-	
-	if (addressComponent) {
-		[self addString:addressComponent toArray:array];
-	}
-}
-
-
-- (void) addString:(NSString *)string toArray:(NSMutableArray *)array {
-	NSString * cleanedString = [[string
-								stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
-								stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
-	
-	if ([cleanedString length] > 0) {
-		[array addObject:cleanedString];
-	}
-}
-
-
 #pragma mark Address Lookup
 
 
@@ -558,28 +501,9 @@ NSString * const failFileName = @"Failed Lookups.plist";
  action for looking up addresses
 */
 - (IBAction) convertAddresses: (id) sender {
-	if (!self.geocodingRunning) {
+	if (!self.geocodingOperation) {
 		[self beginBusy];
-		self.geocodingProgress = 0;
-		self.geocodingRunning = @YES;
-		[NSThread detachNewThreadSelector:@selector(convertAddresses2:) toTarget:self withObject:sender];
-	}
-	else if (self.geocodingRunning) {
-		[geocodingThread cancel];
-	}
-}
-
-
-
-/*
- method looking up addresses
- to be run in separate thread
-*/
-- (void) convertAddresses2: (id) sender {
-	@autoreleasepool {
-		geocodingThread = [NSThread currentThread];
-		double geocodingCurrentPosition = .000001;
-
+		
 		NSArray * people;
 		if (sender == self) {
 			// if message comes from self, look up all remaining addresses...
@@ -589,93 +513,16 @@ NSString * const failFileName = @"Failed Lookups.plist";
 			// ... otherwise (messages comes from GUI) only look up for current selection.
 			people = [self relevantPeople];
 		}
-		NSEnumerator * myEnum = [people objectEnumerator];
-		ABPerson * myPerson;
-		NSTimeInterval previousLookup = 0;
-		BOOL error = NO;
 		
-		self.geocodingMaximum = self.notSearchedCount;
-		
-		while ((myPerson = [myEnum nextObject]) && !error && ![[NSThread currentThread] isCancelled]) {
-			@autoreleasepool {
-				ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
-				NSUInteger addressCount = [addresses count];
-				NSUInteger index = 0;
-
-				while (addressCount > index && !error) {
-					NSDictionary * addressDict = [addresses valueAtIndex:index];
-					NSString * addressString = [self dictionaryKeyForAddressDictionary:addressDict];
-					
-					if (!locations[addressString] && !failLocations[addressString]) {
-						// Look up address if we don't know its coordinates already
-
-						self.currentLookupAddress = addressString;
-						self.geocodingProgress = geocodingCurrentPosition;
-						geocodingCurrentPosition += 1.;
-						
-						// throttle queries
-						if (previousLookup != 0) {
-							NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:previousLookup + SECONDSBETWEENCOORDINATELOOKUPS];
-							[NSThread sleepUntilDate:wakeUpTime];
-						}
-						previousLookup = [NSDate timeIntervalSinceReferenceDate];
-						
-						[[[CLGeocoder alloc] init] geocodeAddressDictionary:addressDict
-														  completionHandler:^(NSArray * placemarks, NSError * lookupError) {
-							if ([placemarks count] == 1) {
-								CLPlacemark * placemark = placemarks[0];
-								CLLocation * location = placemark.location;
-								locations[addressString] = @{
-									@"lat": @(location.coordinate.latitude),
-									@"lon": @(location.coordinate.longitude),
-									@"accuracy": @(location.horizontalAccuracy),
-									@"timestamp": @(location.timestamp.timeIntervalSince1970),
-									@"resultType": @"unique"
-								};
-							}
-							else if ([placemarks count] > 1) {
-								NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
-								NSMutableArray * locationStrings = [NSMutableArray array];
-								[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
-									[locationStrings addObject:[placemark.location description]];
-								}];
-								NSDictionary * failInfo = @{
-									@"type": @"multiple",
-									@"locations": locationStrings
-								};
-								failLocations[addressString] = failInfo;
-							}
-							else {
-								if (lookupError) {
-									NSLog(@"Could not locate address: %@", addressString);
-									NSLog(@"error: %@", lookupError);
-									NSDictionary * errorInfo = @{
-										@"type": @"error",
-										@"domain": [lookupError domain],
-										@"code": [NSNumber numberWithInt:[lookupError code]],
-										@"userInfo": [lookupError userInfo]
-									};
-									failLocations[addressString] = errorInfo;
-								}
-							}
-						}];
-						[self relevantPeople];
-					}
-					index++;
-				}
-			} // @autoreleasepool (inner)
-		}
-
-		self.currentLookupAddress = @"";
-		self.geocodingRunning = @NO;
-		geocodingThread = nil;
-		
-		[geocodingProgressBar setHidden:YES];
-
-		[self writeCaches];
-		[self endBusy];
-	} // @autoreleasepool (for thread)
+		self.geocodingOperation = [[ESAddressLookupOperation alloc] initWithPeople:people];
+		self.geocodingOperation.owner = self;
+		[[[NSOperationQueue alloc] init] addOperation:self.geocodingOperation];
+	}
+	else if (!self.geocodingOperation.finished) {
+		[self.geocodingOperation cancel];
+	}
 }
+
 
 
 
@@ -839,9 +686,6 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 		if (people) {
 			self.KMLMaximum = [people count];
 
-			NSEnumerator * myEnum = [people objectEnumerator];
-			ABPerson * person;
-			
 			// Basic XML setup for KML file
 			NSXMLElement * myXML = [NSXMLElement elementWithName:@"Document"];
 			NSXMLNode * documentID = [NSXMLNode attributeWithName:@"id" stringValue:[[NSUUID UUID] UUIDString]];
@@ -859,6 +703,9 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 			//
 			// Run through all people in the list
 			//
+			
+			NSEnumerator * myEnum = [people objectEnumerator];
+			ABPerson * person;
 			
 			while ((person = [myEnum nextObject]) && ![[NSThread currentThread] isCancelled]) {
 				@autoreleasepool {
@@ -918,8 +765,8 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 
 #pragma mark -do2: Address Label			
 						NSDictionary * theAddress = [addresses valueAtIndex:index];
-						NSString * addressLocationKey = [self dictionaryKeyForAddressDictionary:theAddress];
-						NSDictionary * addressCoordinates = locations[addressLocationKey];
+						NSString * addressLocationKey = [self.addressHelper keyForAddress:theAddress];
+						NSDictionary * addressCoordinates = self.locations[addressLocationKey];
 
 						if ([addressCoordinates isKindOfClass:[NSDictionary class]]) {
 							// only include addresses we resolved before
@@ -967,7 +814,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 							}
 							
 							if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
-								NSArray * addressComponents = [self componentsFromAddressDictionary:theAddress];
+								NSArray * addressComponents = [self.addressHelper componentsForAddress:theAddress];
 								NSString * addressString = [addressComponents componentsJoinedByString:@"<br />"];
 								[descriptionHTMLString appendFormat:@"%@", addressString];
 							}
@@ -1268,7 +1115,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 	2. initiates a look-up for addresses
 */
 - (IBAction) lookupNonLocatableAddresses: (id) sender {
-	[failLocations removeAllObjects];
+	[self.failLocations removeAllObjects];
 	[self updateRelevantPeopleInfo:[[ABAddressBook sharedAddressBook] people]];
 
 	[self convertAddresses:self];
@@ -1303,8 +1150,8 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 		NSUInteger index = 0;
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
-			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = failLocations[addressKey];
+			NSString * addressKey = [self.addressHelper keyForAddress:addressDict];
+			NSObject * addressObject = self.failLocations[addressKey];
 			if (addressObject != nil) {
 				[s appendFormat:@"%@\n***\n", addressKey];
 			}
@@ -1335,8 +1182,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 					   ofObject:(id)object
 						 change:(NSDictionary *)change
 					    context:(void *)context {
-	if ((object == self.addressTermsToRemoveController || object == self.oldLabelsController) &&
-		[keyPath isEqualToString:@"arrangedObjects"]) {
+	if (object == self.oldLabelsController && [keyPath isEqualToString:@"arrangedObjects"]) {
 		[self updateDefaults:nil];
 	}
 }
@@ -1356,7 +1202,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 
 - (NSString *) geocodingButtonLabel {
 	NSString * label;
-	if (self.geocodingRunning) {
+	if (self.geocodingOperation && !self.geocodingOperation.finished) {
 		label = NSLocalizedString(@"Cancel Lookup", @"Title of geocoding button while geocoding is running and can be cancelled.");
 	}
 	else {
@@ -1419,33 +1265,6 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 	return localisedLabelName;
 }
 
-
-
-/*
- Removes lines from string containing terms marked for removal.
-*/
-- (NSString *) cleanAddress:(NSString *)address {
-	NSArray * addressLines = [address componentsSeparatedByString:@"\n"];
-	NSMutableArray * cleanAddressLines = [NSMutableArray arrayWithCapacity:addressLines.count];
-	
-	for (NSString * addressLine in addressLines) {
-		BOOL keepLine = YES;
-		for (ESTerm * term in self.addressTermsToRemove) {
-			if (term.active) {
-				NSRange termRange = [addressLine rangeOfString:term.string options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch];
-				if (termRange.location != NSNotFound) {
-					keepLine = NO;
-					break;
-				}
-			}
-		}
-		if (keepLine) {
-			[cleanAddressLines addObject:addressLine];
-		}
-	}
-	
-	return [cleanAddressLines componentsJoinedByString:@"\n"];
-}
 
 
 

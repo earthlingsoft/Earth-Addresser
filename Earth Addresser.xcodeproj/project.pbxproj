@@ -29,8 +29,6 @@
 		6C2A375C1981691000DBAE64 /* ESTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A375B1981691000DBAE64 /* ESTerm.m */; };
 		6C4FBD39197574000010DC7F /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; };
 		6C4FBD3E197578390010DC7F /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6C4FBD4619766C4E0010DC7F /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 6C4FBD4519766C4E0010DC7F /* Readme.md */; };
-		6C4FBD4F197670B10010DC7F /* License.text in Sources */ = {isa = PBXBuildFile; fileRef = 6C4FBD4E197670B10010DC7F /* License.text */; };
 		6C916E650F58C384003EA1EB /* work.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E630F58C384003EA1EB /* work.png */; };
 		6C916E660F58C384003EA1EB /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E640F58C384003EA1EB /* home.png */; };
 		6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C916EBD0F5963A4003EA1EB /* Icon Large.icns */; };
@@ -405,9 +403,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				6CEABD5C0BB322240059641A /* Magic.m in Sources */,
-				6C4FBD4F197670B10010DC7F /* License.text in Sources */,
 				6C2A375C1981691000DBAE64 /* ESTerm.m in Sources */,
-				6C4FBD4619766C4E0010DC7F /* Readme.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

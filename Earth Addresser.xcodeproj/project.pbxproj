@@ -26,6 +26,7 @@
 		6C1055991911AB6100FA13B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C1055981911AB6100FA13B7 /* CoreLocation.framework */; };
 		6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C29284E0F1A45C000B5059B /* MainMenu.xib */; };
 		6C292AA00F1D15CD00B5059B /* Help.css in Resources */ = {isa = PBXBuildFile; fileRef = 6C292A9F0F1D15CD00B5059B /* Help.css */; };
+		6C2A375C1981691000DBAE64 /* ESTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A375B1981691000DBAE64 /* ESTerm.m */; };
 		6C4FBD39197574000010DC7F /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; };
 		6C4FBD3E197578390010DC7F /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C4FBD4619766C4E0010DC7F /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 6C4FBD4519766C4E0010DC7F /* Readme.md */; };
@@ -132,6 +133,8 @@
 		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C292A9F0F1D15CD00B5059B /* Help.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = Help.css; sourceTree = "<group>"; };
+		6C2A375A1981691000DBAE64 /* ESTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTerm.h; sourceTree = "<group>"; };
+		6C2A375B1981691000DBAE64 /* ESTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESTerm.m; sourceTree = "<group>"; };
 		6C4FBD24197573CB0010DC7F /* Sparkle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sparkle.xcodeproj; path = Sparkle/Sparkle.xcodeproj; sourceTree = "<group>"; };
 		6C4FBD4119758A850010DC7F /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		6C4FBD4519766C4E0010DC7F /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				6CEABD5A0BB322240059641A /* Magic.h */,
 				6CEABD5B0BB322240059641A /* Magic.m */,
+				6C2A375A1981691000DBAE64 /* ESTerm.h */,
+				6C2A375B1981691000DBAE64 /* ESTerm.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -401,6 +406,7 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				6CEABD5C0BB322240059641A /* Magic.m in Sources */,
 				6C4FBD4F197670B10010DC7F /* License.text in Sources */,
+				6C2A375C1981691000DBAE64 /* ESTerm.m in Sources */,
 				6C4FBD4619766C4E0010DC7F /* Readme.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

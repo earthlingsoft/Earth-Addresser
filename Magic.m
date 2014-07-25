@@ -9,7 +9,7 @@
 #import "Magic.h"
 #import <AddressBook/ABAddressBookC.h>
 #import <CoreLocation/CoreLocation.h>
-
+#import "ESTerm.h"
 
 @implementation Magic
 
@@ -21,24 +21,32 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(addressBookChanged:)
 													 name:kABDatabaseChangedExternallyNotification
-												   object:nil];
-		
+												   object:NULL];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(updateDefaults:)
+													 name:ESTermContentChangedNotification
+												   object:NULL];
+
+		[self readDefaults];
 		[self readCaches];
-	}	
+	}
 	return self;
 }
 
 
 - (void)awakeFromNib {
+	[self.addressTermsToRemoveController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
+	[self.oldLabelsController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self relevantPeople];
 }
 
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void) applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
 		[self showWarningInfo:nil];
 	}
-}	
+}
 
 
 + (NSSet *) keyPathsForValuesAffectingValueForKey: (NSString *)key {
@@ -84,12 +92,42 @@
 		@"noHomeWorkIcons": @NO,
 		@"hasReadInfo": @NO,
 		@"groupByAddressLabel": @NO,
+		@"addressTermsToRemove": @[
+			@{ESTermStringKey:@"c/o ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Geb. ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@" Dept", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Dept ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Dept.", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Department ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@" Department", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Zi. ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Zimmer ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Room ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Raum ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"University of", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Universität ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Flat ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"App ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"App.", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Apt ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Apt.", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"#", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"P.O. Box", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"P.O.Box", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Postfach ", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Büro", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Office", ESTermActiveKey:@YES}
+		],
+		@"oldLabels": @[
+			@{ESTermStringKey:@"Old", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Alt", ESTermActiveKey:@YES},
+			@{ESTermStringKey:@"Ancienne", ESTermActiveKey:@YES},
+		]
 	};
 	
 	[UDC setInitialValues:standardDefaults];
 	[UDC setAppliesImmediately:YES];
 }
-
 
 
 - (void) dealloc {
@@ -136,6 +174,45 @@
 		result = NO;
 	}
 	return result;
+}
+
+
+
+#pragma mark User Defaults
+
+- (void) readDefaults {
+	self.addressTermsToRemove = [NSMutableArray array];
+	NSArray * parts = [UDC valueForKeyPath:@"values.addressTermsToRemove"];
+	for (NSDictionary * partDict in parts) {
+		ESTerm * partTerm = [[ESTerm alloc] initWithDictionary:partDict];
+		[self.addressTermsToRemove addObject:partTerm];
+	}
+	
+	self.oldLabels = [NSMutableArray array];
+	NSArray * labels = [UDC valueForKeyPath:@"values.oldLabels"];
+	for (NSDictionary * labelDict in labels) {
+		ESTerm * labelTerm = [[ESTerm alloc] initWithDictionary:labelDict];
+		[self.oldLabels addObject:labelTerm];
+	}
+}
+
+
+- (void) updateDefaults:(NSNotification *) notification {
+	NSMutableArray * terms = [NSMutableArray array];
+	for (ESTerm * term in self.addressTermsToRemove) {
+		NSDictionary * dict = term.dictionary;
+		[terms addObject:dict];
+	}
+	[UDC setValue:terms forKeyPath:@"values.addressTermsToRemove"];
+	
+	NSMutableArray * labels = [NSMutableArray array];
+	for (ESTerm * term in self.oldLabels) {
+		NSDictionary * dict = term.dictionary;
+		[labels addObject:dict];
+	}
+	[UDC setValue:labels forKeyPath:@"values.oldLabels"];
+	
+	[self relevantPeople];
 }
 
 
@@ -336,8 +413,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self dictionaryKeyForAddressDictionary:addressDict];
-			NSObject * addressObject = locations[addressKey];
-			if (addressObject) {
+			if (locations[addressKey]) {
 				// object with coordinates exists => successfully located
 				locatedAddressCount++;
 			}
@@ -440,14 +516,10 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	
 	NSString * addressComponent;
 	if ((addressComponent = [address valueForKey:kABAddressStreetKey])) {
-		NSArray * evilWords = @[@"c/o ", @"Geb. ", @" Dept", @"Dept ", @"Dept.", @"Department ", @" Department", @"Zimmer ", @"Room ", @"Raum ", @"University of", @"Universit\303\244t ",  @"Flat ", @"App ", @"App.", @"Apt ", @"Apt.", @"#", @"P.O. Box", @"P.O.Box", @"Postfach ", @"B\303\274ro", @"Office"];
-		NSEnumerator * evilWordEnumerator = [evilWords objectEnumerator];
-		NSString * evilWord;
-		while (evilWord = [evilWordEnumerator nextObject]) {
-			addressComponent = [self cleanString:addressComponent from:evilWord];
+		NSString * cleanedComponent = [self cleanAddress:addressComponent];
+		if (cleanedComponent.length > 0) {
+			[self addString:cleanedComponent toArray:addressComponents];
 		}
-		
-		[self addString:addressComponent toArray:addressComponents];
 	}
 
 	[self addComponent:kABAddressCityKey ofAddress:address toArray:addressComponents];
@@ -458,6 +530,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	return addressComponents;
 }
 
+
 - (void) addComponent:(NSString *)componentKey ofAddress:(NSDictionary *)address toArray:(NSMutableArray *)array {
 	NSString * addressComponent = [address valueForKey:componentKey];
 	
@@ -465,6 +538,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		[self addString:addressComponent toArray:array];
 	}
 }
+
 
 - (void) addString:(NSString *)string toArray:(NSMutableArray *)array {
 	NSString * cleanedString = [[string
@@ -845,9 +919,9 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 #pragma mark -do2: Address Label			
 						NSDictionary * theAddress = [addresses valueAtIndex:index];
 						NSString * addressLocationKey = [self dictionaryKeyForAddressDictionary:theAddress];
-						NSArray * addressCoordinates = locations[addressLocationKey];
+						NSDictionary * addressCoordinates = locations[addressLocationKey];
 
-						if ([addressCoordinates isKindOfClass:[NSArray class]]) {
+						if ([addressCoordinates isKindOfClass:[NSDictionary class]]) {
 							// only include addresses we resolved before
 							NSString * addressName = [addresses labelAtIndex:index];
 							NSString * addressLabel = [self localisedLabelName: addressName];
@@ -873,13 +947,13 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 								nameElement = [NSXMLNode elementWithName:@"name" stringValue: name];
 							}
 							[placemarkElement addChild: nameElement];
-												
-							NSString * visibilityString = ([OLDLABELS containsObject:normalisedLabel]) ? @"0" : @"1";
+							
+							NSString * visibilityString = ([self isOldLabel:normalisedLabel] ? @"0" : @"1");
 							NSXMLElement * visibilityElement = [NSXMLNode elementWithName:@"visibility" stringValue: visibilityString];
 							[placemarkElement addChild: visibilityElement];
 													
 							NSXMLElement * pointElement = [NSXMLElement elementWithName:@"Point"];
-							NSXMLElement * coordinatesElement = [NSXMLNode elementWithName:@"coordinates" stringValue:[NSString stringWithFormat:@"%@,%@", addressCoordinates[2], addressCoordinates[1]]];
+							NSXMLElement * coordinatesElement = [NSXMLNode elementWithName:@"coordinates" stringValue:[NSString stringWithFormat:@"%@,%@", addressCoordinates[@"lon"], addressCoordinates[@"lat"]]];
 							[pointElement addChild:coordinatesElement];
 							[placemarkElement addChild:pointElement];
 							
@@ -937,7 +1011,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 									NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
 									NSString * allEMails = nil;
 									while (index < eMailCount) {
-										if (![OLDLABELS containsObject:[[eMails labelAtIndex:index] capitalizedString]]) {
+										if (![self isOldLabel:[eMails labelAtIndex:index]]) {
 											NSString * eMailAddress = [eMails valueAtIndex:index];
 											if (eMailAddress) {
 												NSString * localisedLabel = [self localisedLabelName:[eMails labelAtIndex:index]];
@@ -970,7 +1044,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 									NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
 									NSString * allWeblinks = nil;
 									while (index < weblinkCount) {
-										if (![OLDLABELS containsObject:[[weblinks labelAtIndex:index] capitalizedString]]) {
+										if (![self isOldLabel:[weblinks labelAtIndex:index]]) {
 											NSString * weblink = [weblinks valueAtIndex:index];
 											if (weblink) {
 												NSString * localisedLabel = [self localisedLabelName:[weblinks labelAtIndex:index]];
@@ -1003,7 +1077,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 									NSMutableArray * phoneArray = [NSMutableArray arrayWithCapacity:phoneCount];
 									NSString * allPhoneNumbers = nil;
 									while (index < phoneCount) {
-										if (![OLDLABELS containsObject:[[phones labelAtIndex:index] capitalizedString]]) {
+										if (![self isOldLabel:[phones labelAtIndex:index]]) {
 											NSString * phoneNumber = [phones valueAtIndex:index];
 											if (phoneNumber) {
 												NSString * localisedLabel = [self localisedLabelName:[phones labelAtIndex:index]];
@@ -1073,7 +1147,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 									[addressGroup addChild:[NSXMLNode elementWithName:@"name" stringValue:normalisedLabel]];
 									addressLabelGroups[normalisedLabel] = addressGroup;
 									
-									if ([OLDLABELS containsObject:normalisedLabel]) {
+									if ([self isOldLabel:normalisedLabel]) {
 										// this is the group for old addresses
 										[addressGroup addChild:[NSXMLNode elementWithName:@"visibility" stringValue: @"0"]];
 									}
@@ -1257,6 +1331,16 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 
 #pragma mark KVC
 
+- (void) observeValueForKeyPath:(NSString *)keyPath
+					   ofObject:(id)object
+						 change:(NSDictionary *)change
+					    context:(void *)context {
+	if ((object == self.addressTermsToRemoveController || object == self.oldLabelsController) &&
+		[keyPath isEqualToString:@"arrangedObjects"]) {
+		[self updateDefaults:nil];
+	}
+}
+
 
 - (BOOL) needToSearchNoticeHidden {
 	BOOL hidden = self.KMLRunning || (self.notSearchedCount == 0);
@@ -1293,8 +1377,6 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 	return label;
 	
 }
-
-
 
 
 - (NSImage*) AddressBookIcon {
@@ -1339,22 +1421,47 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 
 
 
-
 /*
- Removes lines from string which contain evil.
+ Removes lines from string containing terms marked for removal.
 */
-- (NSString*) cleanString:(NSString*) s from:(NSString*) evil {
-	NSArray * lineArray = [s componentsSeparatedByString:@"\n"];
-	NSEnumerator * myEnum = [lineArray objectEnumerator];
-	NSMutableString * r = [NSMutableString stringWithCapacity:[s length]];
-	NSString * line;
-	while (line = [myEnum nextObject]) {
-		// only preserve lines not containing evil strings
-		if ([line rangeOfString:evil].location == NSNotFound) {
-			[r appendFormat:@"%@\n", line];
+- (NSString *) cleanAddress:(NSString *)address {
+	NSArray * addressLines = [address componentsSeparatedByString:@"\n"];
+	NSMutableArray * cleanAddressLines = [NSMutableArray arrayWithCapacity:addressLines.count];
+	
+	for (NSString * addressLine in addressLines) {
+		BOOL keepLine = YES;
+		for (ESTerm * term in self.addressTermsToRemove) {
+			if (term.active) {
+				NSRange termRange = [addressLine rangeOfString:term.string options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch];
+				if (termRange.location != NSNotFound) {
+					keepLine = NO;
+					break;
+				}
+			}
+		}
+		if (keepLine) {
+			[cleanAddressLines addObject:addressLine];
 		}
 	}
-	return [r stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	return [cleanAddressLines componentsJoinedByString:@"\n"];
+}
+
+
+
+/*
+ Returns whether the passed label is marked as indicating old information.
+*/
+- (BOOL) isOldLabel:(NSString *)label {
+	BOOL isOldLabel = FALSE;
+	NSString * uppercaseLabel = [label uppercaseString];
+	for (ESTerm * oldLabel in self.oldLabels) {
+		if (oldLabel.active == YES && [[oldLabel.string uppercaseString] isEqualToString:uppercaseLabel]) {
+			isOldLabel = YES;
+			break;
+		}
+	}
+	return isOldLabel;
 }
 
 

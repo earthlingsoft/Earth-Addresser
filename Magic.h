@@ -20,8 +20,6 @@
 #define SECONDSBETWEENCOORDINATELOOKUPS 1.0
 #define UDC [NSUserDefaultsController sharedUserDefaultsController]
 #define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
-// Text in 'Old' labels whose groups are automatically hidden -> Localised
-#define OLDLABELS [NSArray arrayWithObjects:@"Old", @"Alt", @"Ancienne", nil]
 
 
 @interface Magic : NSObject {
@@ -74,6 +72,12 @@
 @property (readonly) NSURL * EAApplicationSupportURL;
 @property (readonly) NSString * myVersionString;
 
+@property NSMutableArray * addressTermsToRemove;
+@property IBOutlet NSArrayController * addressTermsToRemoveController;
+
+@property NSMutableArray * oldLabels;
+@property IBOutlet NSArrayController * oldLabelsController;
+
 
 - (void) buildGroupList;
 
@@ -94,7 +98,6 @@
 - (void) updateRelevantPeopleInfo:(NSArray*)people;
 
 - (NSString *) dictionaryKeyForAddressDictionary:(NSDictionary *)address;
-- (NSString *) cleanString:(NSString*)s from:(NSString*)evil ;
 
 - (NSString *) localisedLabelName: (NSString*) label;
 

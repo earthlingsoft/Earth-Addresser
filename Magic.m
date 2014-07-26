@@ -38,11 +38,13 @@
 }
 
 
+
 - (void)awakeFromNib {
 	[self.addressTermsToRemoveController addObserver:self.addressHelper forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self.oldLabelsController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self relevantPeople];
 }
+
 
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -52,30 +54,35 @@
 }
 
 
+
 + (NSSet *) keyPathsForValuesAffectingValueForKey:(NSString *)key {
 	NSArray * newKeyPaths;
-	if ([key isEqualToString:@"needToSearchNoticeHidden"]) {
-		newKeyPaths = @[@"KMLRunning", @"notSearchedCount"];
+	if ([key isEqualToString:NSStringFromSelector(@selector(needToSearchNoticeHidden))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning)),
+						NSStringFromSelector(@selector(notSearchedCount))];
 	}
-	else if ([key isEqualToString:@"nothingToSearch"]) {
-		newKeyPaths = @[@"notSearchedCount"];
+	else if ([key isEqualToString:NSStringFromSelector(@selector(nothingToSearch))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(notSearchedCount))];
 	}
-	else if ([key isEqualToString:@"geocodingRunning"]) {
-		newKeyPaths = @[@"geocodingOperation", @"geocodingOperation.finished"];
+	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingRunning))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(geocodingOperation)),
+						@"geocodingOperation.finished"];
 	}
-	else if ([key isEqualToString:@"KMLRunning"]) {
-		newKeyPaths = @[@"KMLOperation", @"KMLOperation.finished"];
+	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLRunning))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(KMLOperation)),
+						@"KMLOperation.finished"];
 	}
-	else if ([key isEqualToString:@"geocodingButtonLabel"]) {
-		newKeyPaths = @[@"geocodingRunning"];
+	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingButtonLabel))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(geocodingRunning))];
 	}
-	else if ([key isEqualToString:@"KMLWritingButtonLabel"]) {
-		newKeyPaths = @[@"KMLRunning"];
+	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLWritingButtonLabel))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning))];
 	}
 
 	NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	return [keyPaths setByAddingObjectsFromArray:newKeyPaths];
 }
+
 
 
 + (void) initialize {

@@ -13,36 +13,30 @@
 #define MENUOBJECT @"OBJECT"
 #define MENUITEMALL @"ALL"
 #define OMITNAMESDEFAULT @"Omit Names"
-#define EAGENERICSTYLEPREFIX @"EarthAddresser-generic-"
-#define GENERICHOMEICONNAME @"home"
-#define GENERICWORKICONNAME @"work"
 #define ALLDICTIONARY [NSDictionary dictionaryWithObjectsAndKeys:MENUITEMALL, MENUOBJECT, NSLocalizedString(@"All Contacts", @"All Contacts"), MENUNAME, nil]
 #define UDC [NSUserDefaultsController sharedUserDefaultsController]
-#define UPDATEURL @"http://www.earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.xml"
 
 @class ESAddressLookupOperation;
+@class ESCreateKMLOperation;
 @class ESAddressHelper;
 
 @interface Magic : NSObject {
-	NSThread * KMLThread;
-	IBOutlet NSProgressIndicator * progressBar;
-	
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
 	
 	IBOutlet NSWindow * mainWindow;
 	IBOutlet NSPanel * warningMessage;
-	
-	NSArray * groups;
-	BOOL noGroups;
 }
 
+@property NSArray * groups;
+@property BOOL noGroups;
+
 @property ESAddressLookupOperation * geocodingOperation;
+@property (readonly) BOOL geocodingRunning;
 @property (readonly) NSString * geocodingButtonLabel;
 
-@property BOOL KMLRunning;
-@property double KMLProgress;
-@property double KMLMaximum;
+@property ESCreateKMLOperation * KMLOperation;
+@property (readonly) BOOL KMLRunning;
 @property (readonly) NSString * KMLWritingButtonLabel;
 
 @property NSMutableDictionary * locations;
@@ -75,37 +69,31 @@
 @property IBOutlet NSArrayController * oldLabelsController;
 
 
+- (IBAction) convertAddresses:(id)sender;
+- (IBAction) createKML:(id)sender;
+
+- (IBAction) addressBookScopeChanged:(id)sender;
+- (IBAction) groupListSelectionChanged:(id)sender;
+
+- (IBAction) showWarningInfo:(id)sender;
+- (IBAction) dismissSheet:(id)sender;
+
+- (IBAction) toggleGroupByLabel:(id)sender;
+- (IBAction) toggleHideOldByDefault:(id)sender;
+- (IBAction) createListOfNonLocatableAddresses:(id)sender;
+- (IBAction) lookupNonLocatableAddresses:(id)sender;
+
+- (IBAction) readme:(id)sender;
+
 - (void) buildGroupList;
-
-- (void) writeCaches;
-
-- (IBAction) addressBookScopeChanged: (id) sender;
-- (IBAction) groupListSelectionChanged: (id) sender;
-
-- (IBAction) convertAddresses: (id) sender;
-
-- (NSString *) fullPNGImagePathForName:(NSString *)name;
-- (NSXMLElement *) createStyleForImageData:(NSData *)image withID:(NSString *)ID;
-- (NSXMLElement *) genericStyleNamed:(NSString *)name;
-
-- (IBAction) do:(id) sender;
-- (void) do2:(id) sender;
 
 - (NSArray *) relevantPeople;
 - (void) updateRelevantPeopleInfo:(NSArray*)people;
 
-- (NSString *) localisedLabelName: (NSString*) label;
-
-- (IBAction) dismissSheet:(id) sender;
-- (IBAction) showWarningInfo: (id) sender;
-- (IBAction) toggleGroupByLabel: (id) sender;
-- (IBAction) toggleHideOldByDefault: (id) sender;
-- (IBAction) createListOfNonLocatableAddresses:(id) sender;
-- (IBAction) lookupNonLocatableAddresses: (id) sender;
-
-- (IBAction) readme:(id) sender;
+- (void) writeCaches;
 - (void) beginBusy;
 - (void) endBusy;
+
 @end
 
 @interface ABGroup (ESSortExtension)

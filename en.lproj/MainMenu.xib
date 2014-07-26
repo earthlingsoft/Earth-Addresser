@@ -47,8 +47,8 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="do:" target="214" id="215"/>
-                            <binding destination="214" name="enabled2" keyPath="addressesAreAvailable" previousBinding="1063" id="1066">
+                            <action selector="createKML:" target="214" id="j5A-qg-IX4"/>
+                            <binding destination="214" name="enabled2" keyPath="addressesAreAvailable" previousBinding="hdT-CS-x93" id="M97-Om-44n">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -56,7 +56,7 @@
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="enabled" keyPath="geocodingRunning" id="1063">
+                            <binding destination="214" name="enabled" keyPath="geocodingRunning" id="hdT-CS-x93">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -87,7 +87,7 @@
                             <action selector="groupListSelectionChanged:" target="214" id="515"/>
                             <binding destination="260" name="content" keyPath="arrangedObjects" id="272"/>
                             <binding destination="260" name="contentValues" keyPath="arrangedObjects.NAME" previousBinding="272" id="307"/>
-                            <binding destination="214" name="enabled2" keyPath="geocodingRunning" previousBinding="935" id="936">
+                            <binding destination="214" name="enabled2" keyPath="geocodingRunning" previousBinding="935" id="CEi-Q9-aGa">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -96,7 +96,7 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="enabled3" keyPath="noGroups" previousBinding="936" id="937">
+                            <binding destination="214" name="enabled3" keyPath="noGroups" previousBinding="CEi-Q9-aGa" id="s7b-94-vIg">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -118,13 +118,13 @@
                         <rect key="frame" x="182" y="18" width="285" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
-                            <binding destination="214" name="hidden" keyPath="KMLRunning" id="941">
+                            <binding destination="214" name="hidden" keyPath="KMLRunning" id="bJe-22-I8w">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="maxValue" keyPath="KMLMaximum" id="938"/>
-                            <binding destination="214" name="value" keyPath="KMLProgress" previousBinding="938" id="939"/>
+                            <binding destination="214" name="maxValue" keyPath="KMLOperation.people.count" id="q9v-QP-O5p"/>
+                            <binding destination="214" name="value" keyPath="KMLOperation.progress" previousBinding="q9v-QP-O5p" id="Gho-Xh-dEI"/>
                         </connections>
                     </progressIndicator>
                     <textField verticalHuggingPriority="750" id="410">
@@ -159,17 +159,17 @@
                             <outlet property="nextKeyView" destination="584" id="714"/>
                         </connections>
                     </button>
-                    <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" style="bar" id="428">
+                    <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" style="bar" id="428" userLabel="Geocoding Progress">
                         <rect key="frame" x="182" y="190" width="280" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
-                            <binding destination="214" name="hidden" keyPath="geocodingRunning" id="946">
+                            <binding destination="214" name="hidden" keyPath="geocodingRunning" id="1CA-se-DN6">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="maxValue" keyPath="geocodingMaximum" id="942"/>
-                            <binding destination="214" name="value" keyPath="geocodingProgress" previousBinding="942" id="943"/>
+                            <binding destination="214" name="maxValue" keyPath="notSearchedCount" id="rvy-3H-z3T"/>
+                            <binding destination="214" name="value" keyPath="geocodingOperation.progress" previousBinding="rvy-3H-z3T" id="NvV-Gm-v3H"/>
                         </connections>
                     </progressIndicator>
                     <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="435">
@@ -204,7 +204,7 @@
                         <connections>
                             <accessibilityConnection property="title" destination="410" id="1031"/>
                             <action selector="addressBookScopeChanged:" target="214" id="519"/>
-                            <binding destination="214" name="enabled2" keyPath="geocodingRunning" previousBinding="947" id="948">
+                            <binding destination="214" name="enabled2" keyPath="geocodingRunning" previousBinding="947" id="XSC-rA-PTW">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -555,7 +555,7 @@
                                     <string key="NSDisplayPattern">Looking up: %{value1}@</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="hidden" keyPath="geocodingRunning" id="1088">
+                            <binding destination="214" name="hidden" keyPath="geocodingRunning" id="FaX-sX-pNq">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -850,7 +850,6 @@
             <connections>
                 <outlet property="addressTermsToRemoveController" destination="1105" id="TKd-ia-ios"/>
                 <outlet property="createKMLButton" destination="206" id="651"/>
-                <outlet property="geocodingProgressBar" destination="428" id="522"/>
                 <outlet property="mainWindow" destination="21" id="295"/>
                 <outlet property="oldLabelsController" destination="MNY-1R-QMp" id="Qng-ME-9Xt"/>
                 <outlet property="progressBar" destination="275" id="282"/>
@@ -1239,7 +1238,7 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                 <string>string</string>
             </declaredKeys>
             <connections>
-                <binding destination="214" name="contentArray" keyPath="addressTermsToRemove" id="HYa-78-eQ7">
+                <binding destination="214" name="contentArray" keyPath="addressHelper.termsToRemove" id="pjK-e7-9si">
                     <dictionary key="options">
                         <bool key="NSDeletesObjectsOnRemove" value="YES"/>
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>

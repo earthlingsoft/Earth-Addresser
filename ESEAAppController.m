@@ -7,11 +7,9 @@
 */
 
 #import "ESEAAppController.h"
-#import "ESTerm.h"
 #import "ESAddressLookupOperation.h"
 #import "ESCreateKMLOperation.h"
-#import "ESAddressHelper.h"
-
+#import "ESTerm.h"
 
 @implementation ESEAAppController
 
@@ -54,35 +52,6 @@
 
 
 
-+ (NSSet *) keyPathsForValuesAffectingValueForKey:(NSString *)key {
-	NSArray * newKeyPaths;
-	if ([key isEqualToString:NSStringFromSelector(@selector(needToSearchNoticeHidden))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning)),
-						NSStringFromSelector(@selector(notSearchedCount))];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(nothingToSearch))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(notSearchedCount))];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingRunning))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(geocodingOperation)),
-						@"geocodingOperation.finished"];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLRunning))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(KMLOperation)),
-						@"KMLOperation.finished"];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingButtonLabel))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(geocodingRunning))];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLWritingButtonLabel))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning))];
-	}
-
-	NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	return [keyPaths setByAddingObjectsFromArray:newKeyPaths];
-}
-
-
 - (void) dealloc {
 	if (self.geocodingRunning) {
 		[self.geocodingOperation cancel];
@@ -103,7 +72,6 @@
 
 
 
-
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender {
 	NSApplicationTerminateReply result = NSTerminateNow;
 	if (self.geocodingRunning || self.KMLRunning) {
@@ -111,8 +79,6 @@
 	}
 	return result;
 }
-
-
 
 
 
@@ -125,98 +91,6 @@
 		result = NO;
 	}
 	return result;
-}
-
-
-
-#pragma mark User Defaults
-
-- (void) readDefaults {
-	self.oldLabels = [NSMutableArray array];
-	NSArray * labels = [UDC valueForKeyPath:@"values.oldLabels"];
-	for (NSDictionary * labelDict in labels) {
-		ESTerm * labelTerm = [[ESTerm alloc] initWithDictionary:labelDict];
-		[self.oldLabels addObject:labelTerm];
-	}
-}
-
-
-
-- (void) setupTermContentChangedNotification {
-	[[NSNotificationCenter defaultCenter] addObserverForName:ESTermContentChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
-		[self updateDefaults:notification];
-	}];
-}
-
-
-
-- (void) updateDefaults:(NSNotification *)notification {
-	[self.addressHelper updateDefaults];
-
-	NSMutableArray * labels = [NSMutableArray array];
-	for (ESTerm * term in self.oldLabels) {
-		NSDictionary * dict = term.dictionary;
-		[labels addObject:dict];
-	}
-	[UDC setValue:labels forKeyPath:@"values.oldLabels"];
-	
-	[self relevantPeople];
-}
-
-
-
-#pragma mark Caches
-
-NSString * const successFileName = @"Successful Lookups.plist";
-NSString * const failFileName = @"Failed Lookups.plist";
-
-- (void) readCaches {
-	self.locations = [self mutableDictionaryFromApplicationSupportFileName:successFileName];
-	if (!self.locations) {
-		self.locations = [[NSMutableDictionary alloc] init];
-	}
-	
-	self.failLocations = [self mutableDictionaryFromApplicationSupportFileName:failFileName];
-	if (!self.failLocations) {
-		self.failLocations = [[NSMutableDictionary alloc] init];
-	}
-}
-
-
-- (void) writeCaches {
-	[self writeDictionary:self.locations toApplicationSupportFileName:successFileName];
-	[self writeDictionary:self.failLocations toApplicationSupportFileName:failFileName];
-}
-
-
-- (NSMutableDictionary *) mutableDictionaryFromApplicationSupportFileName:(NSString *)fileName {
-	NSURL * fileURL = [[[self class] EAApplicationSupportURL] URLByAppendingPathComponent:fileName];
-	NSMutableDictionary * dictionary = [NSMutableDictionary dictionaryWithContentsOfURL:fileURL];
-	return dictionary;
-}
-
-
-- (BOOL) writeDictionary:(NSDictionary *)dictionary toApplicationSupportFileName:(NSString *)fileName {
-	BOOL success = NO;
-	NSError * error;
-	
-	if([[NSFileManager defaultManager] createDirectoryAtURL:[[self class] EAApplicationSupportURL] withIntermediateDirectories:YES attributes:nil error:&error]) {
-		if ([[self class] EAApplicationSupportURL]) {
-			NSURL * fileURL = [[[self class] EAApplicationSupportURL] URLByAppendingPathComponent:fileName];
-			success = [dictionary writeToURL:fileURL atomically:YES];
-			if (!success) {
-				NSLog(@"Could not write file ”%@“", fileURL.path);
-			}
-		}
-	}
-	else {
-		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [[self class] EAApplicationSupportURL].path);
-		if (error) {
-			NSLog(@"%@", [error localizedDescription]);
-		}
-	}
-	
-	return success;
 }
 
 
@@ -238,7 +112,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 /*
-	Rebuilds the Group list from the Address Book and re-sets the selection in case the selected object ceased existing after the rebuild.
+ Rebuilds the Group list from the Address Book and re-sets the selection in case the selected object ceased existing after the rebuild.
 */
 - (void) buildGroupList {
 	// rebuild the group list
@@ -282,7 +156,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 /*
-	Tells us that the radio button changed
+ Tells us that the radio button changed
 */
 - (IBAction) addressBookScopeChanged:(id)sender {
 	[self relevantPeople];	
@@ -291,7 +165,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 /*
-	Switch to group instead of whole address book when a group is selected.
+ Switch to group instead of whole address book when a group is selected.
 */
 - (IBAction) groupListSelectionChanged:(id)sender {
 	[UDC setValue:@1 forKeyPath:@"values.addressBookScope"];
@@ -342,7 +216,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 /*
-	Sets strings and numbers determined by the array of relevant people
+ Sets strings and numbers determined by the array of relevant people
 */
 - (void) updateRelevantPeopleInfo:(NSArray*)people {
 	int addressCount = 0;
@@ -565,7 +439,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 #pragma mark Actions
 
 /*
-	Displays warning sheet about privacy issues
+ Displays warning sheet about privacy issues
 */
 - (IBAction) showWarningInfo:(id)sender {
 	[NSApp beginSheet:warningMessage modalForWindow:mainWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
@@ -574,7 +448,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 /*
-	for OK button of warning sheet about privacy issues
+ for OK button of warning sheet about privacy issues
 */
 - (IBAction) dismissSheet:(id)sender {
 	[NSApp endSheet:warningMessage];
@@ -584,7 +458,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 /*
-	toggles groupByAddressLabel user default
+ toggles groupByAddressLabel user default
 */
 - (IBAction) toggleGroupByLabel:(id)sender {
 }
@@ -593,7 +467,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 /*
  toggles hideOldByDefault user default
- */
+*/
 - (IBAction) toggleHideOldByDefault:(id)sender {
 }
 
@@ -667,6 +541,36 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 #pragma mark KVO / KVC
 
++ (NSSet *) keyPathsForValuesAffectingValueForKey:(NSString *)key {
+	NSArray * newKeyPaths;
+	if ([key isEqualToString:NSStringFromSelector(@selector(needToSearchNoticeHidden))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning)),
+						NSStringFromSelector(@selector(notSearchedCount))];
+	}
+	else if ([key isEqualToString:NSStringFromSelector(@selector(nothingToSearch))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(notSearchedCount))];
+	}
+	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingRunning))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(geocodingOperation)),
+						@"geocodingOperation.finished"];
+	}
+	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLRunning))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(KMLOperation)),
+						@"KMLOperation.finished"];
+	}
+	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingButtonLabel))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(geocodingRunning))];
+	}
+	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLWritingButtonLabel))]) {
+		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning))];
+	}
+	
+	NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
+	return [keyPaths setByAddingObjectsFromArray:newKeyPaths];
+}
+
+
+
 - (void) observeValueForKeyPath:(NSString *)keyPath
 					   ofObject:(id)object
 						 change:(NSDictionary *)change
@@ -677,10 +581,12 @@ NSString * const failFileName = @"Failed Lookups.plist";
 }
 
 
+
 - (BOOL) needToSearchNoticeHidden {
 	BOOL hidden = self.KMLRunning || (self.notSearchedCount == 0);
 	return hidden;
 }
+
 
 
 - (BOOL) nothingToSearch {
@@ -689,14 +595,17 @@ NSString * const failFileName = @"Failed Lookups.plist";
 }
 
 
+
 - (BOOL) geocodingRunning {
 	return (self.geocodingOperation != nil) && !self.geocodingOperation.finished;
 }
 
 
+
 - (BOOL) KMLRunning {
 	return (self.KMLOperation != nil) && !self.KMLOperation.finished;
 }
+
 
 
 - (NSString *) geocodingButtonLabel {
@@ -709,6 +618,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	}
 	return label;
 }
+
 
 
 - (NSString *) KMLWritingButtonLabel {
@@ -748,6 +658,105 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	return [[NSWorkspace sharedWorkspace] iconForFileType:@"kml"];
 }
 
+
+
+
+
+#pragma mark User Defaults
+
+- (void) readDefaults {
+	self.oldLabels = [NSMutableArray array];
+	NSArray * labels = [UDC valueForKeyPath:@"values.oldLabels"];
+	for (NSDictionary * labelDict in labels) {
+		ESTerm * labelTerm = [[ESTerm alloc] initWithDictionary:labelDict];
+		[self.oldLabels addObject:labelTerm];
+	}
+}
+
+
+
+- (void) setupTermContentChangedNotification {
+	[[NSNotificationCenter defaultCenter] addObserverForName:ESTermContentChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+		[self updateDefaults:notification];
+	}];
+}
+
+
+
+- (void) updateDefaults:(NSNotification *)notification {
+	[self.addressHelper updateDefaults];
+	
+	NSMutableArray * labels = [NSMutableArray array];
+	for (ESTerm * term in self.oldLabels) {
+		NSDictionary * dict = term.dictionary;
+		[labels addObject:dict];
+	}
+	[UDC setValue:labels forKeyPath:@"values.oldLabels"];
+	
+	[self relevantPeople];
+}
+
+
+
+
+
+#pragma mark Caches
+
+NSString * const successFileName = @"Successful Lookups.plist";
+NSString * const failFileName = @"Failed Lookups.plist";
+
+
+- (void) readCaches {
+	self.locations = [self mutableDictionaryFromApplicationSupportFileName:successFileName];
+	if (!self.locations) {
+		self.locations = [[NSMutableDictionary alloc] init];
+	}
+	
+	self.failLocations = [self mutableDictionaryFromApplicationSupportFileName:failFileName];
+	if (!self.failLocations) {
+		self.failLocations = [[NSMutableDictionary alloc] init];
+	}
+}
+
+
+
+- (void) writeCaches {
+	[self writeDictionary:self.locations toApplicationSupportFileName:successFileName];
+	[self writeDictionary:self.failLocations toApplicationSupportFileName:failFileName];
+}
+
+
+
+- (NSMutableDictionary *) mutableDictionaryFromApplicationSupportFileName:(NSString *)fileName {
+	NSURL * fileURL = [[[self class] EAApplicationSupportURL] URLByAppendingPathComponent:fileName];
+	NSMutableDictionary * dictionary = [NSMutableDictionary dictionaryWithContentsOfURL:fileURL];
+	return dictionary;
+}
+
+
+
+- (BOOL) writeDictionary:(NSDictionary *)dictionary toApplicationSupportFileName:(NSString *)fileName {
+	BOOL success = NO;
+	NSError * error;
+	
+	if([[NSFileManager defaultManager] createDirectoryAtURL:[[self class] EAApplicationSupportURL] withIntermediateDirectories:YES attributes:nil error:&error]) {
+		if ([[self class] EAApplicationSupportURL]) {
+			NSURL * fileURL = [[[self class] EAApplicationSupportURL] URLByAppendingPathComponent:fileName];
+			success = [dictionary writeToURL:fileURL atomically:YES];
+			if (!success) {
+				NSLog(@"Could not write file ”%@“", fileURL.path);
+			}
+		}
+	}
+	else {
+		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [[self class] EAApplicationSupportURL].path);
+		if (error) {
+			NSLog(@"%@", [error localizedDescription]);
+		}
+	}
+	
+	return success;
+}
 
 
 

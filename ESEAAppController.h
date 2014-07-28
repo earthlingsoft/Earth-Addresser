@@ -20,6 +20,7 @@
 @class ESCreateKMLOperation;
 @class ESAddressHelper;
 
+
 @interface ESEAAppController : NSObject {
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
@@ -95,11 +96,13 @@
 - (void) updateRelevantPeopleInfo:(NSArray*)people;
 
 - (void) writeCaches;
+
 - (void) beginBusy;
 - (void) endBusy;
 
 + (NSURL *) EAApplicationSupportURL;
 
 @end
+
 
 NSInteger nameSort(id person1, id person2, void *context);

@@ -1,19 +1,19 @@
 /*
-  Magic.m
-  Earth Addresser / Mailboxer
+  ESEAAppController.m
+  Earth Addresser
 
   Created by Sven on 21.03.07.
   Copyright 2006-2014 earthlingsoft. All rights reserved.
 */
 
-#import "Magic.h"
+#import "ESEAAppController.h"
 #import "ESTerm.h"
 #import "ESAddressLookupOperation.h"
 #import "ESCreateKMLOperation.h"
 #import "ESAddressHelper.h"
 
 
-@implementation Magic
+@implementation ESEAAppController
 
 - (instancetype) init {
 	self = [super init];

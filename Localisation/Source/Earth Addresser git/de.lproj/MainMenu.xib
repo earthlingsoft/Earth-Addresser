@@ -868,7 +868,7 @@
                 </menuItem>
             </items>
         </menu>
-        <customObject id="214" userLabel="Magic" customClass="Magic">
+        <customObject id="214" userLabel="App Controller" customClass="ESEAAppController">
             <connections>
                 <outlet property="addressTermsToRemoveController" destination="1105" id="TKd-ia-ios"/>
                 <outlet property="createKMLButton" destination="206" id="651"/>

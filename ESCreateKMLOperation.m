@@ -7,7 +7,7 @@
 //
 
 #import "ESCreateKMLOperation.h"
-#import "Magic.h"
+#import "ESEAAppController.h"
 #import "ESTerm.h"
 #import <AddressBook/AddressBook.h>
 #import <AddressBook/ABAddressBookC.h>
@@ -534,7 +534,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 */
 - (NSString *) imagesFolderPath {
 	NSFileManager * myFM = [NSFileManager defaultManager];
-	NSString * imagesFolderPath = [[Magic EAApplicationSupportURL] URLByAppendingPathComponent:@"Images"].path;
+	NSString * imagesFolderPath = [[ESEAAppController EAApplicationSupportURL] URLByAppendingPathComponent:@"Images"].path;
 	
 	if (![myFM fileExistsAtPath:imagesFolderPath]) { // create folders if needed
 		NSError * error;

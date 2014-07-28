@@ -39,7 +39,7 @@
 		6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C916EBD0F5963A4003EA1EB /* Icon Large.icns */; };
 		6CAE962B19803B19001DCFC8 /* Failed Lookups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */; };
 		6CAE962D19803B1F001DCFC8 /* Successful Lookups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */; };
-		6CEABD5C0BB322240059641A /* Magic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* Magic.m */; };
+		6CEABD5C0BB322240059641A /* ESEAAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* ESEAAppController.m */; };
 		6CEABD780BB322BC0059641A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CEABD770BB322BC0059641A /* AddressBook.framework */; };
 		6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CEAC2720BB4B3290059641A /* Localizable.strings */; };
 		6CFB92660BBC498100191CDD /* readme.html in Resources */ = {isa = PBXBuildFile; fileRef = 6CFB92650BBC498100191CDD /* readme.html */; };
@@ -157,8 +157,8 @@
 		6C916EBD0F5963A4003EA1EB /* Icon Large.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Icon Large.icns"; path = "Icon/Icon Large.icns"; sourceTree = "<group>"; };
 		6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Failed Lookups.plist"; path = "../../Library/Application Support/EarthAddresser/Failed Lookups.plist"; sourceTree = "<group>"; };
 		6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Successful Lookups.plist"; path = "../../Library/Application Support/EarthAddresser/Successful Lookups.plist"; sourceTree = "<group>"; };
-		6CEABD5A0BB322240059641A /* Magic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magic.h; sourceTree = "<group>"; };
-		6CEABD5B0BB322240059641A /* Magic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Magic.m; sourceTree = "<group>"; };
+		6CEABD5A0BB322240059641A /* ESEAAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESEAAppController.h; sourceTree = "<group>"; };
+		6CEABD5B0BB322240059641A /* ESEAAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESEAAppController.m; sourceTree = "<group>"; };
 		6CEABD770BB322BC0059641A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Earth Addresser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Earth Addresser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,8 +184,8 @@
 			children = (
 				32CA4F630368D1EE00C91783 /* EA_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				6CEABD5A0BB322240059641A /* Magic.h */,
-				6CEABD5B0BB322240059641A /* Magic.m */,
+				6CEABD5A0BB322240059641A /* ESEAAppController.h */,
+				6CEABD5B0BB322240059641A /* ESEAAppController.m */,
 				6C2A375A1981691000DBAE64 /* ESTerm.h */,
 				6C2A375B1981691000DBAE64 /* ESTerm.m */,
 				6C2A376C19830E0600DBAE64 /* ESEAOperation.h */,
@@ -429,7 +429,7 @@
 				6C2A37681982EC1900DBAE64 /* ESAddressHelper.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				6C2A376E19830E0600DBAE64 /* ESEAOperation.m in Sources */,
-				6CEABD5C0BB322240059641A /* Magic.m in Sources */,
+				6CEABD5C0BB322240059641A /* ESEAAppController.m in Sources */,
 				6C2A375F1982DFCF00DBAE64 /* ESAddressLookupOperation.m in Sources */,
 				6C2A376B19830D2C00DBAE64 /* ESCreateKMLOperation.m in Sources */,
 				6C4A961219870850000B7E7A /* ABGroup+ESSort.m in Sources */,

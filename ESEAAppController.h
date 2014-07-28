@@ -1,6 +1,6 @@
 /*
-  Magic.h
-  Earth Addresser / Mailboxer
+  ESEAAppController.h
+  Earth Addresser
 
   Created by Sven on 22.03.2007
   Copyright 2006-2014 earthlingsoft. All rights reserved.
@@ -20,7 +20,7 @@
 @class ESCreateKMLOperation;
 @class ESAddressHelper;
 
-@interface Magic : NSObject {
+@interface ESEAAppController : NSObject {
 	IBOutlet NSButton * runGeolocationButton;
 	IBOutlet NSButton * createKMLButton;
 	

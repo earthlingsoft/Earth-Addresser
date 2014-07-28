@@ -224,14 +224,14 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="214" name="displayPatternValue1" keyPath="geocodingStatusMessage" id="jx2-8n-Ppk">
-                                <dictionary key="options">
-                                    <string key="NSDisplayPattern">Looking up: %{value1}@</string>
-                                </dictionary>
-                            </binding>
                             <binding destination="214" name="hidden" keyPath="geocodingRunning" id="FaX-sX-pNq">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="214" name="displayPatternValue1" keyPath="geocodingStatusMessage" id="jx2-8n-Ppk">
+                                <dictionary key="options">
+                                    <string key="NSDisplayPattern">Looking up: %{value1}@</string>
                                 </dictionary>
                             </binding>
                         </connections>
@@ -252,13 +252,13 @@
                         <rect key="frame" x="182" y="190" width="280" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
+                            <binding destination="214" name="value" keyPath="geocodingProgress" previousBinding="rvy-3H-z3T" id="DeU-QE-oph"/>
                             <binding destination="214" name="hidden" keyPath="geocodingRunning" id="1CA-se-DN6">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
                             <binding destination="214" name="maxValue" keyPath="notSearchedCount" id="rvy-3H-z3T"/>
-                            <binding destination="214" name="value" keyPath="geocodingProgress" previousBinding="rvy-3H-z3T" id="DeU-QE-oph"/>
                         </connections>
                     </progressIndicator>
                     <button verticalHuggingPriority="750" id="425" userLabel="Look Up Coordinates Button">
@@ -270,6 +270,7 @@
                         </buttonCell>
                         <connections>
                             <action selector="convertAddresses:" target="214" id="427"/>
+                            <binding destination="214" name="title" keyPath="geocodingButtonLabel" id="958"/>
                             <binding destination="214" name="enabled3" keyPath="geocodingOperation.isCancelled" previousBinding="1067" id="1Qi-io-aqS">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -279,7 +280,6 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="title" keyPath="geocodingButtonLabel" id="958"/>
                             <binding destination="214" name="enabled2" keyPath="nothingToSearch" previousBinding="1058" id="1067">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -597,13 +597,13 @@
                         <rect key="frame" x="182" y="18" width="285" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
+                            <binding destination="214" name="maxValue" keyPath="KMLMaximum" id="2vm-cj-AbV"/>
+                            <binding destination="214" name="value" keyPath="KMLProgress" previousBinding="2vm-cj-AbV" id="MH9-nU-WUf"/>
                             <binding destination="214" name="hidden" keyPath="KMLRunning" id="bJe-22-I8w">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="maxValue" keyPath="KMLMaximum" id="2vm-cj-AbV"/>
-                            <binding destination="214" name="value" keyPath="KMLProgress" previousBinding="2vm-cj-AbV" id="MH9-nU-WUf"/>
                         </connections>
                     </progressIndicator>
                     <textField verticalHuggingPriority="750" id="738" userLabel="Written File Name Information">
@@ -623,12 +623,12 @@
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
+                            <binding destination="214" name="value" keyPath="KMLStatusMessage" id="TMX-vh-WPS"/>
                             <binding destination="214" name="hidden" keyPath="needToSearchNoticeHidden" id="748">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="value" keyPath="KMLStatusMessage" id="TMX-vh-WPS"/>
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" id="206" userLabel="Create Placemarks Button">
@@ -640,15 +640,6 @@
                         </buttonCell>
                         <connections>
                             <action selector="createKML:" target="214" id="j5A-qg-IX4"/>
-                            <binding destination="214" name="title" keyPath="KMLWritingButtonLabel" id="959"/>
-                            <binding destination="214" name="enabled2" keyPath="addressesAreAvailable" previousBinding="hdT-CS-x93" id="M97-Om-44n">
-                                <dictionary key="options">
-                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                    <integer key="NSNullPlaceholder" value="-1"/>
-                                </dictionary>
-                            </binding>
                             <binding destination="214" name="enabled3" keyPath="KMLOperation.isCancelled" previousBinding="M97-Om-44n" id="n0U-rz-PP6">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -656,6 +647,15 @@
                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="214" name="title" keyPath="KMLWritingButtonLabel" id="959"/>
+                            <binding destination="214" name="enabled2" keyPath="addressesAreAvailable" previousBinding="hdT-CS-x93" id="M97-Om-44n">
+                                <dictionary key="options">
+                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                    <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
                             <binding destination="214" name="enabled" keyPath="geocodingRunning" id="hdT-CS-x93">
@@ -864,7 +864,7 @@
                 </menuItem>
             </items>
         </menu>
-        <customObject id="214" userLabel="Magic" customClass="Magic">
+        <customObject id="214" userLabel="App Controller" customClass="ESEAAppController">
             <connections>
                 <outlet property="addressTermsToRemoveController" destination="1105" id="TKd-ia-ios"/>
                 <outlet property="createKMLButton" destination="206" id="651"/>

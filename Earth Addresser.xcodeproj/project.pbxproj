@@ -31,6 +31,7 @@
 		6C2A37681982EC1900DBAE64 /* ESAddressHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A37671982EC1900DBAE64 /* ESAddressHelper.m */; };
 		6C2A376B19830D2C00DBAE64 /* ESCreateKMLOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A376A19830D2C00DBAE64 /* ESCreateKMLOperation.m */; };
 		6C2A376E19830E0600DBAE64 /* ESEAOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A376D19830E0600DBAE64 /* ESEAOperation.m */; };
+		6C4A961219870850000B7E7A /* ABGroup+ESSort.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A961119870850000B7E7A /* ABGroup+ESSort.m */; };
 		6C4FBD39197574000010DC7F /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; };
 		6C4FBD3E197578390010DC7F /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C4FBD30197573CB0010DC7F /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C916E650F58C384003EA1EB /* work.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E630F58C384003EA1EB /* work.png */; };
@@ -145,6 +146,8 @@
 		6C2A376A19830D2C00DBAE64 /* ESCreateKMLOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCreateKMLOperation.m; sourceTree = "<group>"; };
 		6C2A376C19830E0600DBAE64 /* ESEAOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESEAOperation.h; sourceTree = "<group>"; };
 		6C2A376D19830E0600DBAE64 /* ESEAOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESEAOperation.m; sourceTree = "<group>"; };
+		6C4A961019870850000B7E7A /* ABGroup+ESSort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ABGroup+ESSort.h"; sourceTree = "<group>"; };
+		6C4A961119870850000B7E7A /* ABGroup+ESSort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ABGroup+ESSort.m"; sourceTree = "<group>"; };
 		6C4FBD24197573CB0010DC7F /* Sparkle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sparkle.xcodeproj; path = Sparkle/Sparkle.xcodeproj; sourceTree = "<group>"; };
 		6C4FBD4119758A850010DC7F /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		6C4FBD4519766C4E0010DC7F /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
@@ -193,6 +196,8 @@
 				6C2A376A19830D2C00DBAE64 /* ESCreateKMLOperation.m */,
 				6C2A37661982EC1900DBAE64 /* ESAddressHelper.h */,
 				6C2A37671982EC1900DBAE64 /* ESAddressHelper.m */,
+				6C4A961019870850000B7E7A /* ABGroup+ESSort.h */,
+				6C4A961119870850000B7E7A /* ABGroup+ESSort.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -427,6 +432,7 @@
 				6CEABD5C0BB322240059641A /* Magic.m in Sources */,
 				6C2A375F1982DFCF00DBAE64 /* ESAddressLookupOperation.m in Sources */,
 				6C2A376B19830D2C00DBAE64 /* ESCreateKMLOperation.m in Sources */,
+				6C4A961219870850000B7E7A /* ABGroup+ESSort.m in Sources */,
 				6C2A375C1981691000DBAE64 /* ESTerm.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

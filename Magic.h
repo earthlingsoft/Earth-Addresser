@@ -102,8 +102,4 @@
 
 @end
 
-@interface ABGroup (ESSortExtension)
-- (NSComparisonResult) groupByNameCompare:(ABGroup *)aGroup ;
-@end
-
 NSInteger nameSort(id person1, id person2, void *context);

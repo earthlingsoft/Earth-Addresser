@@ -897,18 +897,6 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 
 
 
-@implementation ABGroup (ESSortExtension)
-
-- (NSComparisonResult) groupByNameCompare:(ABGroup *)aGroup {
-	NSString * myName = [self valueForProperty:kABGroupNameProperty];
-	NSString * theirName = [aGroup valueForProperty:kABGroupNameProperty];
-	return [myName caseInsensitiveCompare:theirName];
-}
-
-@end
-
-
-
 
 /*
  Helper function for sorting the people array by name.

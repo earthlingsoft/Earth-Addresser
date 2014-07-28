@@ -79,7 +79,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 		i++;
 	}
 	
-	[KML.XMLData writeToFile:KMLFilePath atomically:YES];
+	[[KML XMLDataWithOptions:NSXMLNodePrettyPrint] writeToFile:KMLFilePath atomically:YES];
 	
 	self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName];
 }

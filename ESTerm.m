@@ -15,6 +15,7 @@ NSString * const ESTermStringKey = @"string";
 NSString * const ESTermContentChangedNotification = @"ESTerm content changed";
 
 
+
 - (instancetype) init {
 	self = [super init];
 	if (self) {
@@ -23,6 +24,7 @@ NSString * const ESTermContentChangedNotification = @"ESTerm content changed";
 	}
 	return self;
 }
+
 
 
 - (instancetype) initWithDictionary:(NSDictionary *)dictionary {
@@ -34,10 +36,17 @@ NSString * const ESTermContentChangedNotification = @"ESTerm content changed";
 }
 
 
+
+
+
+#pragma mark KVO / Accessors
+
+
 - (void) didChangeValueForKey:(NSString *)key {
 	[super didChangeValueForKey:key];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ESTermContentChangedNotification object:self];
 }
+
 
 
 - (NSDictionary *) dictionary {
@@ -46,6 +55,7 @@ NSString * const ESTermContentChangedNotification = @"ESTerm content changed";
 		ESTermStringKey: (self.string ? self.string : @"")
 	};
 }
+
 
 
 - (void) setDictionary:(NSDictionary *)dictionary {
@@ -57,6 +67,7 @@ NSString * const ESTermContentChangedNotification = @"ESTerm content changed";
 	}
 	self.string = dictionary[ESTermStringKey];
 }
+
 
 
 - (NSString *) description {

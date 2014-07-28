@@ -12,34 +12,33 @@
 #import "ESCreateKMLOperation.h"
 #import "ESAddressHelper.h"
 
+
 @implementation Magic
 
 - (instancetype) init {
 	self = [super init];
 	if (self != nil) {
 		[self buildGroupList];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(addressBookChanged:)
-													 name:kABDatabaseChangedExternallyNotification
-												   object:NULL];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(updateDefaults:)
-													 name:ESTermContentChangedNotification
-												   object:NULL];
+		
+		[self setupAddressBookChangedNotification];
+		[self setupTermContentChangedNotification];
+		[self setupOperationProgressNotification];
+		[self setupOperationStatusMessageNotification];
+		[self setupOperationFinishedNotification];
 
 		self.addressHelper = [[ESAddressHelper alloc] init];
 		
 		[self readDefaults];
 		[self readCaches];
+		
+		self.operationQueue = [[NSOperationQueue alloc] init];
 	}
 	return self;
 }
 
 
 
-- (void)awakeFromNib {
+- (void) awakeFromNib {
 	[self.addressTermsToRemoveController addObserver:self.addressHelper forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self.oldLabelsController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self relevantPeople];
@@ -48,7 +47,7 @@
 
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification {
-	if ( ![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue] ) {
+	if (![[UDC valueForKeyPath:@"values.hasReadInfo"] boolValue]) {
 		[self showWarningInfo:nil];
 	}
 }
@@ -104,6 +103,7 @@
 		@"noHomeWorkIcons": @NO,
 		@"hasReadInfo": @NO,
 		@"groupByAddressLabel": @NO,
+		@"secondsBetweenCoordinateLookups": @1.0,
 		@"addressTermsToRemove": @[
 			@{ESTermStringKey:@"c/o ", ESTermActiveKey:@YES},
 			@{ESTermStringKey:@"Geb. ", ESTermActiveKey:@YES},
@@ -200,6 +200,15 @@
 }
 
 
+
+- (void) setupTermContentChangedNotification {
+	[[NSNotificationCenter defaultCenter] addObserverForName:ESTermContentChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+		[self updateDefaults:notification];
+	}];
+}
+
+
+
 - (void) updateDefaults:(NSNotification *)notification {
 	[self.addressHelper updateDefaults];
 
@@ -240,7 +249,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 - (NSMutableDictionary *) mutableDictionaryFromApplicationSupportFileName:(NSString *)fileName {
-	NSURL * fileURL = [self.EAApplicationSupportURL URLByAppendingPathComponent:fileName];
+	NSURL * fileURL = [[[self class] EAApplicationSupportURL] URLByAppendingPathComponent:fileName];
 	NSMutableDictionary * dictionary = [NSMutableDictionary dictionaryWithContentsOfURL:fileURL];
 	return dictionary;
 }
@@ -250,17 +259,17 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	BOOL success = NO;
 	NSError * error;
 	
-	if([[NSFileManager defaultManager] createDirectoryAtURL:self.EAApplicationSupportURL withIntermediateDirectories:YES attributes:nil error:&error]) {
-		if (self.EAApplicationSupportURL) {
-			NSURL * fileURL = [self.EAApplicationSupportURL URLByAppendingPathComponent:fileName];
+	if([[NSFileManager defaultManager] createDirectoryAtURL:[[self class] EAApplicationSupportURL] withIntermediateDirectories:YES attributes:nil error:&error]) {
+		if ([[self class] EAApplicationSupportURL]) {
+			NSURL * fileURL = [[[self class] EAApplicationSupportURL] URLByAppendingPathComponent:fileName];
 			success = [dictionary writeToURL:fileURL atomically:YES];
 			if (!success) {
-				NSLog(@"Could not write file ”%@“", [fileURL path]);
+				NSLog(@"Could not write file ”%@“", fileURL.path);
 			}
 		}
 	}
 	else {
-		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [self.EAApplicationSupportURL path]);
+		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [[self class] EAApplicationSupportURL].path);
 		if (error) {
 			NSLog(@"%@", [error localizedDescription]);
 		}
@@ -271,14 +280,18 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 
 
+
+
 #pragma mark Address Book
 
 /*
-	when Address Book changes, update everything that depends on it
+ On Address Book changes, update everything that depends on it.
 */
-- (void) addressBookChanged:(NSNotification *)notification {
-	[self buildGroupList];
-	[self relevantPeople];
+- (void) setupAddressBookChangedNotification {
+	[[NSNotificationCenter defaultCenter] addObserverForName:kABDatabaseChangedExternallyNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+		[self buildGroupList];
+		[self relevantPeople];
+	}];
 }
 
 
@@ -481,7 +494,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	self.nonLocatableAddressesExist = ([self.failLocations count] > 0);
 	self.notSearchedCount = notYetLocatedAddressCount;
 	self.addressesAreAvailable = (locatedAddressCount != 0);
-	self.doneMessage = @"";
+	self.KMLStatusMessage = @"";
 
 	if (notYetLocatedAddressCount != 0 ) {
 		[createKMLButton setKeyEquivalent:@""];
@@ -516,10 +529,13 @@ NSString * const failFileName = @"Failed Lookups.plist";
 			people = [self relevantPeople];
 		}
 		
-		self.geocodingOperation = [[ESAddressLookupOperation alloc] initWithPeople:people forOwner:self];
-		NSOperationQueue * geocodingQueue = [[NSOperationQueue alloc] init];
-		geocodingQueue.name = @"Geocoding Queue";
-		[geocodingQueue addOperation:self.geocodingOperation];
+		ESAddressLookupOperation * geocodingOperation = [[ESAddressLookupOperation alloc] initWithPeople:people];
+		geocodingOperation.addressHelper = self.addressHelper;
+		geocodingOperation.locations = self.locations;
+		geocodingOperation.failLocations = self.failLocations;
+		self.geocodingOperation = geocodingOperation;
+		
+		[self.operationQueue addOperation:self.geocodingOperation];
 	}
 	else {
 		[self.geocodingOperation cancel];
@@ -536,14 +552,69 @@ NSString * const failFileName = @"Failed Lookups.plist";
 		[self beginBusy];
 		
 		NSArray * people = [self relevantPeople];
-		self.KMLOperation = [[ESCreateKMLOperation alloc] initWithPeople:people forOwner:self];
-		NSOperationQueue * KMLQueue = [[NSOperationQueue alloc] init];
-		KMLQueue.name = @"KML Queue";
-		[KMLQueue addOperation:self.KMLOperation];
+		self.KMLMaximum = people.count;
+		ESCreateKMLOperation * KMLOperation = [[ESCreateKMLOperation alloc] initWithPeople:people];
+		KMLOperation.locations = self.locations;
+		KMLOperation.addressHelper = self.addressHelper;
+		KMLOperation.oldLabels = self.oldLabels;
+		self.KMLOperation = KMLOperation;
+
+		[self.operationQueue addOperation:self.KMLOperation];
 	}
 	else {
 		[self.KMLOperation cancel];
 	}
+}
+
+
+
+- (void) setupOperationProgressNotification {
+	[[NSNotificationCenter defaultCenter] addObserverForName:ESEAOperationProgressNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+		double progress = ((NSNumber*)notification.userInfo[ESEAOperationProgressKey]).doubleValue;
+		
+		if (notification.object == self.geocodingOperation) {
+			if (abs(progress - self.geocodingProgress) > 0.9) {
+				[self relevantPeople];
+			}
+			self.geocodingProgress = progress;
+		}
+		else if (notification.object == self.KMLOperation) {
+			self.KMLProgress = progress;
+		}
+	}];
+}
+
+
+
+- (void) setupOperationStatusMessageNotification {
+	[[NSNotificationCenter defaultCenter] addObserverForName:ESEAOperationStatusMessageNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+		NSString * message = notification.userInfo[ESEAOperationMessageKey];
+		
+		if (notification.object == self.geocodingOperation) {
+			self.geocodingStatusMessage = message;
+		}
+		else if (notification.object == self.KMLOperation) {
+			self.KMLStatusMessage = message;
+		}
+	}];
+}
+
+
+
+- (void) setupOperationFinishedNotification {
+	[[NSNotificationCenter defaultCenter] addObserverForName:ESEAOperationFinishedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+		if (notification.object == self.geocodingOperation) {
+			[self endBusy];
+			self.geocodingProgress = 0;
+			self.geocodingOperation = nil;
+		}
+		else if (notification.object == self.KMLOperation) {
+			[self endBusy];
+			self.KMLProgress = 0;
+			self.KMLMaximum = 0;
+			self.KMLOperation = nil;
+		}
+	}];
 }
 
 
@@ -745,7 +816,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 
 NSString * const applicationSupportFolderName = @"EarthAddresser";
 
-- (NSURL *) EAApplicationSupportURL {
++ (NSURL *) EAApplicationSupportURL {
 	NSError * error;
 	NSURL * applicationSupportURL = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
 	NSURL * myApplicationSupportURL;

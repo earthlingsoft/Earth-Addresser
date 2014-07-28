@@ -11,6 +11,10 @@
 
 @interface ESAddressLookupOperation : ESEAOperation
 
+@property NSMutableDictionary * locations;
+@property NSMutableDictionary * failLocations;
+
 @property NSTimeInterval previousLookup;
+@property NSTimeInterval secondsBetweenCoordinateLookups;
 
 @end

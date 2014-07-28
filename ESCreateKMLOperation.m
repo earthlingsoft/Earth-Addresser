@@ -8,10 +8,11 @@
 
 #import "ESCreateKMLOperation.h"
 #import "Magic.h"
-#import "ESAddressHelper.h"
 #import "ESTerm.h"
 #import <AddressBook/AddressBook.h>
 #import <AddressBook/ABAddressBookC.h>
+
+#define UDC [NSUserDefaultsController sharedUserDefaultsController]
 
 
 @implementation ESCreateKMLOperation
@@ -30,14 +31,12 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 		self.KML = [self createKML];
 		self.KMLDocumentElement = [self createKMLDocument];
 		[[self.KML rootElement] addChild:self.KMLDocumentElement];
-
 		for (ABPerson * person in self.people) {
 			if (self.isCancelled) {
 				break;
 			}
 			[self processPerson:person];
 		}
-		
 		if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
 			// sort and add folders of contacts for each group to main XML tree
 			NSArray * sortedLabels = [[self.addressLabelGroups allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -46,24 +45,19 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 				[self.KMLDocumentElement addChild:self.addressLabelGroups[label]];
 			}
 		}
-		
+
 		self.progress = [self.people count];
 		
 		if (!self.isCancelled) {
 			[self writeKML:self.KML];
 		}
 		else {
-			self.owner.doneMessage = NSLocalizedString(@"Placemark generation was cancelled.", @"Status message after cancelled KML file creation.");
+			self.statusMessage = NSLocalizedString(@"Placemark generation was cancelled.", @"Status message after cancelled KML file creation.");
 		}
 	}
 }
 
 
-
-- (void (^)(void)) completionBlock {
-	[self.owner endBusy];
-	self.owner.KMLOperation = nil;
-}
 
 
 
@@ -85,8 +79,9 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 		i++;
 	}
 	
-	[[KML XMLData] writeToFile:KMLFilePath atomically:YES];
-	self.owner.doneMessage = [NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName];
+	[KML.XMLData writeToFile:KMLFilePath atomically:YES];
+	
+	self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName];
 }
 
 
@@ -148,8 +143,8 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 	for (NSUInteger addressIndex = 0; addressIndex < addressCount; addressIndex++) {
 		NSDictionary * theAddress = [addresses valueAtIndex:addressIndex];
 		NSString * label = [addresses labelAtIndex:addressIndex];
-		NSString * addressLocationKey = [self.owner.addressHelper keyForAddress:theAddress];
-		NSDictionary * addressCoordinates = self.owner.locations[addressLocationKey];
+		NSString * addressLocationKey = [self.addressHelper keyForAddress:theAddress];
+		NSDictionary * addressCoordinates = self.locations[addressLocationKey];
 		
 		if ([addressCoordinates isKindOfClass:[NSDictionary class]]) {
 			// only include addresses we resolved before
@@ -196,7 +191,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 			}
 			
 			if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
-				NSArray * addressComponents = [self.owner.addressHelper componentsForAddress:theAddress];
+				NSArray * addressComponents = [self.addressHelper componentsForAddress:theAddress];
 				NSString * addressString = [addressComponents componentsJoinedByString:@"<br />"];
 				[descriptionHTMLString appendFormat:@"%@", addressString];
 			}
@@ -539,7 +534,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 */
 - (NSString *) imagesFolderPath {
 	NSFileManager * myFM = [NSFileManager defaultManager];
-	NSString * imagesFolderPath = [self.owner.EAApplicationSupportURL URLByAppendingPathComponent:@"Images"].path;
+	NSString * imagesFolderPath = [[Magic EAApplicationSupportURL] URLByAppendingPathComponent:@"Images"].path;
 	
 	if (![myFM fileExistsAtPath:imagesFolderPath]) { // create folders if needed
 		NSError * error;
@@ -573,9 +568,9 @@ NSString * const ESKMLGenericWorkIcon = @"work";
  Returns whether the passed label is marked as indicating old information.
 */
 - (BOOL) isOldLabel:(NSString *)label {
-	BOOL isOldLabel = FALSE;
+	BOOL isOldLabel = NO;
 	NSString * uppercaseLabel = [label uppercaseString];
-	for (ESTerm * oldLabel in self.owner.oldLabels) {
+	for (ESTerm * oldLabel in self.oldLabels) {
 		if (oldLabel.active == YES && [[oldLabel.string uppercaseString] isEqualToString:uppercaseLabel]) {
 			isOldLabel = YES;
 			break;

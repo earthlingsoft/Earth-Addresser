@@ -20,6 +20,7 @@ extern NSString * const ESTermContentChangedNotification;
 
 @property NSDictionary * dictionary;
 
+
 - (instancetype) initWithDictionary:(NSDictionary *)dictionary;
 
 @end

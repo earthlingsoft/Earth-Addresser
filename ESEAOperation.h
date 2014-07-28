@@ -7,16 +7,29 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ESAddressHelper.h"
 
-@class Magic;
+
+@interface ESEAOperation : NSOperation {
+	double _progress;
+	NSString * _statusMessage;
+}
+
+extern NSString * const ESEAOperationFinishedNotification;
+extern NSString * const ESEAOperationProgressNotification;
+extern NSString * const ESEAOperationProgressKey;
+extern NSString * const ESEAOperationStatusMessageNotification;
+extern NSString * const ESEAOperationMessageKey;
 
 
-@interface ESEAOperation : NSOperation
-
-@property (weak) Magic * owner;
 @property NSArray * people;
-@property double progress;
 
-- (instancetype) initWithPeople:(NSArray *)people forOwner:(Magic *)owner;
+@property double progress;
+@property NSString * statusMessage;
+
+@property ESAddressHelper * addressHelper;
+
+
+- (instancetype) initWithPeople:(NSArray *)people;
 
 @end

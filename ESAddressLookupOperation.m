@@ -7,20 +7,17 @@
 //
 
 #import "ESAddressLookupOperation.h"
-#import "Magic.h"
-#import "ESAddressHelper.h"
 #import <AddressBook/AddressBook.h>
 #import <CoreLocation/CoreLocation.h>
 
 @implementation ESAddressLookupOperation
-
-const NSTimeInterval secondsBetweenCoordinateLookups = 1.0;
 
 - (void) main {
 	self.progress = .000001;
 	
 	ABPerson * myPerson;
 	self.previousLookup = 0;
+	self.secondsBetweenCoordinateLookups = ((NSNumber *)[[NSUserDefaultsController sharedUserDefaultsController] valueForKeyPath:@"values.secondsBetweenCoordinateLookups"]).doubleValue;
 	
 	for (ABPerson * person in self.people) {
 		if (self.isCancelled) {
@@ -28,16 +25,15 @@ const NSTimeInterval secondsBetweenCoordinateLookups = 1.0;
 		}
 		[self lookupAddressesForPerson:person];
 	}
+	
+	self.statusMessage = @"";
 }
 
 
-- (void (^)(void)) completionBlock {
-	self.owner.currentLookupAddress = @"";
-	[self.owner writeCaches];
-	[self.owner endBusy];
-	self.owner.geocodingOperation = nil;
-}
 
+
+
+#pragma mark Address lookup
 
 - (void) lookupAddressesForPerson:(ABPerson *)person {
 	@autoreleasepool {
@@ -55,16 +51,17 @@ const NSTimeInterval secondsBetweenCoordinateLookups = 1.0;
 }
 
 
+
 - (void) lookupAddress:(NSDictionary *)addressDict {
-	NSString * addressString = [self.owner.addressHelper keyForAddress:addressDict];
+	NSString * addressString = [self.addressHelper keyForAddress:addressDict];
 	
-	if (!self.owner.locations[addressString] && !self.owner.failLocations[addressString]) {
+	if (!self.locations[addressString] && !self.failLocations[addressString]) {
 		// Look up address if we don’t know its coordinates already
-		self.owner.currentLookupAddress = addressString;
+		self.statusMessage = addressString;
 		
 		// throttle queries
 		if (self.previousLookup != 0) {
-			NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:self.previousLookup + secondsBetweenCoordinateLookups];
+			NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:self.previousLookup + self.secondsBetweenCoordinateLookups];
 			[NSThread sleepUntilDate:wakeUpTime];
 		}
 		self.previousLookup = [NSDate timeIntervalSinceReferenceDate];
@@ -75,7 +72,7 @@ const NSTimeInterval secondsBetweenCoordinateLookups = 1.0;
 				if ([placemarks count] == 1) {
 					CLPlacemark * placemark = placemarks[0];
 					CLLocation * location = placemark.location;
-					self.owner.locations[addressString] = @{
+					self.locations[addressString] = @{
 						@"lat": @(location.coordinate.latitude),
 						@"lon": @(location.coordinate.longitude),
 						@"accuracy": @(location.horizontalAccuracy),
@@ -93,7 +90,7 @@ const NSTimeInterval secondsBetweenCoordinateLookups = 1.0;
 						@"type": @"multiple",
 						@"locations": locationStrings
 					};
-					self.owner.failLocations[addressString] = failInfo;
+					self.failLocations[addressString] = failInfo;
 				}
 				else {
 					if (lookupError) {
@@ -105,14 +102,13 @@ const NSTimeInterval secondsBetweenCoordinateLookups = 1.0;
 						   @"code": [NSNumber numberWithInt:[lookupError code]],
 						   @"userInfo": [lookupError userInfo]
 						};
-						self.owner.failLocations[addressString] = errorInfo;
+						self.failLocations[addressString] = errorInfo;
 					}
 				}
 			}
 		];
 		
 		self.progress += 1;
-		[self.owner relevantPeople];
 	}
 }
 

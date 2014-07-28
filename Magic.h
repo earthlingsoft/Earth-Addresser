@@ -31,13 +31,20 @@
 @property NSArray * groups;
 @property BOOL noGroups;
 
+@property NSOperationQueue * operationQueue;
+
 @property ESAddressLookupOperation * geocodingOperation;
 @property (readonly) BOOL geocodingRunning;
+@property double geocodingProgress;
 @property (readonly) NSString * geocodingButtonLabel;
+@property NSString * geocodingStatusMessage;
 
 @property ESCreateKMLOperation * KMLOperation;
 @property (readonly) BOOL KMLRunning;
+@property double KMLProgress;
+@property double KMLMaximum;
 @property (readonly) NSString * KMLWritingButtonLabel;
+@property NSString * KMLStatusMessage;
 
 @property NSMutableDictionary * locations;
 @property NSMutableDictionary * failLocations;
@@ -48,10 +55,8 @@
 
 @property NSString * relevantPeopleInfo;
 @property NSString * lookupInfo;
-@property NSString * doneMessage;
 
 @property NSInteger addressesAreAvailable;
-@property NSString * currentLookupAddress;
 @property (readonly) BOOL needToSearchNoticeHidden;
 @property (readonly) BOOL nothingToSearch;
 
@@ -59,7 +64,6 @@
 @property (readonly) NSImage * MapsIcon;
 @property (readonly) NSImage * KMLIcon;
 
-@property (readonly) NSURL * EAApplicationSupportURL;
 @property (readonly) NSString * myVersionString;
 
 @property ESAddressHelper * addressHelper;
@@ -93,6 +97,8 @@
 - (void) writeCaches;
 - (void) beginBusy;
 - (void) endBusy;
+
++ (NSURL *) EAApplicationSupportURL;
 
 @end
 

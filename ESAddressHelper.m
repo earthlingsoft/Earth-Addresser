@@ -12,7 +12,6 @@
 
 @implementation ESAddressHelper
 
-
 - (instancetype) init {
 	self = [super init];
 	if (self) {
@@ -20,6 +19,8 @@
 	}
 	return self;
 }
+
+
 
 
 
@@ -48,6 +49,8 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 
 
 
+
+
 #pragma mark KVO
 
 - (void) observeValueForKeyPath:(NSString *)keyPath
@@ -61,11 +64,14 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 
 
 
+
+
 #pragma mark Address Cleanup
 
 - (NSString *) keyForAddress:(NSDictionary *)address {
 	return [[self componentsForAddress:address] componentsJoinedByString:@", "];
 }
+
 
 
 - (NSArray *) componentsForAddress:(NSDictionary *)address {
@@ -88,12 +94,14 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 }
 
 
+
 - (void) addComponent:(NSString *)componentKey ofAddress:(NSDictionary *)address toArray:(NSMutableArray *)array {
 	NSString * addressComponent = address[componentKey];
 	if (addressComponent) {
 		[self addString:addressComponent toArray:array];
 	}
 }
+
 
 
 - (void) addString:(NSString *)string toArray:(NSMutableArray *)array {
@@ -103,6 +111,7 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 		[array addObject:cleanedString];
 	}
 }
+
 
 
 - (NSString *) cleanAddress:(NSString *)address {

@@ -113,7 +113,7 @@ TEXT APPEARING IN THE KML FILE
 "Filename" = "Contacts";
 
 /* Name of Placemark group in KML file */
-"Addresses" = "Addresses";
+"Addresses" = "Contacts";
 
 /* Photo (alt tag for image) */
 "Photo" = "Photo";

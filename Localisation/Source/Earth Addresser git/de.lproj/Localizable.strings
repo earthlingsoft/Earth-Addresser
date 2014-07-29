@@ -148,10 +148,10 @@ TEXT APPEARING IN THE KML FILE
 
 
 /* KML File Name */
-"Filename" = "Adressen";
+"Filename" = "Kontakte";
 
 /* Name of Placemark group in KML file */
-"Addresses" = "Adressen";
+"Addresses" = "Kontakte";
 
 /* Photo (alt tag for image) */
 "Photo" = "Photo";

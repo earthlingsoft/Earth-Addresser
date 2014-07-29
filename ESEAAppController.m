@@ -634,24 +634,33 @@
 }
 
 
+
 - (NSImage *) AddressBookIcon {
-	NSImage * image = nil;
-	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.addressbook"];
-	if (appPath) {
-		image = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
-	}
-	return image;
+	return [self iconForAppBundleIdentifier:@"com.apple.addressbook"];
 }
+
 
 
 - (NSImage *) MapsIcon {
+	NSImage * image = [self iconForAppBundleIdentifier:@"com.apple.Maps"];
+	if (!image) {
+		// No Maps application: use Google Earth icon. (For X.8)
+		image = [self iconForAppBundleIdentifier:@"com.Google.GoogleEarthPlus"];
+	}
+	return image;
+}
+
+
+
+- (NSImage *) iconForAppBundleIdentifier:(NSString *) bundleIdentifier {
 	NSImage * image = nil;
-	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.Maps"];
+	NSString * appPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:bundleIdentifier];
 	if (appPath) {
 		image = [[NSWorkspace sharedWorkspace] iconForFile:appPath];
 	}
 	return image;
 }
+
 
 
 - (NSImage *) KMLIcon {

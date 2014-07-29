@@ -33,6 +33,6 @@
 	<key>SUFeedURL</key>
 	<string>http://earthlingsoft.net/Earth%20Addresser/appcast.xml</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.9.0</string>
+	<string>10.8.0</string>
 </dict>
 </plist>

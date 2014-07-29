@@ -197,9 +197,18 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 			}
 			
 			if ([[UDC valueForKeyPath:@"values.placemarkWithAddressBookLink"] boolValue]) {
-				[descriptionHTMLString appendFormat:@"<br /><a href=\"addressbook://%@\">%@</a>",
-				 uniqueID,
-				 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
+				// Construct the path to the contact’s Spotlight file.
+				// This seems quite wonky (undocumented) and is required because Google Earth
+				// does not seem to call the addressbook:// URLs we used previously.
+				NSURL * abcdpURL = [[[[[person performSelector:@selector(account)] baseURL]
+									  URLByAppendingPathComponent:@"Metadata"]
+									 URLByAppendingPathComponent:uniqueID]
+									URLByAppendingPathExtension:@"abcdp"];
+				if ([[NSFileManager defaultManager] fileExistsAtPath:abcdpURL.path]) {
+					[descriptionHTMLString appendFormat:@"<br /><a href=\"%@\">%@</a>",
+					 abcdpURL.absoluteString,
+					 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
+				}
 			}
 			
 			[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;' />"];

@@ -7,6 +7,17 @@
 		<language>en</language>
 		
 		<item>
+			<title>Version 3b3</title>
+			<description>http://earthlingsoft.net/Earth%20Addresser/versionhistory.html</description>
+			<pubDate>Tue, 29 Jul 2014 20:00:00 +02:00</pubDate>
+			<enclosure
+			sparkle:version="31"
+			sparkle:shortVersionString="3b3"
+			url="http://earthlingsoft.net/Earth%20Addresser/Earth%20Addresser3b3.zip"
+			type="application/octet-stream"/>
+		</item>
+		
+		<item>
 			<title>Version 3b2</title>
 			<description>http://earthlingsoft.net/Earth%20Addresser/versionhistory.html</description>
 			<pubDate>Tue, 29 Jul 2014 00:01:02 +02:00</pubDate>

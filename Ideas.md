@@ -1,15 +1,15 @@
 # Ideas
 
+* use default country code when not present in address
+* fix updating glitch when lookup is finished
+* less NSLog
+* make file written message more visible (especially when creation is so quick that no progress bar is seen)
 * improve handling of no-network errors
 * improve FAIL report
 * improve FAIL re-lookup / do not re-lookup ALL addresses?
-* sane class structure
 * use Container / Sandbox
-* use modern APIs / blocks
-* disable close button while active
 * display map in application
 * use framework provided strings (AB?, CL?) for display rather than building our own
-* improve handling of addresses with extra information (»Room«, »Flat«, …)
 * use geocoding precision info
 * French readme
 * add pointer to images

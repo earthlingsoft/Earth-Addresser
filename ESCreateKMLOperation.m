@@ -67,21 +67,28 @@ NSString * const ESKMLGenericWorkIcon = @"work";
  Writes passed KML XML Document to file on Desktop.
 */
 - (void) writeKML:(NSXMLDocument *)KML {
-	NSString * const KMLPathFormat = [@"~/Desktop/%@" stringByExpandingTildeInPath];
-	
-	NSString * KMLFileName = [NSLocalizedString(@"Filename", @"KML Dateiname") stringByAppendingPathExtension:@"kml"];
-	NSString * KMLFilePath = [NSString stringWithFormat:KMLPathFormat, KMLFileName];
-	int i = 2;
-	
-	while ([[NSFileManager defaultManager] fileExistsAtPath:KMLFilePath]) {
-		KMLFileName = [[NSString stringWithFormat:@"%@ %i", NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
-		KMLFilePath = [NSString stringWithFormat:KMLPathFormat, KMLFileName];
-		i++;
+	NSError * error;
+	NSURL * desktopURL = [[NSFileManager defaultManager] URLForDirectory:NSDesktopDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+	if (desktopURL) {
+		int i = 1;
+		BOOL done = NO;
+		while (!done && i < 10000) {
+			NSString * fileNameFormat = (i == 1 ? @"%@" : @"%@ %i");
+			NSString * KMLFileName = [[NSString stringWithFormat:fileNameFormat, NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
+			NSString * KMLFilePath = [desktopURL.path stringByAppendingPathComponent:KMLFileName];
+			if (![[NSFileManager defaultManager] fileExistsAtPath:KMLFilePath]) {
+				BOOL success = [[KML XMLDataWithOptions:NSXMLNodePrettyPrint] writeToFile:KMLFilePath atomically:YES];
+				if (success) {
+					self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName];
+				}
+				else {
+					self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"Could not create file '%@' on your Desktop", @"Status message after failing to create the KML file."), KMLFileName];
+				}
+				done = YES;
+			}
+			i++;
+		}
 	}
-	
-	[[KML XMLDataWithOptions:NSXMLNodePrettyPrint] writeToFile:KMLFilePath atomically:YES];
-	
-	self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName];
 }
 
 

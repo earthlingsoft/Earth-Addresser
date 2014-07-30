@@ -78,19 +78,12 @@ Veuillez essayer avec une autre sélection pour que cela soit plus utile.";
 
 
 
-/*
-Displayed in bottom section after Placemarks have been created.
-*/
 
 
-"File '%@' on your Desktop" = "Un fichier de repères « %@ » a été créé sur le Bureau.";
 
 /*
- Status message after cancelled KML file creation.
+	ADDRESS LOOKUP OPERATION INFOMRATION AND UI
 */
-
-
-"Placemark generation was cancelled." = "Création du fichier de repères annulée.";
 
 
 
@@ -138,6 +131,14 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
+
+
+/*
+	KML CREATION OPERATION INFOMRATION AND UI
+*/
+
+
+
 /*
  Text displayed in KML Creation button while KML Creation is running
 */
@@ -152,6 +153,19 @@ Displayed in bottom section after Placemarks have been created.
 
 "Create Placemarks" = "Créer des repères";
 
+/*
+Displayed in bottom section after Placemarks have been created.
+*/
+
+
+"File '%@' on your Desktop" = "Un fichier de repères « %@ » a été créé sur le Bureau.";
+
+/*
+ Status message after cancelled KML file creation.
+*/
+
+
+"Placemark generation was cancelled." = "Création du fichier de repères annulée.";
 
 
 
@@ -170,9 +184,8 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
-
 /*
-TEXT APPEARING IN THE KML FILE
+	TEXT APPEARING IN THE KML FILE
 */
 
 
@@ -203,7 +216,7 @@ TEXT APPEARING IN THE KML FILE
 
 
 /*
-TEXT IN LINKS
+	TEXT IN LINKS
 */
 
 

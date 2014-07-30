@@ -417,7 +417,9 @@
 - (void) setupOperationFinishedNotification {
 	[[NSNotificationCenter defaultCenter] addObserverForName:ESEAOperationFinishedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
 		if (notification.object == self.geocodingOperation) {
+			[self writeCaches];
 			[self endBusy];
+			[self relevantPeople];
 			self.geocodingProgress = 0;
 			self.geocodingOperation = nil;
 		}

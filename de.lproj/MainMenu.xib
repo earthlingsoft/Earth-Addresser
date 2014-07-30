@@ -233,11 +233,7 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="displayPatternValue1" keyPath="geocodingStatusMessage" id="jx2-8n-Ppk">
-                                <dictionary key="options">
-                                    <string key="NSDisplayPattern">Koordinaten ermitteln für: %{value1}@</string>
-                                </dictionary>
-                            </binding>
+                            <binding destination="214" name="value" keyPath="geocodingStatusMessage" id="GtF-1y-VaO"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="580">

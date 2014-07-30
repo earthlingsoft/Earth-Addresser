@@ -19,11 +19,14 @@
 	self.previousLookup = 0;
 	self.secondsBetweenCoordinateLookups = ((NSNumber *)[[NSUserDefaultsController sharedUserDefaultsController] valueForKeyPath:@"values.secondsBetweenCoordinateLookups"]).doubleValue;
 	
-	for (ABPerson * person in self.people) {
+	NSArray * addresses = [self addressesForPeople:self.people];
+	for (NSDictionary * addressDict in addresses) {
 		if (self.isCancelled) {
 			break;
 		}
-		[self lookupAddressesForPerson:person];
+		@autoreleasepool {
+			[self lookupAddress:addressDict];
+		}
 	}
 	
 	self.statusMessage = @"";
@@ -35,17 +38,20 @@
 
 #pragma mark Address lookup
 
-- (void) lookupAddressesForPerson:(ABPerson *)person {
-	@autoreleasepool {
-		ABMultiValue * addresses = [person valueForProperty:kABAddressProperty];
-		NSUInteger addressCount = [addresses count];
-		NSUInteger index = 0;
-		while (addressCount > index) {
-			NSDictionary * addressDict = [addresses valueAtIndex:index];
-			[self lookupAddress:addressDict];
-			index++;
+- (NSArray *) addressesForPeople:(NSArray *)people {
+	NSMutableArray * allAddresses = [NSMutableArray array];
+	
+	for (ABPerson * person in people) {
+		ABMultiValue * personAddresses = [person valueForProperty:kABAddressProperty];
+		NSUInteger addressCount = [personAddresses count];
+		
+		for (NSUInteger addressIndex = 0; addressIndex < addressCount; addressIndex++) {
+			NSDictionary * addressDict = [personAddresses valueAtIndex:addressIndex];
+			[allAddresses addObject:addressDict];
 		}
 	}
+	
+	return allAddresses;
 }
 
 
@@ -54,56 +60,78 @@
 	NSString * addressString = [self.addressHelper keyForAddress:addressDict];
 	
 	if (!self.locations[addressString] && !self.failLocations[addressString]) {
-		// Look up address if we don’t know its coordinates already
-		self.statusMessage = addressString;
-		
-		// throttle queries
-		if (self.previousLookup != 0) {
-			NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:self.previousLookup + self.secondsBetweenCoordinateLookups];
-			[NSThread sleepUntilDate:wakeUpTime];
+		// This address has not been looked up yet.
+		[self geocodeAddress:addressDict];
+	}
+}
+
+
+
+- (void) geocodeAddress:(NSDictionary *)addressDict {
+	NSString * addressString = [self.addressHelper keyForAddress:addressDict];
+	self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"Looking up: %@", @"Status message for address lookup with current address."), addressString];
+	
+	// throttle queries
+	if (self.previousLookup != 0) {
+		NSDate * wakeUpTime = [NSDate dateWithTimeIntervalSinceReferenceDate:self.previousLookup + self.secondsBetweenCoordinateLookups];
+		[NSThread sleepUntilDate:wakeUpTime];
+	}
+	self.previousLookup = [NSDate timeIntervalSinceReferenceDate];
+	
+	self.geocoder = [[CLGeocoder alloc] init];
+	[self.geocoder geocodeAddressDictionary:addressDict completionHandler:^(NSArray * placemarks, NSError * lookupError) {
+		if (placemarks.count == 1) {
+			CLPlacemark * placemark = placemarks[0];
+			CLLocation * location = placemark.location;
+			self.locations[addressString] = @{
+				@"lat": @(location.coordinate.latitude),
+				@"lon": @(location.coordinate.longitude),
+				@"accuracy": @(location.horizontalAccuracy),
+				@"timestamp": @(location.timestamp.timeIntervalSince1970),
+				@"resultType": @"unique"
+			};
 		}
-		self.previousLookup = [NSDate timeIntervalSinceReferenceDate];
-		
-		[[[CLGeocoder alloc] init]
-			geocodeAddressDictionary:addressDict
-			completionHandler:^(NSArray * placemarks, NSError * lookupError) {
-				if (placemarks.count == 1) {
-					CLPlacemark * placemark = placemarks[0];
-					CLLocation * location = placemark.location;
-					self.locations[addressString] = @{
-						@"lat": @(location.coordinate.latitude),
-						@"lon": @(location.coordinate.longitude),
-						@"accuracy": @(location.horizontalAccuracy),
-						@"timestamp": @(location.timestamp.timeIntervalSince1970),
-						@"resultType": @"unique"
-					};
-				}
-				else if (placemarks.count > 1) {
-					NSMutableArray * locationStrings = [NSMutableArray array];
-					[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
-						[locationStrings addObject:placemark.location.description];
-					}];
-					NSDictionary * failInfo = @{
-						@"type": @"multiple",
-						@"locations": locationStrings
-					};
-					self.failLocations[addressString] = failInfo;
+		else if (placemarks.count > 1) {
+			NSMutableArray * locationStrings = [NSMutableArray array];
+			[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
+				[locationStrings addObject:placemark.location.description];
+			}];
+			NSDictionary * failInfo = @{
+				@"type": @"multiple",
+				@"locations": locationStrings
+			};
+			self.failLocations[addressString] = failInfo;
+		}
+		else {
+			if (lookupError && !self.isCancelled) {
+				if (lookupError.domain == kCLErrorDomain && lookupError.code == kCLErrorNetwork) {
+					// Network problem
+					self.statusMessage = NSLocalizedString(@"Network error. Will attempt to look this address up the next time.", @"Error message shown when address lookup failed with a netork error.");
 				}
 				else {
-					if (lookupError) {
-						NSDictionary * errorInfo = @{
-						   @"type": @"error",
-						   @"domain": [lookupError domain],
-						   @"code": [NSNumber numberWithInt:[lookupError code]],
-						   @"userInfo": [lookupError userInfo]
-						};
-						self.failLocations[addressString] = errorInfo;
-					}
+					NSDictionary * errorInfo = @{
+						@"type": @"error",
+						@"domain": lookupError.domain,
+						@"code": @(lookupError.code)
+					};
+					self.failLocations[addressString] = errorInfo;
+					self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"Lookup failed for: %@", @"Error message shown when address lookup failed."), addressString];
 				}
 			}
-		];
-		
+		}
+
 		self.progress += 1;
+		self.geocoder = nil;
+	}];
+	
+	
+	NSTimeInterval geocoderPollInterval = 0.05;
+	while (self.geocoder) {
+		if (self.isCancelled) {
+			self.statusMessage = NSLocalizedString(@"Address lookup cancelled.", @"Status message for cancelled address lookup.");
+			[self.geocoder cancelGeocode];
+		}
+		[NSThread sleepForTimeInterval:geocoderPollInterval];
 	}
 }
 

@@ -30,7 +30,7 @@
 		@"noHomeWorkIcons": @NO,
 		@"hasReadInfo": @NO,
 		@"groupByAddressLabel": @NO,
-		@"secondsBetweenCoordinateLookups": @1.0,
+		@"secondsBetweenCoordinateLookups": @1.2,
 		@"addressTermsToRemove": @[
 				@{ESTermStringKey:@"c/o ", ESTermActiveKey:@YES},
 				@{ESTermStringKey:@"Geb. ", ESTermActiveKey:@YES},

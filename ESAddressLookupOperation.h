@@ -8,11 +8,15 @@
 
 #import "ESEAOperation.h"
 
+@class CLGeocoder;
+
 
 @interface ESAddressLookupOperation : ESEAOperation
 
 @property NSMutableDictionary * locations;
 @property NSMutableDictionary * failLocations;
+
+@property CLGeocoder * geocoder;
 
 @property NSTimeInterval previousLookup;
 @property NSTimeInterval secondsBetweenCoordinateLookups;

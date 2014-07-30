@@ -107,6 +107,35 @@ Displayed in bottom section after Placemarks have been created.
 
 "Cancel Lookup" = "Abbrechen";
 
+/*
+ Status message for address lookup with current address.
+*/
+
+
+"Looking up: %@" = "Ermittle Koordinaten für: %@";
+
+/*
+ Status message for cancelled address lookup.
+*/
+
+
+"Address lookup cancelled" = "Ermitteln der Koordinaten abgebrochen.";
+
+/*
+ Error message shown when address lookup failed.
+*/
+
+
+"Lookup failed for: %@" = "Ermitteln der Koordinaten fehlgeschlagen für: %@";
+
+/*
+ Error message shown when address lookup failed with a netork error.
+*/
+
+
+"Network error. Will attempt to look this address up the next time." = "Netzwerkfehler. Die Koordinaten dieser Adresse werden beim nächsten Mal ermittelt.";
+
+
 
 /*
  Text displayed in KML Creation button while KML Creation is running

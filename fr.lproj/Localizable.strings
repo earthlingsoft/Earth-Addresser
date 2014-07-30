@@ -108,6 +108,35 @@ Displayed in bottom section after Placemarks have been created.
 
 "Cancel Lookup" = "Annuler la recherche";
 
+/*
+ Status message for address lookup with current address.
+*/
+
+
+"Looking up: %@" = "Looking up: %@";
+
+/*
+ Status message for cancelled address lookup.
+*/
+
+
+"Address lookup cancelled" = "Address lookup cancelled.";
+
+/*
+ Error message shown when address lookup failed.
+*/
+
+
+"Lookup failed for: %@" = "Lookup failed for: %@";
+
+/*
+ Error message shown when address lookup failed with a netork error.
+*/
+
+
+"Network error. Will attempt to look this address up the next time." = "Network error. Will attempt to look this address up the next time.";
+
+
 
 /*
  Text displayed in KML Creation button while KML Creation is running

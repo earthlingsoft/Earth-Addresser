@@ -81,7 +81,6 @@
 					};
 				}
 				else if ([placemarks count] > 1) {
-					NSLog(@"Found %lu locations for address: %@", [placemarks count], addressString);
 					NSMutableArray * locationStrings = [NSMutableArray array];
 					[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
 						[locationStrings addObject:[placemark.location description]];
@@ -94,8 +93,6 @@
 				}
 				else {
 					if (lookupError) {
-						NSLog(@"Could not locate address: %@", addressString);
-						NSLog(@"error: %@", lookupError);
 						NSDictionary * errorInfo = @{
 						   @"type": @"error",
 						   @"domain": [lookupError domain],

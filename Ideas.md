@@ -2,7 +2,6 @@
 
 * use default country code when not present in address
 * fix updating glitch when lookup is finished
-* less NSLog
 * make file written message more visible (especially when creation is so quick that no progress bar is seen)
 * improve handling of no-network errors
 * improve FAIL report

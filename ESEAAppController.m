@@ -228,10 +228,8 @@
 	for (ABPerson * myPerson in people) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		NSUInteger totalAddresses = [addresses count];
-		NSUInteger index = 0;
-		
-		while (totalAddresses > index) {
-			NSDictionary * addressDict = [addresses valueAtIndex:index];
+		for (NSUInteger index = 0; index < totalAddresses; index++) {
+			NSDictionary * addressDict = [self.addressHelper normaliseAddress:[addresses valueAtIndex:index]];
 			NSString * addressKey = [self.addressHelper keyForAddress:addressDict];
 			if (self.locations[addressKey]) {
 				// object with coordinates exists => successfully located
@@ -246,7 +244,6 @@
 				notYetLocatedAddressCount++;
 			}
 			addressCount++;
-			index++;
 		}
 	}
 	
@@ -505,15 +502,13 @@
 	for (ABPerson * myPerson in people) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		NSUInteger totalAddresses = [addresses count];
-		NSUInteger index = 0;
-		while (totalAddresses > index) {
-			NSDictionary * addressDict = [addresses valueAtIndex:index];
+		for (NSUInteger index = 0; index < totalAddresses; index++) {
+			NSDictionary * addressDict = [self.addressHelper normaliseAddress:[addresses valueAtIndex:index]];
 			NSString * addressKey = [self.addressHelper keyForAddress:addressDict];
 			NSObject * addressObject = self.failLocations[addressKey];
 			if (addressObject != nil) {
 				[nonLocatableAddressesString appendFormat:@"%@\n***\n", addressKey];
 			}
-			index++;
 		}
 	}
 	

@@ -149,7 +149,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 
 #pragma mark loop over addresses
 	for (NSUInteger addressIndex = 0; addressIndex < addressCount; addressIndex++) {
-		NSDictionary * theAddress = [addresses valueAtIndex:addressIndex];
+		NSDictionary * theAddress = [self.addressHelper normaliseAddress:[addresses valueAtIndex:addressIndex]];
 		NSString * label = [addresses labelAtIndex:addressIndex];
 		NSString * addressLocationKey = [self.addressHelper keyForAddress:theAddress];
 		NSDictionary * addressCoordinates = self.locations[addressLocationKey];

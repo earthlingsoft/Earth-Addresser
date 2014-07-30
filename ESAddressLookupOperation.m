@@ -46,7 +46,7 @@
 		NSUInteger addressCount = [personAddresses count];
 		
 		for (NSUInteger addressIndex = 0; addressIndex < addressCount; addressIndex++) {
-			NSDictionary * addressDict = [personAddresses valueAtIndex:addressIndex];
+			NSDictionary * addressDict = [self.addressHelper normaliseAddress:[personAddresses valueAtIndex:addressIndex]];
 			[allAddresses addObject:addressDict];
 		}
 	}

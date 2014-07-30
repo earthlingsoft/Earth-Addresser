@@ -14,6 +14,7 @@
 
 - (void) updateDefaults;
 
+- (NSDictionary *) normaliseAddress:(NSDictionary *)address;
 - (NSString *) keyForAddress:(NSDictionary *)address;
 - (NSArray *) componentsForAddress:(NSDictionary *)address;
 

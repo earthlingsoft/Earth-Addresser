@@ -66,7 +66,22 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 
 
 
-#pragma mark Address Cleanup
+#pragma mark Address Components and Keys
+
+- (NSDictionary *) normaliseAddress:(NSDictionary *)address {
+	NSDictionary * myAddress = address;
+	
+	// Add Country Code if it is missing.
+	if (!address[kABAddressCountryCodeKey]) {
+		NSMutableDictionary * modifiedAddress = [address mutableCopy];
+		modifiedAddress[kABAddressCountryCodeKey] = [[ABAddressBook sharedAddressBook] defaultCountryCode];
+		myAddress = modifiedAddress;
+	}
+	
+	return myAddress;
+}
+
+
 
 - (NSString *) keyForAddress:(NSDictionary *)address {
 	return [[self componentsForAddress:address] componentsJoinedByString:@", "];
@@ -89,7 +104,7 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 	[self addComponent:kABAddressZIPKey ofAddress:address toArray:addressComponents];
 	[self addComponent:kABAddressStateKey ofAddress:address toArray:addressComponents];
 	[self addComponent:kABAddressCountryCodeKey ofAddress:address toArray:addressComponents];
-	
+		
 	return addressComponents;
 }
 
@@ -113,6 +128,10 @@ NSString * const addressTermsToRemoveKeyPath = @"values.addressTermsToRemove";
 }
 
 
+
+
+
+#pragma mark Address Cleanup
 
 - (NSString *) cleanAddress:(NSString *)address {
 	NSArray * addressLines = [address componentsSeparatedByString:@"\n"];

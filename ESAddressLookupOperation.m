@@ -42,9 +42,7 @@
 		NSUInteger index = 0;
 		while (addressCount > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
-			
 			[self lookupAddress:addressDict];
-			
 			index++;
 		}
 	}
@@ -69,7 +67,7 @@
 		[[[CLGeocoder alloc] init]
 			geocodeAddressDictionary:addressDict
 			completionHandler:^(NSArray * placemarks, NSError * lookupError) {
-				if ([placemarks count] == 1) {
+				if (placemarks.count == 1) {
 					CLPlacemark * placemark = placemarks[0];
 					CLLocation * location = placemark.location;
 					self.locations[addressString] = @{
@@ -80,10 +78,10 @@
 						@"resultType": @"unique"
 					};
 				}
-				else if ([placemarks count] > 1) {
+				else if (placemarks.count > 1) {
 					NSMutableArray * locationStrings = [NSMutableArray array];
 					[placemarks enumerateObjectsUsingBlock:^(CLPlacemark * placemark, NSUInteger idx, BOOL * stop) {
-						[locationStrings addObject:[placemark.location description]];
+						[locationStrings addObject:placemark.location.description];
 					}];
 					NSDictionary * failInfo = @{
 						@"type": @"multiple",

@@ -123,12 +123,12 @@
 	ABGroups = [ABGroups sortedArrayUsingSelector:@selector(groupByNameCompare:)];
 	
 	for (ABGroup * group in ABGroups) {
-		[groupsList addObject:@{MENUOBJECT:[group uniqueId], MENUNAME:[group valueForProperty:kABGroupNameProperty]}];
+		[groupsList addObject:@{MENUOBJECT:group.uniqueId, MENUNAME:[group valueForProperty:kABGroupNameProperty]}];
 	}
 	
 	if (groupsList.count > 0) {
 		// look whether the selected item still exists. If it doesn't reset to ALL group
-		NSString * selectedGroup = (NSString*) [UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
+		NSString * selectedGroup = (NSString*)[UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
 		
 		if (selectedGroup
 				&& ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"])
@@ -179,15 +179,15 @@
  the array is sorted
 */
 - (NSArray *) relevantPeople {
-	ABAddressBook * ab = [ABAddressBook sharedAddressBook];
+	ABAddressBook * AB = [ABAddressBook sharedAddressBook];
 	
 	NSArray * people = nil ;
-	NSString * selectedGroup = (NSString*) [UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
+	NSString * selectedGroup = (NSString*)[UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
 	if ([[UDC valueForKeyPath:@"values.addressBookScope"] intValue] == 0) {
-		people = [ab people];
+		people = [AB people];
 	}
 	else if ([selectedGroup hasSuffix:@":ABGroup"] || [selectedGroup hasSuffix:@":ABSmartGroup"]) {
-		ABGroup * myGroup = (ABGroup*) [ab recordForUniqueId:selectedGroup];
+		ABGroup * myGroup = (ABGroup*)[AB recordForUniqueId:selectedGroup];
 		if (myGroup) {
 			people = [myGroup members];
 		}
@@ -195,14 +195,14 @@
 			// the group doesn't exist anymore => switch to all
 			NSLog(@"Previously selected group with ID %@ does not exist anymore. Setting selection to All.", selectedGroup);
 			[UDC setValue:@0 forKeyPath:@"values.addressBookScope"];
-			people = [ab people];
+			people = [AB people];
 		}
 	}
 	else {
 		// group ID does not look like a group ID
 		NSLog(@"Selected group was not recognisable. Setting selection to All.");
 		[UDC setValue:@0 forKeyPath:@"values.addressBookScope"];
-		people = [ab people];
+		people = [AB people];
 	}
 
 	NSNumber * sortByFirstName = @NO;
@@ -224,9 +224,7 @@
 	int nonLocatedAddressCount = 0;
 	int notYetLocatedAddressCount = 0;
 	
-	NSEnumerator * myEnum = [people objectEnumerator];
-	ABPerson * myPerson;
-	while (myPerson = [myEnum nextObject]) {
+	for (ABPerson * myPerson in people) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		NSUInteger totalAddresses = [addresses count];
 		NSUInteger index = 0;
@@ -252,7 +250,7 @@
 	}
 	
 	NSString * contactString;
-	if ([people count] == 1) {
+	if (people.count == 1) {
 		contactString = NSLocalizedString(@"contact", @"");
 	}
 	else {
@@ -267,7 +265,7 @@
 		addressString = NSLocalizedString(@"addresses", @"");
 	}
 		
-	NSString * firstPart = [NSString stringWithFormat:NSLocalizedString(@"%i %@ with %i %@", @""), [people count], contactString, addressCount, addressString];
+	NSString * firstPart = [NSString stringWithFormat:NSLocalizedString(@"%i %@ with %i %@", @""), people.count, contactString, addressCount, addressString];
 
 	NSString * lookupPart = @"";
 	BOOL showNonLocatableAddressesButton = NO;
@@ -306,7 +304,7 @@
 	self.relevantPeopleInfo = infoString;
 	self.lookupInfo = lookupPart;
 	self.nonLocatableAddressesButtonHidden = !showNonLocatableAddressesButton;
-	self.nonLocatableAddressesExist = ([self.failLocations count] > 0);
+	self.nonLocatableAddressesExist = (self.failLocations.count > 0);
 	self.notSearchedCount = notYetLocatedAddressCount;
 	self.addressesAreAvailable = (locatedAddressCount != 0);
 	self.KMLStatusMessage = @"";
@@ -490,7 +488,7 @@
 #pragma mark Non-Locatable Addresses
 
 - (IBAction) createListOfNonLocatableAddresses:(id)sender {
-	NSMutableString * s = [NSMutableString string];
+	NSMutableString * nonLocatableAddressesString = [NSMutableString string];
 	NSArray * people;
 	if ([sender isKindOfClass:[NSButton class]]) {
 		// the button in the window was user => only use non-found addresses in the current selection
@@ -501,31 +499,25 @@
 		people = [[ABAddressBook sharedAddressBook] people];		
 	}
 	
-	
-	NSEnumerator * myEnum = [people objectEnumerator];
-	ABPerson * myPerson;
-	
-	while (myPerson = [myEnum nextObject]) {
+	for (ABPerson * myPerson in people) {
 		ABMultiValue * addresses = [myPerson valueForProperty:kABAddressProperty];
 		NSUInteger totalAddresses = [addresses count];
-		
 		NSUInteger index = 0;
 		while (totalAddresses > index) {
 			NSDictionary * addressDict = [addresses valueAtIndex:index];
 			NSString * addressKey = [self.addressHelper keyForAddress:addressDict];
 			NSObject * addressObject = self.failLocations[addressKey];
 			if (addressObject != nil) {
-				[s appendFormat:@"%@\n***\n", addressKey];
+				[nonLocatableAddressesString appendFormat:@"%@\n***\n", addressKey];
 			}
 			index++;
 		}
 	}
 	
-	
-	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [[NSUUID UUID] UUIDString]];
+	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [NSUUID UUID].UUIDString];
 	NSURL * saveURL = [NSURL fileURLWithPath:savePath];
 	NSError * myError = nil;
-	if ([s writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
+	if ([nonLocatableAddressesString writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
 		[[NSWorkspace sharedWorkspace] openURL:saveURL];
 	}
 	else {
@@ -760,7 +752,7 @@ NSString * const failFileName = @"Failed Lookups.plist";
 	else {
 		NSLog(@"Error when trying to write file “%@”: Could not create folder at “%@”", fileName, [[self class] EAApplicationSupportURL].path);
 		if (error) {
-			NSLog(@"%@", [error localizedDescription]);
+			NSLog(@"%@", error.localizedDescription);
 		}
 	}
 	
@@ -786,7 +778,7 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 	else {
 		NSLog(@"Could not find/create Application Support folder");
 		if (error) {
-			NSLog(@"%@", [error localizedDescription]);
+			NSLog(@"%@", error.localizedDescription);
 		}
 	}
 	

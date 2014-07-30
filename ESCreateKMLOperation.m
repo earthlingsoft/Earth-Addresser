@@ -39,14 +39,14 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 		}
 		if ([[UDC valueForKeyPath:@"values.groupByAddressLabel"] boolValue]) {
 			// sort and add folders of contacts for each group to main XML tree
-			NSArray * sortedLabels = [[self.addressLabelGroups allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+			NSArray * sortedLabels = [self.addressLabelGroups.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 			
 			for (id label in sortedLabels) {
 				[self.KMLDocumentElement addChild:self.addressLabelGroups[label]];
 			}
 		}
 
-		self.progress = [self.people count];
+		self.progress = self.people.count;
 		
 		if (!self.isCancelled) {
 			[self writeKML:self.KML];
@@ -91,8 +91,9 @@ NSString * const ESKMLGenericWorkIcon = @"work";
  Adds them to the file or prepares them for addition to address groups depending on user defaults.
 */
 - (void) processPerson:(ABPerson *)person {
-	NSString * uniqueID = [person uniqueId];
-	NSString * ID = [@"EA" stringByAppendingString:[[person uniqueId] substringToIndex:[uniqueID length] - 9]];
+	NSString * uniqueID = person.uniqueId;
+	// Prefix AB ID with EA (so it begins with a letter) and chop off the »:ABPerson« at the end (to avoid the colon)
+	NSString * ID = [@"EA" stringByAppendingString:[uniqueID substringToIndex:uniqueID.length - 9]];
 	int flags = [[person valueForProperty:kABPersonFlags] intValue];
 
 	// get the name	or anonymous replacement

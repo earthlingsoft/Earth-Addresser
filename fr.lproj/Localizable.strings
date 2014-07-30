@@ -106,28 +106,28 @@ Veuillez essayer avec une autre sélection pour que cela soit plus utile.";
 */
 
 
-"Looking up: %@" = "Looking up: %@";
+"Looking up: %@" = "Recherche %@";
 
 /*
  Status message for cancelled address lookup.
 */
 
 
-"Address lookup cancelled" = "Address lookup cancelled.";
+"Address lookup cancelled" = "Recherche d’adresses annuulée.";
 
 /*
  Error message shown when address lookup failed.
 */
 
 
-"Lookup failed for: %@" = "Lookup failed for: %@";
+"Lookup failed for: %@" = "Recherche échouée pour : %@";
 
 /*
  Error message shown when address lookup failed with a netork error.
 */
 
 
-"Network error. Will attempt to look this address up the next time." = "Network error. Will attempt to look this address up the next time.";
+"Network error. Will attempt to look this address up the next time." = "Erreur de réseau. Va tenter de regarder cette adresse la prochaine fois.";
 
 
 
@@ -194,7 +194,7 @@ Displayed in bottom section after Placemarks have been created.
 "Filename" = "Contacts";
 
 /* Name of Placemark group in KML file */
-"Addresses" = "Adresses";
+"Addresses" = "Contacts";
 
 /* Photo (alt tag for image) */
 "Photo" = "Photo";
@@ -212,7 +212,7 @@ Displayed in bottom section after Placemarks have been created.
 "Note" = "Note";
 
 /* Text for open in AddressBook link (appears in Google Earth Info Balloon) */
-"open in Address Book" = "show in Contacts application";
+"open in Address Book" = "afficher dans l’application Contacts";
 
 
 /*

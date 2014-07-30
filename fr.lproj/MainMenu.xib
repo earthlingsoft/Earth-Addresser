@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1080" defaultVersion="1080" identifier="macosx"/>
+        <deployment version="1080" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6185.11"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -20,9 +20,9 @@
         <window title="Earth Addresser" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="main window" animationBehavior="default" id="21" userLabel="Main Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="32" y="237" width="653" height="500"/>
+            <rect key="contentRect" x="32" y="239" width="653" height="500"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
-            <value key="minSize" type="size" width="653" height="500"/>
+            <value key="minSize" type="size" width="653" height="496"/>
             <value key="maxSize" type="size" width="653" height="500"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="653" height="500"/>
@@ -38,7 +38,7 @@
                         </connections>
                     </imageView>
                     <textField verticalHuggingPriority="750" id="410">
-                        <rect key="frame" x="169" y="463" width="144" height="17"/>
+                        <rect key="frame" x="169" y="463" width="142" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Choisir des contacts" id="846">
                             <font key="font" metaFont="systemBold"/>
@@ -97,16 +97,13 @@
                         </connections>
                     </matrix>
                     <popUpButton verticalHuggingPriority="750" id="220" userLabel="Contact Groups Popup Button">
-                        <rect key="frame" x="337" y="412" width="299" height="26"/>
+                        <rect key="frame" x="337" y="414" width="299" height="26"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="845">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="221"/>
                         </popUpButtonCell>
-                        <accessibility>
-                            <string key="help">Please select the contacts for which you want to create Google Earth placemarks by choosing the “All addresses” option or selecting the name of a group in your Address Book from the popup menu.</string>
-                        </accessibility>
                         <connections>
                             <accessibilityConnection property="title" destination="437" id="1032"/>
                             <action selector="groupListSelectionChanged:" target="214" id="515"/>
@@ -140,7 +137,7 @@
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="516" userLabel="Select Contacts Info Text">
-                        <rect key="frame" x="183" y="387" width="453" height="22"/>
+                        <rect key="frame" x="183" y="377" width="452" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="-" id="857">
                             <font key="font" metaFont="smallSystem"/>
@@ -165,7 +162,7 @@
                         </connections>
                     </imageView>
                     <textField verticalHuggingPriority="750" id="439">
-                        <rect key="frame" x="169" y="303" width="193" height="17"/>
+                        <rect key="frame" x="169" y="303" width="194" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Rechercher les coordonnées" id="848">
                             <font key="font" metaFont="systemBold"/>
@@ -174,7 +171,7 @@
                         </textFieldCell>
                     </textField>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="706">
-                        <rect key="frame" x="611" y="296" width="25" height="25"/>
+                        <rect key="frame" x="610" y="298" width="25" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" inset="2" id="863">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -186,7 +183,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="441" userLabel="Lookup Info Text">
-                        <rect key="frame" x="181" y="248" width="455" height="47"/>
+                        <rect key="frame" x="181" y="248" width="454" height="47"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="-" id="849">
                             <font key="font" metaFont="smallSystem"/>
@@ -198,7 +195,7 @@
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" id="829" userLabel="List Non-Locatable Addresses Button">
-                        <rect key="frame" x="178" y="222" width="261" height="32"/>
+                        <rect key="frame" x="178" y="222" width="257" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Lister les adresses non localisables" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="866">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -220,9 +217,9 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="883" userLabel="Geocoding Current Address">
-                        <rect key="frame" x="180" y="218" width="454" height="14"/>
+                        <rect key="frame" x="180" y="218" width="471" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Current Address" usesSingleLineMode="YES" id="884">
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Adresse actuelle" id="884">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -237,7 +234,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="580">
-                        <rect key="frame" x="326" y="218" width="310" height="28"/>
+                        <rect key="frame" x="327" y="218" width="308" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Cette commande est disponible après avoir lu et accepté l’accord sur la recherche des coordonnées." id="858">
                             <font key="font" metaFont="smallSystem"/>
@@ -249,7 +246,7 @@
                         </connections>
                     </textField>
                     <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" style="bar" id="428" userLabel="Geocoding Progress">
-                        <rect key="frame" x="182" y="190" width="239" height="20"/>
+                        <rect key="frame" x="182" y="190" width="238" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
                             <binding destination="214" name="value" keyPath="geocodingProgress" previousBinding="rvy-3H-z3T" id="DeU-QE-oph"/>
@@ -262,7 +259,7 @@
                         </connections>
                     </progressIndicator>
                     <button verticalHuggingPriority="750" id="425" userLabel="Look Up Coordinates Button">
-                        <rect key="frame" x="421" y="184" width="218" height="32"/>
+                        <rect key="frame" x="422" y="184" width="217" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Rechercher les coordonnées" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="847">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -312,7 +309,7 @@
                         </textFieldCell>
                     </textField>
                     <button id="584" userLabel="Name Check Box">
-                        <rect key="frame" x="182" y="116" width="52" height="18"/>
+                        <rect key="frame" x="182" y="116" width="59" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Nom" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="859">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -330,7 +327,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="588">
-                        <rect key="frame" x="237" y="117" width="299" height="17"/>
+                        <rect key="frame" x="240" y="117" width="298" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="— Utiliser le caractère suivant au lieu du nom :" id="860">
                             <font key="font" metaFont="system"/>
@@ -343,7 +340,7 @@
                         </connections>
                     </textField>
                     <button id="975" userLabel="Address Label Check Box">
-                        <rect key="frame" x="259" y="116" width="143" height="18"/>
+                        <rect key="frame" x="260" y="116" width="141" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Étiquette d’adresse" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="976">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -366,7 +363,7 @@
                         </connections>
                     </button>
                     <comboBox verticalHuggingPriority="750" id="723" userLabel="Name Replacement Combo Box">
-                        <rect key="frame" x="541" y="113" width="95" height="26"/>
+                        <rect key="frame" x="544" y="113" width="92" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="8" id="864">
                             <font key="font" metaFont="system"/>
@@ -394,7 +391,7 @@
                         </connections>
                     </comboBox>
                     <button id="972" userLabel="Address Check Box">
-                        <rect key="frame" x="182" y="94" width="73" height="18"/>
+                        <rect key="frame" x="182" y="94" width="74" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Adresse" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="973">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -412,9 +409,9 @@
                         </connections>
                     </button>
                     <button id="877" userLabel="Link to Contacts Card on this Mac Check Box">
-                        <rect key="frame" x="259" y="94" width="311" height="18"/>
+                        <rect key="frame" x="260" y="94" width="251" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Lien à la fiche du Carnet d’adresse sur ce Mac" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="878">
+                        <buttonCell key="cell" type="check" title="Lien à la fiche du contact sur ce Mac" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="878">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -430,7 +427,7 @@
                         </connections>
                     </button>
                     <button id="474" userLabel="Photo Check Box">
-                        <rect key="frame" x="182" y="72" width="58" height="18"/>
+                        <rect key="frame" x="182" y="72" width="59" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Photo" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="854">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -448,9 +445,9 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="495">
-                        <rect key="frame" x="240" y="73" width="64" height="17"/>
+                        <rect key="frame" x="240" y="73" width="63" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="— Taille :" id="856">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="— Taille :" id="856">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -465,7 +462,7 @@
                         </connections>
                     </textField>
                     <slider verticalHuggingPriority="750" id="478" userLabel="Photo Size Slider">
-                        <rect key="frame" x="307" y="70" width="263" height="21"/>
+                        <rect key="frame" x="307" y="70" width="246" height="21"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <sliderCell key="cell" state="on" alignment="left" minValue="0.5" maxValue="3" doubleValue="1.464286" tickMarkPosition="below" sliderType="linear" id="855">
                             <font key="font" size="12" name="Helvetica"/>
@@ -492,7 +489,7 @@
                         </connections>
                     </slider>
                     <button id="966" userLabel="Notes Check Box">
-                        <rect key="frame" x="576" y="73" width="59" height="18"/>
+                        <rect key="frame" x="557" y="72" width="59" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Notes" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="967">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -510,7 +507,7 @@
                         </connections>
                     </button>
                     <button id="468" userLabel="E-Mail Addresses Check Box">
-                        <rect key="frame" x="182" y="50" width="168" height="18"/>
+                        <rect key="frame" x="182" y="50" width="166" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Adresses électroniques" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="852">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -528,7 +525,7 @@
                         </connections>
                     </button>
                     <button id="470" userLabel="Phone Numbers Check Box">
-                        <rect key="frame" x="354" y="50" width="166" height="18"/>
+                        <rect key="frame" x="352" y="50" width="165" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Numéros de téléphone" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="853">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -546,7 +543,7 @@
                         </connections>
                     </button>
                     <button id="639" userLabel="Web Pages Check Box">
-                        <rect key="frame" x="524" y="50" width="89" height="18"/>
+                        <rect key="frame" x="521" y="50" width="89" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Pages Web" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="861">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -564,9 +561,9 @@
                         </connections>
                     </button>
                     <button id="960" userLabel="Contacts Check Box">
-                        <rect key="frame" x="576" y="94" width="59" height="18"/>
+                        <rect key="frame" x="557" y="94" width="78" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Noms" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="961">
+                        <buttonCell key="cell" type="check" title="Contacts" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="961">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -582,7 +579,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="645">
-                        <rect key="frame" x="182" y="16" width="306" height="28"/>
+                        <rect key="frame" x="182" y="16" width="288" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Certaines coordonnées n’ont pas été encore consultées pour les  adresses sélectionnées." id="862">
                             <font key="font" metaFont="smallSystem"/>
@@ -594,7 +591,7 @@
                         </connections>
                     </textField>
                     <progressIndicator verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" style="bar" id="275" userLabel="KML Progress">
-                        <rect key="frame" x="182" y="18" width="305" height="20"/>
+                        <rect key="frame" x="182" y="19" width="286" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
                             <binding destination="214" name="maxValue" keyPath="KMLMaximum" id="2vm-cj-AbV"/>
@@ -607,7 +604,7 @@
                         </connections>
                     </progressIndicator>
                     <textField verticalHuggingPriority="750" id="738" userLabel="Written File Name Information">
-                        <rect key="frame" x="182" y="16" width="281" height="28"/>
+                        <rect key="frame" x="182" y="16" width="288" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Test" id="865">
                             <font key="font" metaFont="smallSystem"/>
@@ -632,7 +629,7 @@
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" id="206" userLabel="Create Placemarks Button">
-                        <rect key="frame" x="487" y="12" width="152" height="32"/>
+                        <rect key="frame" x="470" y="13" width="169" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Créer des repères" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="842">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -671,7 +668,6 @@
             <connections>
                 <outlet property="initialFirstResponder" destination="435" id="563"/>
             </connections>
-            <point key="canvasLocation" x="-15.5" y="-415"/>
         </window>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
@@ -687,7 +683,7 @@
                             <menuItem isSeparatorItem="YES" id="196">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Preferences…" keyEquivalent="," id="1122">
+                            <menuItem title="Préférences…" keyEquivalent="," id="1122">
                                 <connections>
                                     <action selector="makeKeyAndOrderFront:" target="1090" id="1126"/>
                                 </connections>
@@ -783,7 +779,7 @@
                                     <binding destination="290" name="value" keyPath="values.groupByAddressLabel" id="905"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Masquer le groupe de l’étiquette « Ancienne »" id="911">
+                            <menuItem title="Masquer le groupe d’étiquettes « Ancienne »" id="911">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="toggleHideOldByDefault:" target="214" id="919"/>
@@ -798,8 +794,8 @@
                                     <binding destination="214" name="enabled" keyPath="nonLocatableAddressesExist" id="918"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Répéter Rechercher les adresses non localisables" id="899">
-                                <string key="toolTip">Makes Earth Addresser re-look-up the addresses it previously failed to look up. Useful if you suspect that Apple improved their address database in regions where look-ups failed before.</string>
+                            <menuItem title="Répéter la recherche des adresses non localisables" id="899">
+                                <string key="toolTip">Pousse Earth Addresser à re-regarder-les adresses qu’il a précédemment échoué à rechercher. Utile si vous pensez que Apple a amélioré leur base de données d’adresses dans les régions où la recherches n’ont pas eu de résultats avant.</string>
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="lookupNonLocatableAddresses:" target="214" id="910"/>
@@ -887,21 +883,21 @@
         <window title="Bienvenue" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="283" userLabel="Welcome Panel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="128" y="203" width="778" height="432"/>
+            <rect key="contentRect" x="128" y="228" width="778" height="407"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="284">
-                <rect key="frame" x="0.0" y="0.0" width="778" height="432"/>
+                <rect key="frame" x="0.0" y="0.0" width="778" height="407"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView id="285" userLabel="Earth Addresser Icon Image View">
-                        <rect key="frame" x="20" y="284" width="128" height="128"/>
+                        <rect key="frame" x="20" y="259" width="128" height="128"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="867"/>
                         <accessibility description="Application Icon"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" id="286">
-                        <rect key="frame" x="165" y="395" width="197" height="17"/>
+                        <rect key="frame" x="165" y="370" width="199" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Bienvenue à Earth Addresser" id="868">
                             <font key="font" metaFont="systemBold"/>
@@ -910,29 +906,29 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="560">
-                        <rect key="frame" x="165" y="98" width="597" height="289"/>
+                        <rect key="frame" x="165" y="90" width="592" height="272"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" state="on" allowsEditingTextAttributes="YES" id="870">
                             <font key="font" metaFont="system"/>
                             <string key="title">L’utilisation de Earth Addresser est un processus en trois étapes :
 
-	1. Sélectionne les adresses du Carnet d’adresses,
+	1. Sélectionne les adresses de Contacts,
 	2. Détermine la longitude et la latitude de chacune des adresses,
 	3. Enregistre ces coordonnées dans un fichier repère Google Earth (KML).
 
-Earth Addresser enverra chacune des adresses sélectionnées au service Google Maps, qui fournit la longitude et la latitude associée. Si vous ne voulez pas que votre adresse soit être envoyé à Google, vous ne devez pas cocher la case en dessous de ce texte et ne pas utiliser Earth Addresser.
+Earth Addresser enverra chacune des adresses sélectionnées au à partir du service de localisation d’Apple qui fournit la longitude et la latitude associée. Si vous ne voulez pas que votre adresse soit envoyé à Apple, vous ne devez pas cocher la case en dessous de ce texte et ne pas utiliser Earth Addresser.
 
-En faisant cette recherche, Earth Addresser enverra seulement les adresses à Google. Les noms associés et autres informations restent sur votre ordinateur à tout moment.
+En faisant cette recherche, Earth Addresser enverra seulement les adresses à Apple. Les noms associés et autres informations restent sur votre ordinateur à tout moment.
 
-Une fois que la longitude et la latitude d'une adresse ont été déterminées, Earth Addresser va enregistrer le résultat dans ses préférences pour réutilisation en cas de besoin lors d’une exécution future de l'application.</string>
+Une fois que la longitude et la latitude d’une adresse ont été déterminées, Earth Addresser va enregistrer le résultat dans ses préférences pour réutilisation en cas de besoin lors d’une exécution future de l’application.</string>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <button id="575">
-                        <rect key="frame" x="166" y="58" width="595" height="18"/>
+                        <rect key="frame" x="166" y="58" width="467" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Je consens à ce que les adresses soient envoyées à Google pour trouver leurs coordonnées" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="871">
+                        <buttonCell key="cell" type="check" title="Je consens à ce que les adresses soient envoyées à Apple pour trouver leurs coordonnées" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="871">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -964,34 +960,34 @@ DQ
         </window>
         <userDefaultsController representsSharedInstance="YES" id="290" userLabel="Shared Defaults"/>
         <customObject id="1033" customClass="SUUpdater"/>
-        <window identifier="Preferences" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="Preferences" animationBehavior="default" id="1090" userLabel="Preferences">
+        <window identifier="Preferences" title="Préférences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="Preferences" animationBehavior="default" id="1090" userLabel="Preferences">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="619" y="411" width="621" height="407"/>
+            <rect key="contentRect" x="619" y="411" width="764" height="407"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
-            <value key="minSize" type="size" width="621" height="407"/>
-            <value key="maxSize" type="size" width="621" height="1000"/>
+            <value key="minSize" type="size" width="764" height="407"/>
+            <value key="maxSize" type="size" width="764" height="1000"/>
             <view key="contentView" id="1091">
-                <rect key="frame" x="0.0" y="-5" width="621" height="407"/>
+                <rect key="frame" x="0.0" y="0.0" width="764" height="407"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="1092">
-                        <rect key="frame" x="18" y="370" width="195" height="17"/>
+                        <rect key="frame" x="50" y="370" width="256" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Omit address lines containing:" id="1093">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Omettre les lignes d’adresse contenant :" id="1093">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1228" userLabel="Address Terms to Omit Table View">
-                        <rect key="frame" x="219" y="277" width="159" height="110"/>
+                        <rect key="frame" x="312" y="277" width="159" height="110"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="AwG-ud-gJD">
-                            <rect key="frame" x="1" y="17" width="238" height="117"/>
+                            <rect key="frame" x="1" y="1" width="157" height="108"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" id="1229">
-                                    <rect key="frame" x="0.0" y="0.0" width="157" height="19"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="157" height="108"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1027,7 +1023,7 @@ DQ
                                             <connections>
                                                 <binding destination="1105" name="value" keyPath="arrangedObjects.string" id="Oa1-HZ-sZh">
                                                     <dictionary key="options">
-                                                        <string key="NSNullPlaceholder">New address part</string>
+                                                        <string key="NSNullPlaceholder">Nouvelle partie d’adresse</string>
                                                     </dictionary>
                                                 </binding>
                                             </connections>
@@ -1047,7 +1043,7 @@ DQ
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="1112" userLabel="+ Button">
-                        <rect key="frame" x="219" y="256" width="30" height="23"/>
+                        <rect key="frame" x="312" y="256" width="30" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1113">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1058,7 +1054,7 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="1115" userLabel="- Button">
-                        <rect key="frame" x="248" y="256" width="30" height="23"/>
+                        <rect key="frame" x="341" y="256" width="30" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1116">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1070,35 +1066,35 @@ DQ
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="J2w-zG-fcp" userLabel="Information for “Omit address lines containing”">
-                        <rect key="frame" x="384" y="289" width="219" height="98"/>
+                        <rect key="frame" x="477" y="289" width="269" height="98"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="agi-9w-Wkc">
                             <font key="font" metaFont="smallSystem"/>
-                            <string key="title">Parts of the address like room numbers may cause the lookup to fail.
-Earth Addresser will omit address lines containing the terms in this list.
-For terms which may also occur in street name, it is advisable to add an initial or final space to the term.</string>
+                            <string key="title">Parties de l’adresse comme le numéro de chambre peuvent causer l’échec de la recherche.
+Earth Addresser omettra les lignes d’adresses contenant les termes dans cette liste.
+Pour les termes qui peuvent également se produirent dans le nom de la rue, il est conseillé d’ajouter un espace initial ou final au terme.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="697-s6-GAv">
-                        <rect key="frame" x="43" y="222" width="170" height="17"/>
+                        <rect key="frame" x="18" y="222" width="288" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Labels indicating old data:" id="qhD-W0-BcG">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Étiquettes indiquant des anciennes données :" id="qhD-W0-BcG">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="VRB-Zy-Eyk" userLabel="Old Labels Table View">
-                        <rect key="frame" x="219" y="129" width="159" height="110"/>
+                        <rect key="frame" x="312" y="129" width="159" height="110"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="5qw-1W-Yrp">
-                            <rect key="frame" x="1" y="17" width="238" height="117"/>
+                            <rect key="frame" x="1" y="1" width="157" height="108"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" id="b0c-O3-9YD">
-                                    <rect key="frame" x="0.0" y="0.0" width="157" height="19"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="157" height="108"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1134,7 +1130,7 @@ For terms which may also occur in street name, it is advisable to add an initial
                                             <connections>
                                                 <binding destination="MNY-1R-QMp" name="value" keyPath="arrangedObjects.string" id="XMS-US-eYC">
                                                     <dictionary key="options">
-                                                        <string key="NSNullPlaceholder">New label name</string>
+                                                        <string key="NSNullPlaceholder">Nouveau nom d’étiquette</string>
                                                     </dictionary>
                                                 </binding>
                                             </connections>
@@ -1154,7 +1150,7 @@ For terms which may also occur in street name, it is advisable to add an initial
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="IBz-kh-dmV" userLabel="+ Button">
-                        <rect key="frame" x="219" y="108" width="30" height="23"/>
+                        <rect key="frame" x="312" y="108" width="30" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ND9-AU-ion">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1165,7 +1161,7 @@ For terms which may also occur in street name, it is advisable to add an initial
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="ckZ-Ib-2OX" userLabel="- Button">
-                        <rect key="frame" x="248" y="108" width="30" height="23"/>
+                        <rect key="frame" x="341" y="108" width="30" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hCb-6c-ymB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1177,31 +1173,35 @@ For terms which may also occur in street name, it is advisable to add an initial
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="tXZ-oY-fh1" userLabel="Information for “Labels indicating old data”">
-                        <rect key="frame" x="384" y="129" width="219" height="110"/>
+                        <rect key="frame" x="477" y="141" width="269" height="98"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="b3B-4p-A6e">
                             <font key="font" metaFont="smallSystem"/>
-                            <string key="title">Information for your contacts comes with labels like “Home” or “Work”.
-Earth Addresser will omit phone numbers, e-mail addresses and other auxiliary information with these labels.
-You can choose to hide the addresses with these labels in the “Tools” menu.</string>
+                            <string key="title">Informations sur vos contacts est livré avec des étiquettes comme « Domicile » ou « Travail ».
+Earth Addresser sera omettre les numéros de téléphone, adresses e-mail et autres informations auxiliaire avec ces étiquettes.
+Vous pouvez choisir de masquer les adresses avec ces étiquettes dans le menu Outils.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="dPx-Ue-TEo">
-                        <rect key="frame" x="154" y="74" width="59" height="17"/>
+                        <rect key="frame" x="218" y="74" width="88" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Updates:" id="AM1-aW-H2v">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Mises à jour :" id="AM1-aW-H2v">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <button id="idP-JS-rGm">
-                        <rect key="frame" x="217" y="73" width="306" height="18"/>
+                        <rect key="frame" x="310" y="73" width="420" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Automatically check for updates once a week" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="KwT-Kl-wwi">
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="KwT-Kl-wwi">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <string key="title" base64-UTF8="YES">
+EFbDqXJpZmllciBhdXRvbWF0aXF1ZW1lbnQgbGVzIG1pc2VzIMOgIGpvdXIgdW5lIGZvaXMgcGFyIHNl
+bWFpbmU
+</string>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
@@ -1209,9 +1209,9 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6as-CG-NL9">
-                        <rect key="frame" x="234" y="53" width="76" height="14"/>
+                        <rect key="frame" x="327" y="53" width="113" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Last checked:" id="Aaq-YP-SHw">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Dernière recherche :" id="Aaq-YP-SHw">
                             <dateFormatter key="formatter" dateStyle="short" id="ldm-XV-JFl"/>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1219,7 +1219,7 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="NiL-Ii-YZd" userLabel="Last Checked Date">
-                        <rect key="frame" x="310" y="53" width="142" height="14"/>
+                        <rect key="frame" x="440" y="53" width="142" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="-" id="VYS-4f-8U5">
                             <dateFormatter key="formatter" dateStyle="medium" timeStyle="short" doesRelativeDateFormatting="YES" id="PWX-0L-6dx"/>
@@ -1236,9 +1236,9 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" id="tlU-0u-ruR" userLabel="Check For Updates Now Button">
-                        <rect key="frame" x="230" y="13" width="188" height="32"/>
+                        <rect key="frame" x="323" y="13" width="288" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Check for Updates Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xUq-K5-t17">
+                        <buttonCell key="cell" type="push" title="Rechercher une mise à jour maintenant" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xUq-K5-t17">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -1248,7 +1248,6 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="42.5" y="630.5"/>
         </window>
         <arrayController objectClassName="ESTerm" avoidsEmptySelection="NO" id="1105" userLabel="Address Terms To Remove Controller">
             <declaredKeys>

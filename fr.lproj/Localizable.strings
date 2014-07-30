@@ -192,6 +192,9 @@ TEXT APPEARING IN THE KML FILE
 /* Phone (appears in Google Earth Info Balloon) */
 "Phone" = "Téléphone";
 
+/* Web (appears in Google Earth Info Balloon) */
+"Web" = "Web";
+
 /* Note (appears in Google Earth Info Balloon) */
 "Note" = "Note";
 

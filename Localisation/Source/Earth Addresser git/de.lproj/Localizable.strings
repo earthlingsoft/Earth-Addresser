@@ -77,19 +77,12 @@ Info text in middle section of window – variant used when the AddressBook sele
 
 
 
-/*
-Displayed in bottom section after Placemarks have been created.
-*/
 
 
-"File '%@' on your Desktop" = "Die Ortsmarkendatei „%@“ liegt auf dem Schreibtisch.";
 
 /*
- Status message after cancelled KML file creation.
+	ADDRESS LOOKUP OPERATION INFOMRATION AND UI
 */
-
-
-"Placemark generation was cancelled." = "Das Erzeugen der Ortsmarkendatei wurde abgebrochen.";
 
 
 
@@ -137,6 +130,14 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
+
+
+/*
+	KML CREATION OPERATION INFOMRATION AND UI
+*/
+
+
+
 /*
  Text displayed in KML Creation button while KML Creation is running
 */
@@ -151,6 +152,19 @@ Displayed in bottom section after Placemarks have been created.
 
 "Create Placemarks" = "Ortsmarken erzeugen";
 
+/*
+Displayed in bottom section after Placemarks have been created.
+*/
+
+
+"File '%@' on your Desktop" = "Die Ortsmarkendatei „%@“ liegt auf dem Schreibtisch.";
+
+/*
+ Status message after cancelled KML file creation.
+*/
+
+
+"Placemark generation was cancelled." = "Das Erzeugen der Ortsmarkendatei wurde abgebrochen.";
 
 
 
@@ -169,9 +183,8 @@ Displayed in bottom section after Placemarks have been created.
 
 
 
-
 /*
-TEXT APPEARING IN THE KML FILE
+	TEXT APPEARING IN THE KML FILE
 */
 
 
@@ -191,13 +204,18 @@ TEXT APPEARING IN THE KML FILE
 /* Phone (appears in Google Earth Info Balloon) */
 "Phone" = "Telephon";
 
+/* Web (appears in Google Earth Info Balloon) */
+"Web" = "Web";
+
 /* Note (appears in Google Earth Info Balloon) */
 "Note" = "Notiz";
 
+/* Text for open in AddressBook link (appears in Google Earth Info Balloon) */
+"open in Address Book" = "im Programm Kontakte anzeigen";
 
 
 /*
-TEXT IN LINKS
+	TEXT IN LINKS
 */
 
 

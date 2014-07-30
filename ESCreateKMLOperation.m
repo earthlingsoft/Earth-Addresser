@@ -199,8 +199,8 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 			}
 			
 			if ([[UDC valueForKeyPath:@"values.placemarkWithAddress"] boolValue]) {
-				NSArray * addressComponents = [self.addressHelper componentsForAddress:theAddress];
-				NSString * addressString = [addressComponents componentsJoinedByString:@"<br />"];
+				NSString * addressString = [[ABAddressBook sharedAddressBook] formattedAddressFromDictionary:theAddress].string;
+				addressString = [addressString stringByReplacingOccurrencesOfString:@"\n\\s*" withString:@"<br/>" options:NSRegularExpressionSearch range:NSMakeRange(0, addressString.length)];
 				[descriptionHTMLString appendFormat:@"%@", addressString];
 			}
 			

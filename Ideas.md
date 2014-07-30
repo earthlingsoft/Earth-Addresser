@@ -7,7 +7,6 @@
 * improve FAIL re-lookup / do not re-lookup ALL addresses?
 * use Container / Sandbox
 * display map in application
-* use framework provided strings (AB?, CL?) for display rather than building our own
 * use geocoding precision info
 * French readme
 * add pointer to images

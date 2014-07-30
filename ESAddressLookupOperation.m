@@ -58,7 +58,6 @@
 
 - (void) lookupAddress:(NSDictionary *)addressDict {
 	NSString * addressString = [self.addressHelper keyForAddress:addressDict];
-	
 	if (!self.locations[addressString] && !self.failLocations[addressString]) {
 		// This address has not been looked up yet.
 		[self geocodeAddress:addressDict];
@@ -69,7 +68,10 @@
 
 - (void) geocodeAddress:(NSDictionary *)addressDict {
 	NSString * addressString = [self.addressHelper keyForAddress:addressDict];
-	self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"Looking up: %@", @"Status message for address lookup with current address."), addressString];
+	NSString * displayString = [[ABAddressBook sharedAddressBook] formattedAddressFromDictionary:addressDict].string;
+	displayString = [displayString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	displayString = [displayString stringByReplacingOccurrencesOfString:@"\n\\s*" withString:@", " options:NSRegularExpressionSearch range:NSMakeRange(0, displayString.length)];
+	self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"Looking up: %@", @"Status message for address lookup with current address."), displayString];
 	
 	// throttle queries
 	if (self.previousLookup != 0) {

@@ -130,7 +130,7 @@
 	NSTimeInterval geocoderPollInterval = 0.05;
 	while (self.geocoder) {
 		if (self.isCancelled) {
-			self.statusMessage = NSLocalizedString(@"Address lookup cancelled.", @"Status message for cancelled address lookup.");
+			self.statusMessage = NSLocalizedString(@"Address lookup cancelled", @"Status message for cancelled address lookup.");
 			[self.geocoder cancelGeocode];
 		}
 		[NSThread sleepForTimeInterval:geocoderPollInterval];

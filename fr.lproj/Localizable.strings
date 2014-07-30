@@ -195,6 +195,8 @@ TEXT APPEARING IN THE KML FILE
 /* Note (appears in Google Earth Info Balloon) */
 "Note" = "Note";
 
+/* Text for open in AddressBook link (appears in Google Earth Info Balloon) */
+"open in Address Book" = "show in Contacts application";
 
 
 /*

@@ -208,7 +208,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 				if ([[NSFileManager defaultManager] fileExistsAtPath:abcdpURL.path]) {
 					[descriptionHTMLString appendFormat:@"<br /><a href=\"%@\">%@</a>",
 					 abcdpURL.absoluteString,
-					 NSLocalizedString(@"open in AddressBook", @"open in AddressBook")];
+					 NSLocalizedString(@"open in Address Book", @"Text for open in AddressBook link (appears in Google Earth Info Balloon)")];
 				}
 			}
 			

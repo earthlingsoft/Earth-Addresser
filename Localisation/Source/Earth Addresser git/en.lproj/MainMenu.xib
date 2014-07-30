@@ -229,7 +229,11 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="value" keyPath="geocodingStatusMessage" id="GtF-1y-VaO"/>
+                            <binding destination="214" name="displayPatternValue1" keyPath="geocodingStatusMessage" id="jx2-8n-Ppk">
+                                <dictionary key="options">
+                                    <string key="NSDisplayPattern">Looking up: %{value1}@</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="580">
@@ -453,11 +457,6 @@
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="link" destination="474" id="1024"/>
-                            <binding destination="290" name="hidden" keyPath="values.placemarkWithImage" id="501">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
                         </connections>
                     </textField>
                     <slider verticalHuggingPriority="750" id="478" userLabel="Photo Size Slider">
@@ -479,11 +478,6 @@
                             </binding>
                             <binding destination="290" name="value" keyPath="values.imageSize" id="492"/>
                             <binding destination="290" name="enabled" keyPath="values.placemarkWithImage" id="494"/>
-                            <binding destination="290" name="hidden" keyPath="values.placemarkWithImage" previousBinding="952" id="953">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
                             <outlet property="nextKeyView" destination="966" id="995"/>
                         </connections>
                     </slider>

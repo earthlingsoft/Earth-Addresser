@@ -233,11 +233,7 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="displayPatternValue1" keyPath="geocodingStatusMessage" id="jx2-8n-Ppk">
-                                <dictionary key="options">
-                                    <string key="NSDisplayPattern">Looking up: %{value1}@</string>
-                                </dictionary>
-                            </binding>
+                            <binding destination="214" name="value" keyPath="geocodingStatusMessage" id="eVP-My-KG5"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="580">
@@ -665,7 +661,7 @@
             <connections>
                 <outlet property="initialFirstResponder" destination="435" id="563"/>
             </connections>
-            <point key="canvasLocation" x="-15.5" y="-415"/>
+            <point key="canvasLocation" x="-24.5" y="-421"/>
         </window>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
@@ -806,6 +802,11 @@
                 <menuItem title="Fenster" id="19">
                     <menu key="submenu" title="Fenster" systemMenu="window" id="24">
                         <items>
+                            <menuItem title="Schließen" keyEquivalent="w" id="Rha-tq-2gZ">
+                                <connections>
+                                    <action selector="performClose:" target="-1" id="TJH-vX-vcn"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Minimieren" keyEquivalent="m" id="23">
                                 <connections>
                                     <action selector="performMiniaturize:" target="-1" id="37"/>

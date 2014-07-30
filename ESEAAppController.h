@@ -103,6 +103,3 @@
 + (NSURL *) EAApplicationSupportURL;
 
 @end
-
-
-NSInteger nameSort(id person1, id person2, void *context);

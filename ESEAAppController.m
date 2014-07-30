@@ -10,6 +10,7 @@
 #import "ESAddressLookupOperation.h"
 #import "ESCreateKMLOperation.h"
 #import "ESTerm.h"
+#import "ABRecord+ESSort.h"
 
 @implementation ESEAAppController
 
@@ -183,6 +184,7 @@
 	
 	NSArray * people = nil ;
 	NSString * selectedGroup = (NSString*)[UDC valueForKeyPath:@"values.selectedGroup2"][MENUOBJECT];
+	
 	if ([[UDC valueForKeyPath:@"values.addressBookScope"] intValue] == 0) {
 		people = [AB people];
 	}
@@ -205,8 +207,7 @@
 		people = [AB people];
 	}
 
-	NSNumber * sortByFirstName = @NO;
-	people =  [people sortedArrayUsingFunction:nameSort context:(__bridge void *)(sortByFirstName)];
+	people = [people sortedArrayUsingSelector:@selector(nameCompare:)];
 
 	[self updateRelevantPeopleInfo:people];
 	
@@ -846,51 +847,3 @@ NSString * const applicationSupportFolderName = @"EarthAddresser";
 }
 
 @end
-
-
-
-
-
-/*
- Helper function for sorting the people array by name.
-*/
-NSInteger nameSort(id person1, id person2, void *context) {
-	NSString * lastName1 = [person1 valueForProperty:kABLastNamePhoneticProperty];
-	if (!lastName1) {
-		lastName1 = [person1 valueForProperty:kABLastNameProperty];
-	}
-	NSString * lastName2 = [person2 valueForProperty:kABLastNamePhoneticProperty];
-	if (!lastName2) {
-		lastName2 = [person2 valueForProperty:kABLastNameProperty];
-	}
-	
-	NSComparisonResult result = [lastName1 localizedCaseInsensitiveCompare:lastName2];
-	
-	if (result == NSOrderedSame) {
-		NSString * firstName1 = [person1 valueForProperty:kABFirstNamePhoneticProperty];
-		if (!firstName1) {
-			firstName1 = [person1 valueForProperty:kABFirstNameProperty];
-		}
-		NSString * firstName2 = [person2 valueForProperty:kABFirstNamePhoneticProperty];
-		if (!firstName2) {
-			firstName2 = [person2 valueForProperty:kABFirstNameProperty];
-		}
-		
-		result = [firstName1 localizedCaseInsensitiveCompare:firstName2];
-		
-		if (result == NSOrderedSame) {
-			NSString * middleName1 = [person1 valueForProperty:kABMiddleNamePhoneticProperty];
-			if (!middleName1) {
-				middleName1 = [person1 valueForProperty:kABMiddleNameProperty];
-			}
-			NSString * middleName2 = [person2 valueForProperty:kABMiddleNamePhoneticProperty];
-			if (!middleName2) {
-				middleName2 = [person2 valueForProperty:kABMiddleNameProperty];
-			}
-			
-			result = [middleName1 localizedCaseInsensitiveCompare:middleName2];
-		}
-	}
-	
-	return result;
-}

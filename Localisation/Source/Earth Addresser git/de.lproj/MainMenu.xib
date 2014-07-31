@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1080" identifier="macosx"/>
+        <deployment version="1080" defaultVersion="1080" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6185.11"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -414,6 +414,7 @@
                     <button id="877" userLabel="Link to Contacts Card on this Mac Check Box">
                         <rect key="frame" x="311" y="93" width="249" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Der Link funktioniert nur, wenn in Google Earth der Zugriff auf lokale Dateien im „Allgemein“ Tab der Einstellungen erlaubt ist.</string>
                         <buttonCell key="cell" type="check" title="Link zu Visitenkarte auf diesem Mac" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="878">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -661,6 +662,7 @@
             <connections>
                 <outlet property="initialFirstResponder" destination="435" id="563"/>
             </connections>
+            <point key="canvasLocation" x="-24.5" y="-421"/>
         </window>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
@@ -981,11 +983,11 @@ DQ
                         <rect key="frame" x="179" y="277" width="159" height="110"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="AwG-ud-gJD">
-                            <rect key="frame" x="1" y="1" width="157" height="108"/>
+                            <rect key="frame" x="1" y="17" width="238" height="117"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" id="1229">
-                                    <rect key="frame" x="0.0" y="0.0" width="157" height="108"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="157" height="19"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1088,11 +1090,11 @@ Tipp: Falls ein Begriff auch Teil eines Straßennamens sein kann, ein Leerzeiche
                         <rect key="frame" x="179" y="129" width="159" height="110"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="5qw-1W-Yrp">
-                            <rect key="frame" x="1" y="1" width="157" height="108"/>
+                            <rect key="frame" x="1" y="17" width="238" height="117"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" id="b0c-O3-9YD">
-                                    <rect key="frame" x="0.0" y="0.0" width="157" height="108"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="157" height="19"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1242,6 +1244,7 @@ Im „Spezial“ Menü lassen sich alte Adressen in der Exportdatei ausgeblenden
                     </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="42.5" y="630.5"/>
         </window>
         <arrayController objectClassName="ESTerm" avoidsEmptySelection="NO" id="1105" userLabel="Address Terms To Remove Controller">
             <declaredKeys>

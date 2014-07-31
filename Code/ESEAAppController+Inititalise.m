@@ -24,7 +24,7 @@
 		@"placemarkWithEMail": @NO,
 		@"placemarkWithPhone": @NO,
 		@"placemarkWithWeblinks": @YES,
-		@"placemarkWithAddressBookLink": @YES,
+		@"placemarkWithAddressBookLink": @NO,
 		@"placemarkWithContacts": @NO,
 		@"placemarkWithNotes": @NO,
 		@"noHomeWorkIcons": @NO,

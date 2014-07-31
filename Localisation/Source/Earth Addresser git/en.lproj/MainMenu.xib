@@ -407,7 +407,7 @@
                             <outlet property="nextKeyView" destination="877" id="993"/>
                         </connections>
                     </button>
-                    <button id="877" userLabel="Link to Contacts Card on this Mac Check Box">
+                    <button toolTip="The link only works when you configure Google Earth to allow links to local files in the “General” tab of its Preferences." id="877" userLabel="Link to Contacts Card on this Mac Check Box">
                         <rect key="frame" x="318" y="94" width="232" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Link to Contacts card on this Mac" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="878">

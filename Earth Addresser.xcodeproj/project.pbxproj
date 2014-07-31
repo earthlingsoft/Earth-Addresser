@@ -39,8 +39,6 @@
 		6C916E650F58C384003EA1EB /* work.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E630F58C384003EA1EB /* work.png */; };
 		6C916E660F58C384003EA1EB /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C916E640F58C384003EA1EB /* home.png */; };
 		6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C916EBD0F5963A4003EA1EB /* Icon Large.icns */; };
-		6CAE962B19803B19001DCFC8 /* Failed Lookups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */; };
-		6CAE962D19803B1F001DCFC8 /* Successful Lookups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */; };
 		6CEABD5C0BB322240059641A /* ESEAAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEABD5B0BB322240059641A /* ESEAAppController.m */; };
 		6CEABD780BB322BC0059641A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CEABD770BB322BC0059641A /* AddressBook.framework */; };
 		6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CEAC2720BB4B3290059641A /* Localizable.strings */; };
@@ -382,17 +380,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */,
 				6C2928500F1A45C000B5059B /* MainMenu.xib in Resources */,
-				6CAE962B19803B19001DCFC8 /* Failed Lookups.plist in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				6CEAC2740BB4B3290059641A /* Localizable.strings in Resources */,
+				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
 				6CFB92660BBC498100191CDD /* readme.html in Resources */,
 				6C292AA00F1D15CD00B5059B /* Help.css in Resources */,
-				6CFB92680BBC499100191CDD /* Credits.html in Resources */,
 				6C916E650F58C384003EA1EB /* work.png in Resources */,
 				6C916E660F58C384003EA1EB /* home.png in Resources */,
-				6C916EBE0F5963A4003EA1EB /* Icon Large.icns in Resources */,
-				6CAE962D19803B1F001DCFC8 /* Successful Lookups.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,15 +430,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C2A37681982EC1900DBAE64 /* ESAddressHelper.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				6C2A376E19830E0600DBAE64 /* ESEAOperation.m in Sources */,
 				6CEABD5C0BB322240059641A /* ESEAAppController.m in Sources */,
 				6C4A961C19870C32000B7E7A /* ESEAAppController+Inititalise.m in Sources */,
+				6C2A376E19830E0600DBAE64 /* ESEAOperation.m in Sources */,
 				6C2A375F1982DFCF00DBAE64 /* ESAddressLookupOperation.m in Sources */,
 				6C2A376B19830D2C00DBAE64 /* ESCreateKMLOperation.m in Sources */,
-				6C4A961219870850000B7E7A /* ABGroup+ESSort.m in Sources */,
+				6C2A37681982EC1900DBAE64 /* ESAddressHelper.m in Sources */,
 				6C2A375C1981691000DBAE64 /* ESTerm.m in Sources */,
+				6C4A961219870850000B7E7A /* ABGroup+ESSort.m in Sources */,
 				6C4FE5FE19891412004C2A24 /* ABRecord+ESSort.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

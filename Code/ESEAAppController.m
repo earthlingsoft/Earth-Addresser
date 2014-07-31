@@ -329,6 +329,7 @@
 - (IBAction) convertAddresses:(id)sender {
 	if (!self.geocodingRunning) {
 		[self beginBusy];
+		self.geocodingStatusMessage = @"";
 		
 		NSArray * people;
 		if (sender == self) {

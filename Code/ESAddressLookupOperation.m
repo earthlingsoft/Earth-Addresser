@@ -12,6 +12,52 @@
 
 @implementation ESAddressLookupOperation
 
+NSString * const isExecutingName = @"isExecuting";
+NSString * const isFinishedName = @"isFinished";
+
+
+- (instancetype) initWithPeople:(NSArray *)people {
+	self = [super initWithPeople:people];
+	if (self) {
+		executing = NO;
+		finished = NO;
+		_addressesToLookup = [NSMutableArray array];
+	}
+	return self;
+}
+
+
+
+
+
+# pragma mark Run the Operation asynchronously
+
+- (void) start {
+	if (self.isCancelled) {
+		[self cancelOperation];
+		return;
+	}
+	
+	// If the operation is not cancelled, begin executing the task.
+	[self willChangeValueForKey:isExecutingName];
+	[self main];
+	executing = YES;
+	[self didChangeValueForKey:isExecutingName];
+}
+
+
+
+- (void) cancelOperation {
+	self.statusMessage = NSLocalizedString(@"Address lookup cancelled", @"Status message for cancelled address lookup.");
+	[self.addressesToLookup removeAllObjects];
+	
+	[self willChangeValueForKey:isFinishedName];
+	finished = YES;
+	[self didChangeValueForKey:isFinishedName];
+}
+
+
+
 - (void) main {
 	self.progress = .000001;
 	
@@ -19,17 +65,19 @@
 	self.previousLookup = 0;
 	self.secondsBetweenCoordinateLookups = ((NSNumber *)[[NSUserDefaultsController sharedUserDefaultsController] valueForKeyPath:@"values.secondsBetweenCoordinateLookups"]).doubleValue;
 	
-	NSArray * addresses = [self addressesForPeople:self.people];
-	for (NSDictionary * addressDict in addresses) {
-		if (self.isCancelled) {
-			break;
-		}
-		@autoreleasepool {
-			[self lookupAddress:addressDict];
-		}
-	}
-	
-	self.statusMessage = @"";
+	[self fillAddressesToLookup];
+	[self processNextAddress];
+}
+
+
+
+- (void) completeOperation {
+	[self willChangeValueForKey:isFinishedName];
+	[self willChangeValueForKey:isExecutingName];
+	executing = NO;
+	finished = YES;
+	[self didChangeValueForKey:isExecutingName];
+	[self didChangeValueForKey:isFinishedName];
 }
 
 
@@ -38,29 +86,38 @@
 
 #pragma mark Address lookup
 
-- (NSArray *) addressesForPeople:(NSArray *)people {
-	NSMutableArray * allAddresses = [NSMutableArray array];
-	
-	for (ABPerson * person in people) {
+- (void) fillAddressesToLookup {
+	for (ABPerson * person in self.people) {
 		ABMultiValue * personAddresses = [person valueForProperty:kABAddressProperty];
 		NSUInteger addressCount = [personAddresses count];
 		
 		for (NSUInteger addressIndex = 0; addressIndex < addressCount; addressIndex++) {
 			NSDictionary * addressDict = [self.addressHelper normaliseAddress:[personAddresses valueAtIndex:addressIndex]];
-			[allAddresses addObject:addressDict];
+			NSString * addressString = [self.addressHelper keyForAddress:addressDict];
+			if (!self.locations[addressString] && !self.failLocations[addressString]) {
+				// This address has not been looked up yet.
+				[self.addressesToLookup addObject:addressDict];
+			}
 		}
 	}
-	
-	return allAddresses;
 }
 
 
 
-- (void) lookupAddress:(NSDictionary *)addressDict {
-	NSString * addressString = [self.addressHelper keyForAddress:addressDict];
-	if (!self.locations[addressString] && !self.failLocations[addressString]) {
-		// This address has not been looked up yet.
+- (void) processNextAddress {
+	if (self.isCancelled) {
+		[self cancelOperation];
+	}
+	
+	if (self.addressesToLookup.count > 0) {
+		// Take the first address from the list and look it up.
+		NSDictionary * addressDict = self.addressesToLookup[0];
+		[self.addressesToLookup removeObjectAtIndex:0];
 		[self geocodeAddress:addressDict];
+	}
+	else {
+		// If there are no addresses left, finish the operation.
+		[self completeOperation];
 	}
 }
 
@@ -124,17 +181,25 @@
 
 		self.progress += 1;
 		self.geocoder = nil;
+		
+		[self processNextAddress];
 	}];
-	
-	
-	NSTimeInterval geocoderPollInterval = 0.05;
-	while (self.geocoder) {
-		if (self.isCancelled) {
-			self.statusMessage = NSLocalizedString(@"Address lookup cancelled", @"Status message for cancelled address lookup.");
-			[self.geocoder cancelGeocode];
-		}
-		[NSThread sleepForTimeInterval:geocoderPollInterval];
-	}
+}
+
+
+
+
+
+#pragma mark KVO
+
+- (BOOL) isExecuting {
+	return executing;
+}
+
+
+
+- (BOOL) isFinished {
+	return finished;
 }
 
 @end

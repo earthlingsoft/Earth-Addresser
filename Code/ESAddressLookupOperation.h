@@ -11,14 +11,20 @@
 @class CLGeocoder;
 
 
-@interface ESAddressLookupOperation : ESEAOperation
+@interface ESAddressLookupOperation : ESEAOperation {
+	BOOL executing;
+	BOOL finished;
+}
 
 @property NSMutableDictionary * locations;
 @property NSMutableDictionary * failLocations;
 
+@property NSMutableArray * addressesToLookup;
 @property CLGeocoder * geocoder;
 
 @property NSTimeInterval previousLookup;
 @property NSTimeInterval secondsBetweenCoordinateLookups;
+
+- (instancetype) initWithPeople:(NSArray *)people;
 
 @end

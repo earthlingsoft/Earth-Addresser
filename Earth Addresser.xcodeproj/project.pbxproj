@@ -539,13 +539,13 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 32;
+				Build_Number = 33;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				IBC_FLATTEN_NIBS = NO;
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 3b4;
+				Version_Number = 3b5;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -553,11 +553,11 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 32;
+				Build_Number = 33;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 3b4;
+				Version_Number = 3b5;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

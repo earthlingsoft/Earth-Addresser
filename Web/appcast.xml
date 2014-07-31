@@ -7,6 +7,28 @@
 		<language>en</language>
 		
 		<item>
+			<title>Version 3b5</title>
+			<description>http://earthlingsoft.net/Earth%20Addresser/versionhistory.html</description>
+			<pubDate>Thu, 31 Jul 2014 02:00:00 +02:00</pubDate>
+			<enclosure
+			sparkle:version="33"
+			sparkle:shortVersionString="3b5"
+			url="http://earthlingsoft.net/Earth%20Addresser/Earth%20Addresser3b5.zip"
+			type="application/octet-stream"/>
+		</item>
+
+		<item>
+			<title>Version 3b4</title>
+			<description>http://earthlingsoft.net/Earth%20Addresser/versionhistory.html</description>
+			<pubDate>Wed, 30 Jul 2014 15:00:00 +02:00</pubDate>
+			<enclosure
+			sparkle:version="32"
+			sparkle:shortVersionString="3b4"
+			url="http://earthlingsoft.net/Earth%20Addresser/Earth%20Addresser3b4.zip"
+			type="application/octet-stream"/>
+		</item>
+
+		<item>
 			<title>Version 3b3</title>
 			<description>http://earthlingsoft.net/Earth%20Addresser/versionhistory.html</description>
 			<pubDate>Tue, 29 Jul 2014 20:00:00 +02:00</pubDate>

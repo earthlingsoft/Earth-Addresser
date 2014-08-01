@@ -120,6 +120,7 @@
 		32CA4F630368D1EE00C91783 /* EA_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EA_Prefix.pch; path = Code/EA_Prefix.pch; sourceTree = "<group>"; };
 		6C1055981911AB6100FA13B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = /System/Library/Frameworks/CoreLocation.framework; sourceTree = "<absolute>"; };
 		6C10559A1911C49100FA13B7 /* net.earthlingsoft.earthaddresser.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = net.earthlingsoft.earthaddresser.plist; path = ../../Library/Preferences/net.earthlingsoft.earthaddresser.plist; sourceTree = SOURCE_ROOT; };
+		6C1328FE198AD1090038C41D /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/readme.html; sourceTree = "<group>"; };
 		6C1569DB0F0F025F009C7B5F /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = en; path = en.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DC0F0F026C009C7B5F /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = de; path = de.lproj/Credits.html; sourceTree = "<group>"; };
 		6C1569DD0F0F026E009C7B5F /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = fr; path = fr.lproj/Credits.html; sourceTree = "<group>"; };
@@ -239,11 +240,11 @@
 			isa = PBXGroup;
 			children = (
 				8D1107310486CEB800E47090 /* Info.plist */,
+				6C29284E0F1A45C000B5059B /* MainMenu.xib */,
 				6CEAC2720BB4B3290059641A /* Localizable.strings */,
 				6CFB92650BBC498100191CDD /* readme.html */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				6C29284E0F1A45C000B5059B /* MainMenu.xib */,
 				6CFB92670BBC499100191CDD /* Credits.html */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				6C916EBD0F5963A4003EA1EB /* Icon Large.icns */,
 				6C916E630F58C384003EA1EB /* work.png */,
 				6C916E640F58C384003EA1EB /* home.png */,
@@ -497,6 +498,7 @@
 			children = (
 				6C1569E30F0F0293009C7B5F /* en */,
 				6C1569E40F0F0295009C7B5F /* de */,
+				6C1328FE198AD1090038C41D /* fr */,
 			);
 			name = readme.html;
 			path = Resources;

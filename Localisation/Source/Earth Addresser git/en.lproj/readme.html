@@ -14,20 +14,20 @@
 			Putting your addresses on the map.
 		</p>
 		<p>
-			Love <a href="http://earth.google.com/">Google Earth</a> and have all your friends’ contact information in your Mac’s Contacts application? Then you will like  Earth Addresser! It takes your contacts’ addresses and writes them to a <a href="http://code.google.com/apis/kml/documentation/">KML Placemark file</a> which Google Earth can open to display your friends’ places right on the globe. If you have added photos for them in your Address Book, those will appear instead of the usual drawing pin when viewing the file on your own computer.
+			Love <a href="http://earth.google.com/">Google Earth</a> and have all your friends’ contact information in your Mac’s Contacts application? Then you will like  Earth Addresser! It takes your contacts’ addresses and writes them to a <a href="http://code.google.com/apis/kml/documentation/">KML Placemark file</a> which Google Earth can open to display your friends’ places right on the globe. If you have added photos for them in Contacts, those will appear instead of the usual drawing pin when viewing the file on your own computer.
 		</p>
 		<p>
 			For Google Earth to able to display your friends’ addresses in the correct location, they need to be converted to coordinates on the surface of the earth (longitude and latitude) first. That conversion is done by your Mac’s built-in Maps service which Earth Addresser send the addresses to. <strong>If you are not comfortable with sending all those addresses to Apple, be sure to <em>not</em> use Earth Addresser.</strong>
 		</p>
 		<p>
-			Please keep in mind that Apple’s Maps service may be unable to determine the coordinates for some of the addresses in your address book. A complete list of those addresses can be seen by using the “List All Non-locatable Addresses” command in the Help menu. Typical reasons for addresses not being locatable are the following:
+			Please keep in mind that Apple’s Maps service may be unable to determine the coordinates for some of your contacts’ addresses. A complete list of those addresses can be seen by using the “List All Non-locatable Addresses” command in the Help menu. Typical reasons for addresses not being locatable are the following:
 		</p>
 		<dl>
 			<dt>Country Information:</dt>
-			<dd>Earth Addresser does <em>not</em> use the country you typed into the Address Book when looking up addresses. This is done because there can be different styles, spellings and language versions of country names. Instead, Earth Addresser uses the <em>address format</em> which you have set up for the address – usually this defaults to the format of your home country. You can adjust the address format in the menu that appears when you click the address’ label while editing in the Contacts application.
+			<dd>Earth Addresser does <em>not</em> use the country you typed into the Contacts application when looking up addresses. This is done because there can be different styles, spellings and language versions of country names. Instead, Earth Addresser uses the <em>address format</em> which you have set up for the address – usually this defaults to the format of your home country. You can adjust the address format in the menu that appears when you click the address’ label while editing in the Contacts application.
 			</dd>
-			<dt>Uknown acronyms in addresses:</dt>
-			<dd>Apple’s address lookup service may fail to correctly locate addresses which include auxiliary information like room numbers. Earth Addresser attempts to filter the most common of those out by leaving out the lines in the address containing terms like “Room”. In case Earth Addresser misses some terms you need in you addresses, use the Preferences window to add your terms to the list.
+			<dt>Unknown words in addresses:</dt>
+			<dd>Apple’s address lookup service may fail to correctly locate addresses which include auxiliary information like room numbers. Earth Addresser removes lines with terms like “Room” from the address to avoid that. You can edit the list of these terms in the Preferences window.
 			</dd>
 			<dt>Apple’s Coverage:</dt>
 			<dd>Apple’s maps service does not cover all countries on the planet to the same degree. In some countries their database will not know all the street names. In addition to that the native spelling of an addresses can differ from the one you may find logical. It may take a bit of tinkering to figure out whether Apple’s maps service can ultimately locate an address.
@@ -61,10 +61,30 @@
 		
 		<dl class="versions" id="latestversion">
 			
+			<dt>v3b5 (2014-07-30)</dt>
+			<dd>
+				<ul>
+					<li>Localisation improvements.</li>
+					<li>Add menu item “Close”.</li>
+					<li>Add note about Google Earth preferences to “Link to Contacts card” checkbox.</li>
+				</ul>
+			</dd>
+
+			<dt>v3b4 (2014-07-30)</dt>
+			<dd>
+				<ul>
+					<li>Fix glitches in address lookup progress display.</li>
+					<li>Use default country (as set in Contacts preferences) for address lookups when no country code/address format information is present.</li>
+					<li>Use country-specific address formats as used in the Contacts application.</li>
+					<li>Further code modernisation.</li>
+					<li>Localisation improvements.</li>
+				</ul>
+			</dd>
+
 			<dt>v3b3 (2014-07-29)</dt>
 			<dd>
 				<ul>
-					<li>Hack: Use file: instead of addressbook: URL to open contact card (Google Earth will not open the latter)</li>
+					<li>Hack: Use file: instead of addressbook: URL to open contact card (Google Earth will not open the latter).</li>
 				</ul>
 			</dd>
 
@@ -129,7 +149,7 @@
 			<dt>v2.2  (2009-03-03)</dt>
 			<dd>
 				<ul>
-					<li>Uses own ‘home’ und ‘work’ icons for contacts without a photo.</li>
+					<li>Uses own ‘home’ and ‘work’ icons for contacts without a photo.</li>
 					<li>Adapted icon to match Google Earth 5’s.</li>
 					<li>Improved handling of a lack of internet connection.</li>
 				</ul>

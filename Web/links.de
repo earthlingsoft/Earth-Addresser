@@ -1,21 +1,13 @@
 <p>
 <!-- 
-<strong><a href="<?php echo($flickrURL); ?>">Bildschirmphotos</a></strong>
+<strong><a href="<?php echo($flickrURL);?>">Bildschirmphotos</a></strong>
 •
 -->
-<strong><?php appEMail("E-Mail"); ?></strong>
+<strong><?php appEMail("E-Mail");?></strong>
 •
-<strong><a href="<?php echo($commentLink); ?>" hreflang="en">Kommentar hinterlassen</a></strong>
+<strong><a href="<?php echo($commentLink);?>" hreflang="en">Kommentar hinterlassen</a></strong>
 •
-<strong><?php  paypallink("Spenden"); ?>
-/
-flattrn: 
-</strong>
-<span class="flattr">
-<script type="text/javascript">
-	var flattr_url='http://earthlingsoft.net/Earth%20Addresser/';
-	var flattr_btn='compact';
-</script>
-<script src="http://api.flattr.com/button/load.js" type="text/javascript"></script>
-</span>
+<strong><a href="<?php echo($githubLink);?>" title="bei github">Quellcode</a></strong>
+•
+<strong><?php  paypallink("Spenden");?></strong>
 </p>

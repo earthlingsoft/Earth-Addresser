@@ -4,10 +4,8 @@
 	$buzzline = $titlenote;
 	$description = "Mac application that creates Google Earth placemarks for all addresses in your Address Book. Putting your friends on the globe!";
 	$registertext = "via PayPal";
-	$limitations = ", Mac OS X.4";
+	$limitations = ", Mac OS X.8";
 
-	include "index.variables";
-		
-	$dr = $_SERVER[DOCUMENT_ROOT]; 
+	include("index.variables");
 	include($dr.'/includes/applicationpage.php');
 ?>

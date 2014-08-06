@@ -4,11 +4,9 @@
 	$buzzline = $titlenote;
 	$description = "Mac Programm, das Google Earth Ortsmarken für alle Adressen Deines Adressbuchs erstellt. Deine Freunde auf dem Globus!";
 	$registertext = "mit PayPal";
-	$limitations = ", Mac OS X.4";
+	$limitations = ", Mac OS X.8";
 				
-	$dr = $_SERVER[DOCUMENT_ROOT]; 
 	include ("./index.variables");
-
 	include($dr.'/includes/applicationpage.php');
 ?>
 

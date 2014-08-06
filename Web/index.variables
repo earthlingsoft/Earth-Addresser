@@ -4,11 +4,13 @@ $appname = "Earth Addresser";
 $appnameURL = "Earth%20Addresser";
 $downloadURL = "http://earthlingsoft.net/Earth%20Addresser/Earth%20Addresser.zip";
 $price = "0";
-$oldStyleVersionFile = "Earth Addresser Web.xml";
-$flickrURL = "http://www.flickr.com/groups/earthlingsoft/pool/tags/earthaddresser2";	
+$oldStyleVersionFile = NULL;
 
-$commentLink = "http://earthlingsoft.net/ssp/blog/2009/01/earth_addresser_2#comments";
+$flickrURL = "http://www.flickr.com/groups/earthlingsoft/pool/tags/earthaddresser2";
+$commentLink = "http://earthlingsoft.net/ssp/blog/2014/08/earth_addresser_3#commentform";
+$githubLink = "https://github.com/earthlingsoft/Earth-Addresser";
 
 $title = $appname . " – " . $titlenote . " – earthlingsoft";
 
+$dr = $_SERVER["DOCUMENT_ROOT"];
 ?>

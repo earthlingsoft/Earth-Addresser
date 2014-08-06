@@ -1,0 +1,5 @@
+<?php
+	$lang="en";
+	$dr = $_SERVER[DOCUMENT_ROOT]; 
+	include($dr.'/includes/versionhistorypage.php');
+?>

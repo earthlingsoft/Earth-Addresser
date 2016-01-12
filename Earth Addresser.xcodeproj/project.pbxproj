@@ -306,7 +306,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = ES;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = earthlingsoft;
 				TargetAttributes = {
 					8D1107260486CEB800E47090 = {
@@ -529,6 +529,7 @@
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.earthlingsoft.earthaddresser;
 				PRODUCT_NAME = zip;
 			};
 			name = Debug;
@@ -536,6 +537,7 @@
 		6C15690E0F0ED50C009C7B5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_BUNDLE_IDENTIFIER = net.earthlingsoft.earthaddresser;
 				PRODUCT_NAME = zip;
 			};
 			name = Release;
@@ -550,6 +552,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				IBC_FLATTEN_NIBS = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = net.earthlingsoft.earthaddresser;
 				PRODUCT_NAME = "Earth Addresser";
 				PROVISIONING_PROFILE = "";
 				Version_Number = 3.1b1;
@@ -565,6 +568,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = net.earthlingsoft.earthaddresser;
 				PRODUCT_NAME = "Earth Addresser";
 				PROVISIONING_PROFILE = "";
 				Version_Number = 3.1b1;

@@ -495,7 +495,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 			NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:imageData];
 			if (imageRep != nil) {
 				// create PNG data and write it
-				NSData * PNGData = [imageRep representationUsingType:NSPNGFileType properties:nil];
+				NSData * PNGData = [imageRep representationUsingType:NSPNGFileType properties:@{}];
 				BOOL PNGWriteSuccess = [PNGData writeToFile:fullImagePath atomically:YES];
 				if (PNGWriteSuccess) {
 					// now that we have written the image, create the style for it

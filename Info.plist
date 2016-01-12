@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>Icon Large</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.earthlingsoft.earthaddresser</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

@@ -439,7 +439,9 @@
  Displays warning sheet about privacy issues
 */
 - (IBAction) showWarningInfo:(id)sender {
-	[NSApp beginSheet:warningMessage modalForWindow:mainWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+	[mainWindow beginSheet:warningMessage completionHandler:^(NSModalResponse returnCode) {
+		// do nothing
+	}];
 }
 
 

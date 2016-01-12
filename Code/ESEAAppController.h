@@ -3,7 +3,7 @@
   Earth Addresser
 
   Created by Sven on 22.03.2007
-  Copyright 2006-2014 earthlingsoft. All rights reserved.
+  Copyright 2006-2016 earthlingsoft. All rights reserved.
 */
 
 #import <Cocoa/Cocoa.h>
@@ -30,13 +30,13 @@
 }
 
 @property NSArray * groups;
-@property BOOL noGroups;
 
 @property NSOperationQueue * operationQueue;
 
 @property ESAddressLookupOperation * geocodingOperation;
 @property (readonly) BOOL geocodingRunning;
 @property double geocodingProgress;
+@property double geocodingMaximum;
 @property (readonly) NSString * geocodingButtonLabel;
 @property NSString * geocodingStatusMessage;
 
@@ -60,6 +60,7 @@
 @property NSInteger addressesAreAvailable;
 @property (readonly) BOOL needToSearchNoticeHidden;
 @property (readonly) BOOL nothingToSearch;
+@property (readonly) BOOL hasGroups;
 
 @property (readonly) NSImage * AddressBookIcon;
 @property (readonly) NSImage * MapsIcon;

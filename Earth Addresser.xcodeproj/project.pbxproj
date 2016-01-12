@@ -135,7 +135,6 @@
 		6C26C4220BB711AC0001C5D3 /* Ideas.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Ideas.md; sourceTree = "<group>"; };
 		6C29284F0F1A45C000B5059B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C2928530F1A45DD00B5059B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		6C2928540F1A463300B5059B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C292A9F0F1D15CD00B5059B /* Help.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = Help.css; path = Resources/Help.css; sourceTree = "<group>"; };
 		6C2A375A1981691000DBAE64 /* ESTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESTerm.h; path = Code/ESTerm.h; sourceTree = "<group>"; };
 		6C2A375B1981691000DBAE64 /* ESTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESTerm.m; path = Code/ESTerm.m; sourceTree = "<group>"; };
@@ -161,6 +160,7 @@
 		6C916EBD0F5963A4003EA1EB /* Icon Large.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Icon Large.icns"; path = "Resources/Icon/Icon Large.icns"; sourceTree = "<group>"; };
 		6CAE962A19803B19001DCFC8 /* Failed Lookups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Failed Lookups.plist"; path = "../../Library/Application Support/EarthAddresser/Failed Lookups.plist"; sourceTree = "<group>"; };
 		6CAE962C19803B1F001DCFC8 /* Successful Lookups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Successful Lookups.plist"; path = "../../Library/Application Support/EarthAddresser/Successful Lookups.plist"; sourceTree = "<group>"; };
+		6CCEC23619A0C4C10023CA1B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6CEABD5A0BB322240059641A /* ESEAAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESEAAppController.h; path = Code/ESEAAppController.h; sourceTree = "<group>"; };
 		6CEABD5B0BB322240059641A /* ESEAAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESEAAppController.m; path = Code/ESEAAppController.m; sourceTree = "<group>"; };
 		6CEABD770BB322BC0059641A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
@@ -308,6 +308,11 @@
 				CLASSPREFIX = ES;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = earthlingsoft;
+				TargetAttributes = {
+					8D1107260486CEB800E47090 = {
+						DevelopmentTeam = RN8WQDQF9B;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Earth Addresser" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -321,6 +326,7 @@
 				en,
 				de,
 				fr,
+				ja,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* EA */;
 			projectDirPath = "";
@@ -476,7 +482,7 @@
 			children = (
 				6C2928530F1A45DD00B5059B /* en */,
 				6C29284F0F1A45C000B5059B /* de */,
-				6C2928540F1A463300B5059B /* fr */,
+				6CCEC23619A0C4C10023CA1B /* fr */,
 			);
 			name = MainMenu.xib;
 			path = Resources;
@@ -537,13 +543,16 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 34;
+				Build_Number = 35;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				IBC_FLATTEN_NIBS = NO;
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 3;
+				PROVISIONING_PROFILE = "";
+				Version_Number = 3.1b1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -551,11 +560,14 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				Build_Number = 34;
+				Build_Number = 35;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "Earth Addresser";
-				Version_Number = 3;
+				PROVISIONING_PROFILE = "";
+				Version_Number = 3.1b1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -567,10 +579,10 @@
 				CODE_SIGN_IDENTITY = "earthlingsoft Code Signing";
 				IBC_FLATTEN_NIBS = NO;
 				INFOPLIST_FILE = Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.11;
 			};
 			name = Debug;
 		};
@@ -580,9 +592,9 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "earthlingsoft Code Signing";
 				INFOPLIST_FILE = Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.11;
 			};
 			name = Release;
 		};

@@ -3,7 +3,7 @@
   Earth Addresser
 
   Created by Sven on 21.03.07.
-  Copyright 2006-2014 earthlingsoft. All rights reserved.
+  Copyright 2006-2016 earthlingsoft. All rights reserved.
 */
 
 #import "ESEAAppController.h"
@@ -17,8 +17,6 @@
 - (instancetype) init {
 	self = [super init];
 	if (self != nil) {
-		[self buildGroupList];
-		
 		[self setupAddressBookChangedNotification];
 		[self setupTermContentChangedNotification];
 		[self setupOperationProgressNotification];
@@ -41,6 +39,7 @@
 	[self.addressTermsToRemoveController addObserver:self.addressHelper forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self.oldLabelsController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
 	[self relevantPeople];
+	[self buildGroupList];
 }
 
 
@@ -118,7 +117,7 @@
 - (void) buildGroupList {
 	// rebuild the group list
 	ABAddressBook * AB = [ABAddressBook sharedAddressBook];
-	NSMutableArray * groupsList = [NSMutableArray arrayWithCapacity:self.groups.count +1];
+	NSMutableArray * groupsList = [NSMutableArray arrayWithCapacity:self.groups.count + 1];
 
 	NSArray * ABGroups = [AB groups];
 	ABGroups = [ABGroups sortedArrayUsingSelector:@selector(groupByNameCompare:)];
@@ -138,7 +137,6 @@
 		else {				
 			[UDC setValue:groupsList[0] forKeyPath:@"values.selectedGroup2"];
 		}
-		self.noGroups = @NO;
 	}
 	else {
 		// there are NO groups => deactivate the GUI
@@ -148,7 +146,6 @@
 		[groupsList addObject:selectGroupDictionary];
 		[UDC setValue:@0 forKeyPath:@"values.addressBookScope"];
 		[UDC setValue:selectGroupDictionary forKeyPath:@"values.selectedGroup2"];
-		self.noGroups = @YES;
 	}
 	
 	self.groups = groupsList;
@@ -330,6 +327,7 @@
 	if (!self.geocodingRunning) {
 		[self beginBusy];
 		self.geocodingStatusMessage = @"";
+		self.geocodingMaximum = self.notSearchedCount;
 		
 		NSArray * people;
 		if (sender == self) {
@@ -382,10 +380,10 @@
 
 - (void) setupOperationProgressNotification {
 	[[NSNotificationCenter defaultCenter] addObserverForName:ESEAOperationProgressNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
-		double progress = ((NSNumber*)notification.userInfo[ESEAOperationProgressKey]).doubleValue;
+		double progress = ((NSNumber *)notification.userInfo[ESEAOperationProgressKey]).doubleValue;
 		
 		if (notification.object == self.geocodingOperation) {
-			if (abs(progress - self.geocodingProgress) > 0.9) {
+			if (fabs(progress - self.geocodingProgress) > 0.9) {
 				[self relevantPeople];
 			}
 			self.geocodingProgress = progress;
@@ -513,7 +511,7 @@
 		}
 	}
 	
-	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", [NSUUID UUID].UUIDString];
+	NSString * savePath = [NSString stringWithFormat:@"/tmp/Earth Addresser Non Locatable Addresses %@.text", ((NSUUID *)[NSUUID UUID]).UUIDString];
 	NSURL * saveURL = [NSURL fileURLWithPath:savePath];
 	NSError * myError = nil;
 	if ([nonLocatableAddressesString writeToURL:saveURL atomically:NO encoding:NSUTF8StringEncoding error:&myError]) {
@@ -532,36 +530,6 @@
 
 #pragma mark KVO / KVC
 
-+ (NSSet *) keyPathsForValuesAffectingValueForKey:(NSString *)key {
-	NSArray * newKeyPaths;
-	if ([key isEqualToString:NSStringFromSelector(@selector(needToSearchNoticeHidden))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning)),
-						NSStringFromSelector(@selector(notSearchedCount))];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(nothingToSearch))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(notSearchedCount))];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingRunning))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(geocodingOperation)),
-						@"geocodingOperation.finished"];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLRunning))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(KMLOperation)),
-						@"KMLOperation.finished"];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(geocodingButtonLabel))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(geocodingRunning))];
-	}
-	else if ([key isEqualToString:NSStringFromSelector(@selector(KMLWritingButtonLabel))]) {
-		newKeyPaths = @[NSStringFromSelector(@selector(KMLRunning))];
-	}
-	
-	NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	return [keyPaths setByAddingObjectsFromArray:newKeyPaths];
-}
-
-
-
 - (void) observeValueForKeyPath:(NSString *)keyPath
 					   ofObject:(id)object
 						 change:(NSDictionary *)change
@@ -571,6 +539,9 @@
 	}
 }
 
++ (NSSet<NSString *> *) keyPathsForValuesAffectingNeedToSearchNoticeHidden {
+	return [NSSet setWithObjects:NSStringFromSelector(@selector(KMLRunning)), NSStringFromSelector(@selector(notSearchedCount)), nil];
+}
 
 
 - (BOOL) needToSearchNoticeHidden {
@@ -580,23 +551,52 @@
 
 
 
++ (NSSet<NSString *> *) keyPathsForValuesAffectingNothingToSearch {
+	return [NSSet setWithObjects:NSStringFromSelector(@selector(notSearchedCount)), nil];
+}
+
 - (BOOL) nothingToSearch {
 	BOOL nothingToSearch = (self.notSearchedCount == 0);
 	return nothingToSearch;
 }
 
 
-
-- (BOOL) geocodingRunning {
-	return (self.geocodingOperation != nil) && !self.geocodingOperation.finished;
++ (NSSet<NSString *> *) keyPathsForValuesAffectingHasGroups {
+	return [NSSet setWithObject:NSStringFromSelector(@selector(groups))];
 }
 
+
+- (BOOL) hasGroups {
+	return [self.groups count] > 0;
+}
+
+
+
++ (NSSet<NSString *> *) keyPathsForValuesAffectingGeocodingRunning {
+	return [NSSet setWithObjects:NSStringFromSelector(@selector(geocodingOperation)), @"geocodingOperation.finished", nil];
+}
+
+
+- (BOOL) geocodingRunning {
+	return (self.geocodingOperation != nil) && !self.geocodingOperation.isFinished;
+}
+
+
+
++ (NSSet<NSString *> *) keyPathsForValuesAffectingKMLRunning {
+	return [NSSet setWithObjects:NSStringFromSelector(@selector(KMLOperation)), @"KMLOperation.finished", nil];
+}
 
 
 - (BOOL) KMLRunning {
-	return (self.KMLOperation != nil) && !self.KMLOperation.finished;
+	return (self.KMLOperation != nil) && !self.KMLOperation.isFinished;
 }
 
+
+
++ (NSSet<NSString *> *) keyPathsForValuesAffectingGeocodingButtonLabel {
+	return [NSSet setWithObject:NSStringFromSelector(@selector(geocodingRunning))];
+}
 
 
 - (NSString *) geocodingButtonLabel {
@@ -610,6 +610,11 @@
 	return label;
 }
 
+
+
++ (NSSet<NSString *> *) keyPathsForValuesAffectingKMLWritingButtonLabel {
+	return [NSSet setWithObject:NSStringFromSelector(@selector(KMLRunning))];
+}
 
 
 - (NSString *) KMLWritingButtonLabel {

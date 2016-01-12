@@ -24,6 +24,8 @@
 	<string>${Build_Number}</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.10.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -32,7 +34,5 @@
 	<string>YES</string>
 	<key>SUFeedURL</key>
 	<string>http://earthlingsoft.net/Earth%20Addresser/appcast.xml</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.8.0</string>
 </dict>
 </plist>

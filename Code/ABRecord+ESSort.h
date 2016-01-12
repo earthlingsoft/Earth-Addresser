@@ -2,7 +2,7 @@
 //  ABRecord+ESSort.h
 //  Earth Addresser
 //
-//  Created by  Sven on 30.07.14.
+//  Created by Sven on 30.07.14.
 //  Copyright (c) 2014 earthlingsoft. All rights reserved.
 //
 

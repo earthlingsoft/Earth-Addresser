@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15E27e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1080" defaultVersion="1080" identifier="macosx"/>
+        <deployment identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6185.11"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -65,11 +65,7 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <connections>
-                                        <binding destination="214" name="enabled" keyPath="noGroups" id="657">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
+                                        <binding destination="214" name="enabled" keyPath="hasGroups" id="fCw-mY-fNA"/>
                                     </connections>
                                 </buttonCell>
                             </column>
@@ -122,13 +118,12 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="enabled3" keyPath="noGroups" previousBinding="CEi-Q9-aGa" id="s7b-94-vIg">
+                            <binding destination="214" name="enabled3" keyPath="hasGroups" previousBinding="CEi-Q9-aGa" id="fNP-nc-qXW">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                     <integer key="NSNullPlaceholder" value="-1"/>
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
                             <binding destination="290" name="selectedObject" keyPath="values.selectedGroup2" previousBinding="307" id="880"/>
@@ -170,7 +165,7 @@
                         </textFieldCell>
                     </textField>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="706">
-                        <rect key="frame" x="611" y="296" width="25" height="25"/>
+                        <rect key="frame" x="610" y="296" width="25" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" inset="2" id="863">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -212,7 +207,7 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <outlet property="nextKeyView" destination="425" id="874"/>
+                            <outlet property="nextKeyView" destination="12o-Zz-Y4W" id="I0I-V3-v8I"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="883" userLabel="Geocoding Current Address">
@@ -232,42 +227,48 @@
                             <binding destination="214" name="value" keyPath="geocodingStatusMessage" id="eVP-My-KG5"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="580">
-                        <rect key="frame" x="304" y="218" width="332" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="This command becomes available after you read, and agreed to, the information about looking up the coordinates." id="858">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="290" name="hidden" keyPath="values.hasReadInfo" id="582"/>
-                        </connections>
-                    </textField>
                     <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" style="bar" id="428" userLabel="Geocoding Progress">
                         <rect key="frame" x="182" y="190" width="280" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
-                            <binding destination="214" name="value" keyPath="geocodingProgress" previousBinding="rvy-3H-z3T" id="DeU-QE-oph"/>
+                            <binding destination="214" name="maxValue" keyPath="geocodingMaximum" id="tl5-VO-Vh0"/>
+                            <binding destination="214" name="value" keyPath="geocodingProgress" previousBinding="tl5-VO-Vh0" id="WuZ-XD-Vt0"/>
                             <binding destination="214" name="hidden" keyPath="geocodingRunning" id="1CA-se-DN6">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="maxValue" keyPath="notSearchedCount" id="rvy-3H-z3T"/>
                         </connections>
                     </progressIndicator>
+                    <button verticalHuggingPriority="750" id="12o-Zz-Y4W" userLabel="Agree to Coordinate Lookup Button">
+                        <rect key="frame" x="405" y="184" width="234" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Agree To Coordinate Lookup…" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="epS-4Y-6UM">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent">r</string>
+                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="showWarningInfo:" target="214" id="kVY-b3-1La"/>
+                            <binding destination="290" name="hidden" keyPath="values.hasReadInfo" id="zng-gy-5zW"/>
+                            <outlet property="nextKeyView" destination="425" id="dpJ-Hh-hHb"/>
+                        </connections>
+                    </button>
                     <button verticalHuggingPriority="750" id="425" userLabel="Look Up Coordinates Button">
                         <rect key="frame" x="467" y="184" width="172" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Look Up Coordinates" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="847">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
                         </buttonCell>
                         <connections>
                             <action selector="convertAddresses:" target="214" id="427"/>
                             <binding destination="214" name="title" keyPath="geocodingButtonLabel" id="958"/>
-                            <binding destination="214" name="enabled3" keyPath="geocodingOperation.isCancelled" previousBinding="1067" id="1Qi-io-aqS">
+                            <binding destination="214" name="enabled2" keyPath="geocodingOperation.isCancelled" previousBinding="JsY-GE-Fkw" id="x7p-ln-w6S">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
@@ -276,16 +277,16 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="214" name="enabled2" keyPath="nothingToSearch" previousBinding="1058" id="1067">
+                            <binding destination="214" name="enabled" keyPath="nothingToSearch" id="JsY-GE-Fkw">
                                 <dictionary key="options">
-                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                    <integer key="NSNullPlaceholder" value="-1"/>
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="290" name="enabled" keyPath="values.hasReadInfo" id="1058"/>
+                            <binding destination="290" name="hidden" keyPath="values.hasReadInfo" previousBinding="x7p-ln-w6S" id="vBv-hc-KcD">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <outlet property="nextKeyView" destination="584" id="714"/>
                         </connections>
                     </button>
@@ -657,7 +658,6 @@
             <connections>
                 <outlet property="initialFirstResponder" destination="435" id="563"/>
             </connections>
-            <point key="canvasLocation" x="-24.5" y="-421"/>
         </window>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
@@ -785,8 +785,8 @@
                                 </connections>
                             </menuItem>
                             <menuItem title="Repeat Look-Up of Non-Locatable Addresses" id="899">
-                                <string key="toolTip">Makes Earth Addresser re-look-up the addresses it previously failed to look up. Useful if you suspect that Apple improved their address database in regions where look-ups failed before.</string>
                                 <modifierMask key="keyEquivalentModifierMask"/>
+                                <string key="toolTip">Makes Earth Addresser re-look-up the addresses it previously failed to look up. Useful if you suspect that Apple improved their address database in regions where look-ups failed before.</string>
                                 <connections>
                                     <action selector="lookupNonLocatableAddresses:" target="214" id="910"/>
                                     <binding destination="214" name="enabled" keyPath="nonLocatableAddressesExist" id="917"/>
@@ -861,7 +861,6 @@
                 <outlet property="createKMLButton" destination="206" id="651"/>
                 <outlet property="mainWindow" destination="21" id="295"/>
                 <outlet property="oldLabelsController" destination="MNY-1R-QMp" id="Qng-ME-9Xt"/>
-                <outlet property="progressBar" destination="275" id="282"/>
                 <outlet property="runGeolocationButton" destination="425" id="652"/>
                 <outlet property="warningMessage" destination="283" id="294"/>
             </connections>
@@ -878,21 +877,21 @@
         <window title="Welcome" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="283" userLabel="Welcome Panel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="128" y="228" width="778" height="407"/>
+            <rect key="contentRect" x="128" y="228" width="757" height="408"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="284">
-                <rect key="frame" x="0.0" y="0.0" width="778" height="407"/>
+                <rect key="frame" x="0.0" y="0.0" width="757" height="408"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView id="285" userLabel="Earth Addresser Icon Image View">
-                        <rect key="frame" x="20" y="259" width="128" height="128"/>
+                        <rect key="frame" x="20" y="260" width="128" height="128"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="867"/>
                         <accessibility description="Application Icon"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" id="286">
-                        <rect key="frame" x="165" y="370" width="195" height="17"/>
+                        <rect key="frame" x="165" y="371" width="195" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Welcome to Earth Addresser" id="868">
                             <font key="font" metaFont="systemBold"/>
@@ -901,7 +900,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="560">
-                        <rect key="frame" x="165" y="90" width="592" height="272"/>
+                        <rect key="frame" x="165" y="91" width="574" height="272"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" state="on" allowsEditingTextAttributes="YES" id="870">
                             <font key="font" metaFont="system"/>
@@ -921,9 +920,9 @@ Once the longitude and latitude of an address have been determined, Earth Addres
                         </textFieldCell>
                     </textField>
                     <button id="575">
-                        <rect key="frame" x="166" y="58" width="467" height="18"/>
+                        <rect key="frame" x="166" y="59" width="467" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="I agree that addresses are sent to Apple to determine their coordinates" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="871">
+                        <buttonCell key="cell" type="check" title="I agree that addresses are sent to Apple to determine their coordinates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="871">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -933,7 +932,7 @@ Once the longitude and latitude of an address have been determined, Earth Addres
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="288">
-                        <rect key="frame" x="674" y="12" width="90" height="32"/>
+                        <rect key="frame" x="653" y="13" width="90" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="869">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -978,14 +977,14 @@ DQ
                         <rect key="frame" x="219" y="277" width="159" height="110"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="AwG-ud-gJD">
-                            <rect key="frame" x="1" y="17" width="238" height="117"/>
+                            <rect key="frame" x="1" y="1" width="157" height="108"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" id="1229">
                                     <rect key="frame" x="0.0" y="0.0" width="157" height="19"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="20" minWidth="20" maxWidth="1000" id="1233">
@@ -1085,14 +1084,14 @@ For terms which may also occur in street name, it is advisable to add an initial
                         <rect key="frame" x="219" y="129" width="159" height="110"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="5qw-1W-Yrp">
-                            <rect key="frame" x="1" y="17" width="238" height="117"/>
+                            <rect key="frame" x="1" y="1" width="157" height="108"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" id="b0c-O3-9YD">
                                     <rect key="frame" x="0.0" y="0.0" width="157" height="19"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="20" minWidth="20" maxWidth="1000" id="5Q5-G7-5sb">
@@ -1239,7 +1238,6 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="42.5" y="630.5"/>
         </window>
         <arrayController objectClassName="ESTerm" avoidsEmptySelection="NO" id="1105" userLabel="Address Terms To Remove Controller">
             <declaredKeys>
@@ -1264,10 +1262,19 @@ You can choose to hide the addresses with these labels in the “Tools” menu.<
                 <binding destination="214" name="contentArray" keyPath="oldLabels" id="Ckq-t9-bs7"/>
             </connections>
         </arrayController>
+        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="4Qv-A9-VPN">
+            <rect key="frame" x="0.0" y="0.0" width="39" height="38"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <buttonCell key="cell" type="round" bezelStyle="circular" image="NSInfo" imagePosition="above" alignment="left" borderStyle="border" imageScaling="proportionallyDown" id="lRU-93-u8p">
+                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                <font key="font" metaFont="label"/>
+            </buttonCell>
+        </button>
     </objects>
     <resources>
-        <image name="NSAddTemplate" width="8" height="8"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSApplicationIcon" width="128" height="128"/>
-        <image name="NSRemoveTemplate" width="8" height="8"/>
+        <image name="NSInfo" width="32" height="32"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

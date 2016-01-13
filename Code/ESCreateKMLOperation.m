@@ -213,13 +213,13 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 									 URLByAppendingPathComponent:uniqueID]
 									URLByAppendingPathExtension:@"abcdp"];
 				if ([[NSFileManager defaultManager] fileExistsAtPath:abcdpURL.path]) {
-					[descriptionHTMLString appendFormat:@"<br /><a href=\"%@\">%@</a>",
+					[descriptionHTMLString appendFormat:@"<br/><a href=\"%@\">%@</a>",
 					 abcdpURL.absoluteString,
 					 NSLocalizedString(@"open in Address Book", @"Text for open in AddressBook link (appears in Google Earth Info Balloon)")];
 				}
 			}
 			
-			[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;' />"];
+			[descriptionHTMLString appendString:@"<hr style='width:20em;clear:all;visibility:hidden;'/>"];
 			
 			
 #pragma mark Related People
@@ -227,129 +227,41 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 				ABMultiValue * people = [person valueForProperty:kABRelatedNamesProperty];
 				NSUInteger peopleCount = [people count];
 				if (peopleCount != 0) {
-					[descriptionHTMLString appendString:@"<br />"];
+					[descriptionHTMLString appendString:@"<br/>"];
 					for (NSUInteger personIndex = 0; personIndex < peopleCount; personIndex++) {
 						NSString * personName = [people valueAtIndex:personIndex];
 						NSString * personLabel = [self localisedLabelName:[people labelAtIndex:personIndex]];
 						if (personName != nil && personLabel != nil) {
-							[descriptionHTMLString appendFormat:@"<br /><strong>%@:</strong> %@", personLabel, personName];
+							[descriptionHTMLString appendFormat:@"<br/><strong>%@:</strong> %@", personLabel, personName];
 						}
-					}
-				}
-			}
-			
-			
-#pragma mark EMail
-			if ([[UDC valueForKeyPath:@"values.placemarkWithEMail"] boolValue]) {
-				// include non-old e-mail addresses in placemark
-				ABMultiValue * eMails = [person valueForProperty:kABEmailProperty];
-				NSUInteger eMailCount = [eMails count];
-				if (eMailCount != 0) {
-					[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)")];
-					NSMutableArray * eMailArray = [NSMutableArray arrayWithCapacity:eMailCount];
-					NSString * allEMails = nil;
-					for (NSUInteger eMailIndex = 0; eMailIndex < eMailCount; eMailIndex++) {
-						NSString * eMailLabel = [eMails labelAtIndex:eMailIndex];
-						if (![self isOldLabel:eMailLabel]) {
-							NSString * eMailAddress = [eMails valueAtIndex:eMailIndex];
-							if (eMailAddress) {
-								NSString * localisedLabel = [self localisedLabelName:eMailLabel];
-								if (localisedLabel) {
-									localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-								}
-								else {
-									localisedLabel = @"";
-								}
-								[eMailArray addObject:[NSString stringWithFormat:@"<a href='mailto:%@'>%@</a>%@", eMailAddress, eMailAddress, localisedLabel]];
-								allEMails = [eMailArray componentsJoinedByString:@", "];
-							}
-						}
-					}
-					if (allEMails) {
-						[descriptionHTMLString appendFormat:@"%@.", allEMails];
 					}
 				}
 			}
 
-			
-#pragma mark Website
-			if ([[UDC valueForKeyPath:@"values.placemarkWithWeblinks"] boolValue]) {
-				// include non-old web-addresses in placemark
-				ABMultiValue * weblinks = [person valueForProperty:kABURLsProperty];
-				NSUInteger weblinkCount = [weblinks count];
-				if (weblinkCount != 0) {
-					[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)")];
-					NSMutableArray * weblinkArray = [NSMutableArray arrayWithCapacity:weblinkCount];
-					NSString * allWeblinks = nil;
-					for (NSUInteger weblinkIndex = 0; weblinkIndex < weblinkCount; weblinkIndex++) {
-						NSString * weblinkLabel = [weblinks labelAtIndex:weblinkIndex];
-						if (![self isOldLabel:weblinkLabel]) {
-							NSString * weblink = [weblinks valueAtIndex:weblinkIndex];
-							if (weblink) {
-								NSString * localisedLabel = [self localisedLabelName:weblinkLabel];
-								if (localisedLabel) {
-									localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-								}
-								else {
-									localisedLabel = @"";
-								}
-								[weblinkArray addObject:[NSString stringWithFormat:@"<a href='%@'>%@</a>%@", weblink, weblink, localisedLabel]];
-								allWeblinks = [weblinkArray componentsJoinedByString:@", "];
-							}
-						}
-					}
-					if (allWeblinks) {
-						[descriptionHTMLString appendFormat:@"%@.", allWeblinks];
-					}
-				}
-			}
-			
-			
-#pragma mark Phone
-			if ([[UDC valueForKeyPath:@"values.placemarkWithPhone"] boolValue]) {
-				// include non-old phone numbers in placemark
-				ABMultiValue * phones = [person valueForProperty:kABPhoneProperty];
-				NSUInteger phoneCount = [phones count];
-				if (phoneCount != 0) {
-					[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> ", NSLocalizedString(@"Phone", @"Phone (appears in Google Earth Info Balloon)")];
-					NSMutableArray * phoneArray = [NSMutableArray arrayWithCapacity:phoneCount];
-					NSString * allPhoneNumbers = nil;
-					for (NSUInteger phoneIndex = 0; phoneIndex < phoneCount; phoneIndex++) {
-						NSString * phoneLabel = [phones labelAtIndex:phoneIndex];
-						if (![self isOldLabel:phoneLabel]) {
-							NSString * phoneNumber = [phones valueAtIndex:phoneIndex];
-							if (phoneNumber) {
-								NSString * localisedLabel = [self localisedLabelName:phoneLabel];
-								if (localisedLabel) {
-									localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-								}
-								else {
-									localisedLabel = @"";
-								}
-								[phoneArray addObject:[NSString stringWithFormat:@"%@%@", phoneNumber,  localisedLabel]];
-								allPhoneNumbers = [phoneArray componentsJoinedByString:@", "];
-							}
-						}
-					}
-					if (allPhoneNumbers) {
-						[descriptionHTMLString appendFormat:@"%@.", allPhoneNumbers];
-					}
-				}
-			}
-			
-			
+
+#pragma mark Repeating Fields: E-Mail, Web, Phone
+			// E-Mail
+			[descriptionHTMLString appendString:[self createMultiElementMarkupForValueAtKeyPath:@"values.placemarkWithEMail" property:kABEmailProperty person:person title:NSLocalizedString(@"E-Mail", @"E-Mail (appears in Google Earth Info Balloon)") format:@"<a href='mailto:%1$@'>%1$@</a>%2$@"]];
+
+			// Website
+			[descriptionHTMLString appendString:[self createMultiElementMarkupForValueAtKeyPath:@"values.placemarkWithWeblinks" property:kABURLsProperty person:person title:NSLocalizedString(@"Web", @"Web (appears in Google Earth Info Balloon)") format:@"<a href='%1$@'>%1$@</a>%2$@"]];
+
+			// Phone
+			[descriptionHTMLString appendString:[self createMultiElementMarkupForValueAtKeyPath:@"values.placemarkWithPhone" property:kABPhoneProperty person:person title:NSLocalizedString(@"Phone", @"Phone (appears in Google Earth Info Balloon)") format:@"%1$@%2$@"]];
+
+
 #pragma mark Notes
 			if ([[UDC valueForKeyPath:@"values.placemarkWithNotes"] boolValue]) {
 				NSString * noteString = [person valueForProperty:kABNoteProperty];
 				if ( [noteString length] > 0 ) {
 					NSMutableString * noteStringWithNewlines = [noteString mutableCopy];
-					[noteStringWithNewlines replaceOccurrencesOfString:@"\n" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
-					[noteStringWithNewlines replaceOccurrencesOfString:@"\r" withString:@"<br />" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
-					[descriptionHTMLString appendFormat:@"<br /><br /><strong>%@:</strong> %@", NSLocalizedString(@"Note", @"Note (appears in Google Earth Info Balloon)"), noteStringWithNewlines];
+					[noteStringWithNewlines replaceOccurrencesOfString:@"\n" withString:@"<br/>" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
+					[noteStringWithNewlines replaceOccurrencesOfString:@"\r" withString:@"<br/>" options:NSLiteralSearch range:NSMakeRange(0, [noteStringWithNewlines length])];
+					[descriptionHTMLString appendFormat:@"<br/><br/><strong>%@:</strong> %@", NSLocalizedString(@"Note", @"Note (appears in Google Earth Info Balloon)"), noteStringWithNewlines];
 				}
 			}
 			
-			[descriptionHTMLString appendString:@"<br />"];
+			[descriptionHTMLString appendString:@"<br/>"];
 			
 			NSXMLElement * descriptionElement = [NSXMLElement elementWithName:@"description" stringValue:descriptionHTMLString];
 			[placemarkElement addChild:descriptionElement];
@@ -411,6 +323,41 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 	
 	self.progress += 1;
 }
+
+
+
+- (nonnull NSString *) createMultiElementMarkupForValueAtKeyPath:(NSString *)keyPath property:(NSString *)property person:(ABPerson *)person title:(NSString *)title format:(NSString *)format {
+
+	if ([[UDC valueForKeyPath:keyPath] boolValue]) {
+		ABMultiValue * abItems = [person valueForProperty:property];
+		NSUInteger itemCount = abItems.count;
+		if (itemCount > 0) {
+			NSMutableArray<NSString *> * items = [NSMutableArray arrayWithCapacity:itemCount];
+			for (NSUInteger itemIndex = 0; itemIndex < itemCount; itemIndex++) {
+				NSString * itemLabel = [abItems labelAtIndex:itemIndex];
+				if (![self isOldLabel:itemLabel]) {
+					NSString * item	= [abItems valueAtIndex:itemIndex];
+					if (item != nil) {
+						NSString * localisedLabel = [self localisedLabelName:itemLabel];
+						if (localisedLabel) {
+							localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
+						}
+						else {
+							localisedLabel = @"";
+						}
+						[items addObject:[NSString stringWithFormat:format, item, localisedLabel]];
+					}
+				}
+			}
+			if (items.count > 0) {
+				NSString * allItems = [items componentsJoinedByString:@", "];
+				return [NSString stringWithFormat:@"<br/><br/><strong>%@:</strong> %@.", title, allItems];
+			}
+		}
+	}
+	return @"";
+}
+
 
 
 

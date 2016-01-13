@@ -77,7 +77,8 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 			NSString * KMLFileName = [[NSString stringWithFormat:fileNameFormat, NSLocalizedString(@"Filename", @"KML Dateiname"), i] stringByAppendingPathExtension:@"kml"];
 			NSString * KMLFilePath = [desktopURL.path stringByAppendingPathComponent:KMLFileName];
 			if (![[NSFileManager defaultManager] fileExistsAtPath:KMLFilePath]) {
-				BOOL success = [[KML XMLDataWithOptions:NSXMLNodePrettyPrint] writeToFile:KMLFilePath atomically:YES];
+				NSData * KMLData = [[self class] createCleanedKMLData:KML];
+				BOOL success = [KMLData writeToFile:KMLFilePath atomically:YES];
 				if (success) {
 					self.statusMessage = [NSString stringWithFormat:NSLocalizedString(@"File '%@' on your Desktop", @"Status message after successful creation of the KML file."), KMLFileName];
 				}
@@ -89,6 +90,31 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 			i++;
 		}
 	}
+}
+
+
+
+/*
+ Turn the KML XML Document into the data for writing to the file.
+ Includes cleanup.
+*/
++ (NSData *) createCleanedKMLData:(NSXMLDocument *)KML {
+	NSData * KMLData = [KML XMLDataWithOptions:NSXMLNodePrettyPrint];
+	NSString * KMLString = [[NSString alloc] initWithData:KMLData encoding:NSUTF8StringEncoding];
+	NSString * cleanedString = [[self class] removeForbiddenCodepoints:KMLString];
+	return [cleanedString dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+
+/*
+ Remove ASCII control characters that are not allowed in XML from the final string.
+ NSXML seems to write those out despite not being valid XML.
+ Google Earth chokes on them.
+*/
++ (NSString * _Nonnull) removeForbiddenCodepoints:(NSString * _Nonnull)input {
+	NSError * error;
+	NSRegularExpression * re = [NSRegularExpression regularExpressionWithPattern:@"[\x00-\x08\x0b\x0c\x0e-\x19]" options:0 error:&error];
+	return [re stringByReplacingMatchesInString:input options:0 range:NSMakeRange(0, input.length) withTemplate:@""];
 }
 
 

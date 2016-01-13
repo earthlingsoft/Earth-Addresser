@@ -326,38 +326,31 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 
 
 
-- (nonnull NSString *) createMultiElementMarkupForValueAtKeyPath:(NSString *)keyPath property:(NSString *)property person:(ABPerson *)person title:(NSString *)title format:(NSString *)format {
+/*
+ Creates the markup/formatted string for the given multi value property.
+*/
+- (NSString * _Nonnull) createMultiElementMarkupForValueAtKeyPath:(NSString * _Nonnull)keyPath property:(NSString * _Nonnull)property person:(ABPerson * _Nonnull)person title:(NSString * _Nonnull)title format:(NSString * _Nonnull)format {
 
 	if ([[UDC valueForKeyPath:keyPath] boolValue]) {
 		ABMultiValue * abItems = [person valueForProperty:property];
-		NSUInteger itemCount = abItems.count;
-		if (itemCount > 0) {
-			NSMutableArray<NSString *> * items = [NSMutableArray arrayWithCapacity:itemCount];
-			for (NSUInteger itemIndex = 0; itemIndex < itemCount; itemIndex++) {
-				NSString * itemLabel = [abItems labelAtIndex:itemIndex];
-				if (![self isOldLabel:itemLabel]) {
-					NSString * item	= [abItems valueAtIndex:itemIndex];
-					if (item != nil) {
-						NSString * localisedLabel = [self localisedLabelName:itemLabel];
-						if (localisedLabel) {
-							localisedLabel = [NSString stringWithFormat:@" (%@)", localisedLabel];
-						}
-						else {
-							localisedLabel = @"";
-						}
-						[items addObject:[NSString stringWithFormat:format, item, localisedLabel]];
-					}
-				}
+		
+		NSSet<NSString *> * relevantItemIDs = [self getIDsOfRelevantValues:abItems];
+
+		NSMutableArray<NSString *> * formattedItems = [NSMutableArray arrayWithCapacity:relevantItemIDs.count];
+		for (NSString * itemID in relevantItemIDs) {
+			NSString  * formattedItem = [self formatItemID:itemID from:abItems format:format];
+			if (formattedItem != nil) {
+				[formattedItems addObject:formattedItem];
 			}
-			if (items.count > 0) {
-				NSString * allItems = [items componentsJoinedByString:@", "];
-				return [NSString stringWithFormat:@"<br/><br/><strong>%@:</strong> %@.", title, allItems];
-			}
+		}
+		
+		if (formattedItems.count > 0) {
+			NSString * allItems = [formattedItems componentsJoinedByString:@", "];
+			return [NSString stringWithFormat:@"<br/><br/><strong>%@:</strong> %@.", title, allItems];
 		}
 	}
 	return @"";
 }
-
 
 
 
@@ -522,7 +515,7 @@ NSString * const ESKMLGenericWorkIcon = @"work";
 /*
  Localises Address Boook labels, could return nil.
 */
-- (NSString *) localisedLabelName:(NSString *)labelName {
+- (NSString * _Nullable) localisedLabelName:(NSString * _Nonnull)labelName {
 	return (NSString *)CFBridgingRelease(ABCopyLocalizedPropertyOrLabel((__bridge CFStringRef)labelName));
 }
 
@@ -532,15 +525,56 @@ NSString * const ESKMLGenericWorkIcon = @"work";
  Returns whether the passed label is marked as indicating old information.
 */
 - (BOOL) isOldLabel:(NSString *)label {
-	BOOL isOldLabel = NO;
-	NSString * uppercaseLabel = [label uppercaseString];
+	NSString * uppercaseLabel = label.uppercaseString;
 	for (ESTerm * oldLabel in self.oldLabels) {
-		if (oldLabel.active == YES && [[oldLabel.string uppercaseString] isEqualToString:uppercaseLabel]) {
-			isOldLabel = YES;
-			break;
+		if (oldLabel.active && [oldLabel.string.uppercaseString isEqualToString:uppercaseLabel]) {
+			return YES;
 		}
 	}
-	return isOldLabel;
+	return NO;
+}
+
+
+
+/*
+ Returns the set of IDs from the given ABMultiValue that we need to include.
+*/
+- (NSSet<NSString *> * _Nonnull) getIDsOfRelevantValues:(ABMultiValue * _Nonnull)multiValue {
+	NSMutableSet<NSString *> * IDs = [[NSMutableSet alloc] init];
+	for (NSString * itemID in multiValue) {
+		NSString * itemLabel = [multiValue labelForIdentifier:itemID];
+		if (![self isOldLabel:itemLabel]) {
+			[IDs addObject:itemID];
+		}
+	}
+	return IDs;
+}
+
+
+
+/*
+ Formats and localises the value/label with the given ID in the ABMultiValue.
+*/
+- (NSString * _Nullable) formatItemID:(NSString * _Nonnull)itemID from:(ABMultiValue *)multiValue format:(NSString * _Nonnull)format {
+	NSString * itemValue = [multiValue valueForIdentifier:itemID];
+	NSString * itemLabel = [multiValue labelForIdentifier:itemID];
+	if (itemValue != nil && itemLabel != nil ) {
+		return [NSString stringWithFormat:@"%@%@", itemValue, [self formattedLocalisedLabelFor:itemLabel]];
+	}
+	return nil;
+}
+
+
+
+/*
+ Formats and localises the given value string.
+*/
+- (NSString * _Nonnull) formattedLocalisedLabelFor:(NSString * _Nonnull)itemLabel {
+	NSString * localisedLabel = [self localisedLabelName:itemLabel];
+	if (localisedLabel != nil) {
+		return [NSString stringWithFormat:@" (%@)", localisedLabel];
+	}
+	return @"";
 }
 
 @end
